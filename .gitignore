@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# Environment files (keep the example)
+.env
+.env.*
+!.env.example
+
 # Local working folders (source images, not deployed)
 assets-src
 extracted_assets

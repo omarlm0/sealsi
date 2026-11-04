@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { whatsappLink } from '../config/business'
 import { NAV_ITEMS, href } from '../data/site'
 import type { PageId } from '../data/site'
 import { Icon } from './Icon'
@@ -75,9 +76,21 @@ export function Header({ page, cartons, dark = false, onNavigate }: HeaderProps)
             FR
           </span>
           <a
+            className="header-contact"
+            href={whatsappLink(
+              'Bonjour SEALSI, je souhaite des informations sur la lessive Oceanic Scent 5 L.',
+            )}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Contacter SEALSI sur WhatsApp"
+          >
+            <Icon name="whatsapp" />
+            <span>WhatsApp</span>
+          </a>
+          <a
             href={href('selection')}
             className="cart-link"
-            aria-label={`Voir ma sélection : ${cartons} carton${cartons > 1 ? 's' : ''}`}
+            aria-label={`Voir ma sélection : ${cartons} carton${cartons === 1 ? '' : 's'}`}
             onClick={(event) => {
               event.preventDefault()
               go('selection')
@@ -131,6 +144,16 @@ export function Header({ page, cartons, dark = false, onNavigate }: HeaderProps)
             }}
           >
             Ma sélection
+          </a>
+          <a
+            href={whatsappLink(
+              'Bonjour SEALSI, je souhaite des informations sur la lessive Oceanic Scent 5 L.',
+            )}
+            className="mobile-contact"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <Icon name="whatsapp" /> WhatsApp
           </a>
         </nav>
       ) : null}

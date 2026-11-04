@@ -19,8 +19,6 @@ export const PRODUCT = {
   minimumCartons: 1,
   /** Demonstration limit only — replace with the validated commercial rule. */
   maximumCartons: 999,
-  /** Quantity shown when no selection exists yet (handoff requirement). */
-  exampleCartons: 6,
 } as const
 
 export const QUANTITY_ERROR = `Indiquez un nombre entier entre ${PRODUCT.minimumCartons} et ${PRODUCT.maximumCartons} cartons.`
@@ -53,7 +51,16 @@ export const FAQ = [
   },
 ] as const
 
-export type PageId = 'accueil' | 'produit' | 'selection' | 'demande' | 'professionnels'
+export type PageId =
+  | 'accueil'
+  | 'produit'
+  | 'selection'
+  | 'demande'
+  | 'professionnels'
+  | 'mentions-legales'
+  | 'confidentialite'
+  | 'conditions-de-vente'
+  | 'introuvable'
 
 export const PATHS: Record<PageId, string> = {
   accueil: '/',
@@ -61,6 +68,10 @@ export const PATHS: Record<PageId, string> = {
   selection: '/selection',
   demande: '/demande',
   professionnels: '/professionnels',
+  'mentions-legales': '/mentions-legales',
+  confidentialite: '/confidentialite',
+  'conditions-de-vente': '/conditions-de-vente',
+  introuvable: '/404',
 }
 
 const PATH_TO_PAGE: Record<string, PageId> = Object.fromEntries(
@@ -75,11 +86,18 @@ export function parseLocation(location: { pathname: string; hash: string }): {
   page: PageId
   section: string | null
 } {
-  const rawPath = decodeURIComponent(location.pathname)
+  const decode = (value: string) => {
+    try {
+      return decodeURIComponent(value)
+    } catch {
+      return value
+    }
+  }
+  const rawPath = decode(location.pathname)
   const path = rawPath.replace(/\/+$/, '') || '/'
-  const section = decodeURIComponent(location.hash.replace(/^#/, '')) || null
+  const section = decode(location.hash.replace(/^#/, '')) || null
   return {
-    page: PATH_TO_PAGE[path] ?? 'accueil',
+    page: PATH_TO_PAGE[path] ?? 'introuvable',
     section,
   }
 }
@@ -109,6 +127,25 @@ export const PAGE_META: Record<PageId, { title: string; description: string }> =
     title: 'Professionnels et revendeurs — SEALSI',
     description:
       'Revendeurs et approvisionnements en volume : une gamme SEALSI, un conditionnement par cartons de 3 bouteilles et un échange direct.',
+  },
+  'mentions-legales': {
+    title: 'Mentions légales — SEALSI',
+    description:
+      'Éditeur, hébergement, propriété intellectuelle et informations légales du site SEALSI.',
+  },
+  confidentialite: {
+    title: 'Politique de confidentialité — SEALSI',
+    description:
+      'Données collectées via le formulaire SEALSI, finalités, durée de conservation et droits des personnes.',
+  },
+  'conditions-de-vente': {
+    title: 'Conditions générales de vente — SEALSI',
+    description:
+      'Devis, prix, livraison, paiement, rétractation et garanties des produits SEALSI.',
+  },
+  introuvable: {
+    title: 'Page introuvable — SEALSI',
+    description: 'La page demandée n’existe pas ou a été déplacée.',
   },
 }
 

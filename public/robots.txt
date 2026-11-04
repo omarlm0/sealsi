@@ -1,4 +1,4 @@
-# Prototype SEALSI — indexation désactivée jusqu'à validation des contenus
-# légaux et commerciaux. Remplacer par « Allow: / » au moment de la mise en ligne.
 User-agent: *
-Disallow: /
+Allow: /
+
+Sitemap: https://www.sealsi.com/sitemap.xml

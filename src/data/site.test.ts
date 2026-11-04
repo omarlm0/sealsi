@@ -12,10 +12,23 @@ describe('site routing', () => {
     )
   })
 
-  it('reads section anchors and ignores unknown paths', () => {
+  it('maps legal pages', () => {
+    expect(parseLocation({ pathname: '/mentions-legales', hash: '' }).page).toBe(
+      'mentions-legales',
+    )
+    expect(parseLocation({ pathname: '/confidentialite', hash: '' }).page).toBe(
+      'confidentialite',
+    )
+    expect(parseLocation({ pathname: '/conditions-de-vente', hash: '' }).page).toBe(
+      'conditions-de-vente',
+    )
+  })
+
+  it('reads section anchors and sends unknown paths to the 404 page', () => {
     expect(parseLocation({ pathname: '/', hash: '#univers' }).section).toBe('univers')
     expect(parseLocation({ pathname: '/professionnels', hash: '#faq' }).section).toBe('faq')
-    expect(parseLocation({ pathname: '/inconnu', hash: '' }).page).toBe('accueil')
+    expect(parseLocation({ pathname: '/inconnu', hash: '' }).page).toBe('introuvable')
+    expect(parseLocation({ pathname: '/404', hash: '' }).page).toBe('introuvable')
   })
 
   it('builds canonical hrefs', () => {
@@ -23,5 +36,6 @@ describe('site routing', () => {
     expect(href('produit')).toBe('/lessive/oceanic-5l')
     expect(href('produit', 'conseils')).toBe('/lessive/oceanic-5l#conseils')
     expect(href('accueil', 'univers')).toBe('/#univers')
+    expect(href('confidentialite')).toBe('/confidentialite')
   })
 })

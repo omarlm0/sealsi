@@ -1,3 +1,6 @@
+import { CONTACT, mailtoLink, whatsappLink } from '../config/business'
+import { LEGAL_DOCUMENTS } from '../data/legal'
+import type { LegalPageId } from '../data/legal'
 import { href } from '../data/site'
 import type { PageId } from '../data/site'
 import { Icon } from './Icon'
@@ -7,7 +10,14 @@ type FooterProps = {
   onNavigate: (page: PageId, section?: string) => void
 }
 
-const LEGAL_LABELS = ['Mentions légales', 'Confidentialité', 'Conditions de vente']
+const LEGAL_LINKS: Array<{ page: LegalPageId; label: string }> = [
+  { page: 'mentions-legales', label: 'Mentions légales' },
+  { page: 'confidentialite', label: 'Confidentialité' },
+  { page: 'conditions-de-vente', label: 'Conditions de vente' },
+]
+
+const DEFAULT_MESSAGE =
+  'Bonjour SEALSI, je souhaite des informations sur la lessive Oceanic Scent 5 L.'
 
 export function Footer({ onNavigate }: FooterProps) {
   const link = (page: PageId, section: string | undefined, label: string) => (
@@ -36,7 +46,7 @@ export function Footer({ onNavigate }: FooterProps) {
           </div>
 
           <nav aria-label="Découvrir">
-            <h4>Découvrir</h4>
+            <h2>Découvrir</h2>
             <ul>
               <li>{link('produit', undefined, 'Oceanic Scent')}</li>
               <li>{link('accueil', 'univers', 'Notre univers')}</li>
@@ -45,7 +55,7 @@ export function Footer({ onNavigate }: FooterProps) {
           </nav>
 
           <nav aria-label="Commander">
-            <h4>Commander</h4>
+            <h2>Commander</h2>
             <ul>
               <li>{link('selection', undefined, 'Commander par carton')}</li>
               <li>{link('professionnels', undefined, 'Devenir revendeur')}</li>
@@ -54,12 +64,30 @@ export function Footer({ onNavigate }: FooterProps) {
           </nav>
 
           <div>
-            <h4>Restons en contact</h4>
-            <ul>
+            <h2>Restons en contact</h2>
+            <p className="footer-contact-intro">Votre projet commence par une conversation.</p>
+            <ul className="footer-contact">
               <li>
-                Votre projet commence
-                <br />
-                par une conversation.
+                <a href={mailtoLink('Demande d’information SEALSI', DEFAULT_MESSAGE)}>
+                  <Icon name="mail" />
+                  {CONTACT.email}
+                </a>
+              </li>
+              <li>
+                <a href={CONTACT.phoneHref}>
+                  <Icon name="phone" />
+                  {CONTACT.phoneDisplay}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={whatsappLink(DEFAULT_MESSAGE)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Icon name="whatsapp" />
+                  WhatsApp
+                </a>
               </li>
             </ul>
             <a
@@ -78,9 +106,18 @@ export function Footer({ onNavigate }: FooterProps) {
         <div className="footer-bottom">
           <span>© 2026 SEALSI. Tous droits réservés.</span>
           <div className="footer-legal">
-            {LEGAL_LABELS.map((label) => (
-              <span key={label} className="footer-legal-label" title="Document à rédiger avant mise en ligne">
-                {label}
+            {LEGAL_LINKS.map(({ page, label }) => (
+              <span key={page}>
+                <a
+                  href={href(page)}
+                  title={LEGAL_DOCUMENTS[page].title}
+                  onClick={(event) => {
+                    event.preventDefault()
+                    onNavigate(page)
+                  }}
+                >
+                  {label}
+                </a>
               </span>
             ))}
           </div>

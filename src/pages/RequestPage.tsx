@@ -1,5 +1,16 @@
 import { useEffect, useRef, useState } from 'react'
 import type { FormEvent } from 'react'
+import {
+  COMMERCE,
+  CONTACT,
+  REQUEST_ENDPOINT,
+  buildReference,
+  buildRequestMessage,
+  buildRequestSubject,
+  mailtoLink,
+  whatsappLink,
+} from '../config/business'
+import type { RequestDetails } from '../config/business'
 import { PRODUCT, href } from '../data/site'
 import type { PageId } from '../data/site'
 import { bottlesFor, litresFor } from '../lib/cart'
@@ -23,6 +34,8 @@ type FormValues = {
 }
 
 type FormErrors = Partial<Record<keyof FormValues, string>>
+type DialogMode = 'handoff' | 'sent' | 'error'
+type CopyState = 'idle' | 'copied' | 'error'
 
 const INITIAL_VALUES: FormValues = {
   type: 'Professionnel / revendeur',
@@ -56,15 +69,26 @@ function validate(values: FormValues): FormErrors {
 export function RequestPage({ cartons, onNavigate }: RequestPageProps) {
   const [values, setValues] = useState<FormValues>(INITIAL_VALUES)
   const [errors, setErrors] = useState<FormErrors>({})
-  const [dialogOpen, setDialogOpen] = useState(false)
+  const [honeypot, setHoneypot] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  const [submitError, setSubmitError] = useState('')
+  const [lastRequest, setLastRequest] = useState<RequestDetails | null>(null)
+  const [dialogMode, setDialogMode] = useState<DialogMode | null>(null)
+  const [copyState, setCopyState] = useState<CopyState>('idle')
   const dialogRef = useRef<HTMLDialogElement>(null)
 
   useEffect(() => {
     const dialog = dialogRef.current
     if (!dialog) return
-    if (dialogOpen && !dialog.open) dialog.showModal()
-    if (!dialogOpen && dialog.open) dialog.close()
-  }, [dialogOpen])
+    if (dialogMode && !dialog.open) dialog.showModal()
+    if (!dialogMode && dialog.open) dialog.close()
+  }, [dialogMode])
+
+  useEffect(() => {
+    if (copyState !== 'copied') return
+    const timer = window.setTimeout(() => setCopyState('idle'), 3000)
+    return () => window.clearTimeout(timer)
+  }, [copyState])
 
   const update = <K extends keyof FormValues>(key: K, value: FormValues[K]) => {
     setValues((current) => ({ ...current, [key]: value }))
@@ -76,8 +100,10 @@ export function RequestPage({ cartons, onNavigate }: RequestPageProps) {
     })
   }
 
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+    if (submitting) return
+
     const nextErrors = validate(values)
     setErrors(nextErrors)
     const firstInvalid = FIELD_ORDER.find((field) => nextErrors[field])
@@ -85,11 +111,175 @@ export function RequestPage({ cartons, onNavigate }: RequestPageProps) {
       document.getElementById(firstInvalid)?.focus()
       return
     }
-    setDialogOpen(true)
+
+    const details: RequestDetails = {
+      reference: buildReference(),
+      createdAt: new Date().toISOString(),
+      product: `${PRODUCT.name} ${PRODUCT.volumeL} L`,
+      cartons,
+      bottles: bottlesFor(cartons),
+      litres: litresFor(cartons),
+      type: values.type,
+      name: values.name.trim(),
+      company: values.company.trim(),
+      phone: values.phone.trim(),
+      city: values.city.trim(),
+      email: values.email.trim(),
+      message: values.message.trim(),
+    }
+
+    setLastRequest(details)
+    setSubmitError('')
+    setCopyState('idle')
+
+    // Honeypot: a real visitor never fills this hidden field. Bots get a
+    // success-looking dialog without any network request or data transfer.
+    if (honeypot.trim()) {
+      setDialogMode('sent')
+      return
+    }
+
+    if (!REQUEST_ENDPOINT) {
+      setDialogMode('handoff')
+      return
+    }
+
+    setSubmitting(true)
+    try {
+      const response = await fetch(REQUEST_ENDPOINT, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify(details),
+      })
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`)
+      }
+      setDialogMode('sent')
+    } catch {
+      setSubmitError(
+        'L’envoi automatique n’a pas abouti. Réessayez ou transmettez votre demande via WhatsApp ou e-mail.',
+      )
+      setDialogMode('error')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const copyMessage = async () => {
+    if (!lastRequest) return
+    try {
+      await navigator.clipboard.writeText(buildRequestMessage(lastRequest))
+      setCopyState('copied')
+    } catch {
+      setCopyState('error')
+    }
+  }
+
+  const closeDialog = () => {
+    setDialogMode(null)
+    setCopyState('idle')
+  }
+
+  if (cartons < PRODUCT.minimumCartons) {
+    return (
+      <main id="main-content" tabIndex={-1}>
+        <div className="wrap">
+          <div className="page-head">
+            <nav className="breadcrumb" aria-label="Fil d’Ariane">
+              <a
+                href={href('accueil')}
+                onClick={(event) => {
+                  event.preventDefault()
+                  onNavigate('accueil')
+                }}
+              >
+                Accueil
+              </a>{' '}
+              / Ma demande
+            </nav>
+            <h1>Votre demande.</h1>
+            <p className="lead">Quelques informations pour vous proposer la suite adaptée.</p>
+          </div>
+
+          <section className="empty-state" aria-labelledby="empty-selection-title">
+            <Icon name="bag" />
+            <h2 id="empty-selection-title">Votre sélection est vide.</h2>
+            <p>
+              Choisissez au moins un carton pour préparer une demande. Un carton contient{' '}
+              {PRODUCT.bottlesPerCarton} bouteilles de {PRODUCT.volumeL} L, soit{' '}
+              {PRODUCT.litresPerCarton} litres.
+            </p>
+            <div className="btn-row">
+              <a
+                className="btn btn-primary"
+                href={href('selection')}
+                onClick={(event) => {
+                  event.preventDefault()
+                  onNavigate('selection')
+                }}
+              >
+                Choisir mes cartons <Icon name="arrow" />
+              </a>
+              <a
+                className="btn btn-outline"
+                href={href('produit')}
+                onClick={(event) => {
+                  event.preventDefault()
+                  onNavigate('produit')
+                }}
+              >
+                Voir le produit
+              </a>
+            </div>
+          </section>
+        </div>
+      </main>
+    )
   }
 
   const hasErrors = Object.keys(errors).length > 0
   const describedBy = (field: keyof FormValues) => (errors[field] ? `${field}-error` : undefined)
+  const message = lastRequest ? buildRequestMessage(lastRequest) : ''
+  const subject = lastRequest ? buildRequestSubject(lastRequest) : ''
+  const directMessage =
+    'Bonjour SEALSI, je souhaite des informations sur la lessive Oceanic Scent 5 L.'
+
+  const handoffActions = lastRequest ? (
+    <>
+      <p className="dialog-reference">
+        Référence : <strong>{lastRequest.reference}</strong>
+      </p>
+      <div className="dialog-actions">
+        <a
+          className="btn btn-primary full"
+          href={whatsappLink(message)}
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <Icon name="whatsapp" /> Envoyer sur WhatsApp
+        </a>
+        <a className="btn btn-outline full" href={mailtoLink(subject, message)}>
+          <Icon name="mail" /> Envoyer par e-mail
+        </a>
+        <button type="button" className="btn btn-quiet full" onClick={copyMessage}>
+          <Icon name="copy" />
+          {copyState === 'copied' ? 'Récapitulatif copié' : 'Copier le récapitulatif'}
+        </button>
+      </div>
+      {copyState === 'error' ? (
+        <p className="field-error" role="alert">
+          La copie automatique est indisponible. Sélectionnez le texte du message ou utilisez
+          WhatsApp / e-mail.
+        </p>
+      ) : null}
+      <p className="small muted">
+        Le message contient vos coordonnées et votre sélection. Vérifiez-le avant l’envoi.
+      </p>
+    </>
+  ) : null
 
   return (
     <main id="main-content" tabIndex={-1}>
@@ -118,6 +308,19 @@ export function RequestPage({ cartons, onNavigate }: RequestPageProps) {
                 Vérifiez les champs signalés ci-dessous.
               </p>
             ) : null}
+
+            <div className="visually-hidden" aria-hidden="true">
+              <label htmlFor="website">Site web</label>
+              <input
+                id="website"
+                name="website"
+                type="text"
+                tabIndex={-1}
+                autoComplete="off"
+                value={honeypot}
+                onChange={(event) => setHoneypot(event.target.value)}
+              />
+            </div>
 
             <div className="form-grid">
               <div className="field full-row">
@@ -262,16 +465,65 @@ export function RequestPage({ cartons, onNavigate }: RequestPageProps) {
                   {errors.consent}
                 </p>
               ) : null}
+              <p className="consent-note">
+                Les informations sont conservées {COMMERCE.dataRetentionMonths} mois après le
+                dernier contact et ne sont ni vendues ni utilisées pour de la prospection non
+                sollicitée. Consultez la{' '}
+                <a
+                  href={href('confidentialite')}
+                  onClick={(event) => {
+                    event.preventDefault()
+                    onNavigate('confidentialite')
+                  }}
+                >
+                  politique de confidentialité
+                </a>
+                .
+              </p>
             </div>
 
-            <button className="btn btn-primary full" type="submit">
-              Envoyer ma demande <Icon name="arrow" />
+            {submitError ? (
+              <p className="form-alert" role="alert">
+                {submitError}
+              </p>
+            ) : null}
+
+            <button className="btn btn-primary full" type="submit" disabled={submitting}>
+              {submitting ? (
+                'Envoi en cours…'
+              ) : (
+                <>
+                  Envoyer ma demande <Icon name="arrow" />
+                </>
+              )}
             </button>
             <p className="small muted form-footnote">
-              La commande devient définitive après confirmation du tarif et des modalités.
-              <br />
-              Maquette locale : aucune donnée n’est envoyée.
+              La commande devient définitive après confirmation du tarif et des modalités. Aucun
+              paiement n’est demandé sur ce site.
             </p>
+
+            <div className="form-direct">
+              <h2>Vous préférez échanger directement ?</h2>
+              <p>
+                Notre équipe peut répondre à vos questions sur la quantité, la livraison ou les
+                conditions professionnelles.
+              </p>
+              <div className="form-direct-links">
+                <a
+                  href={whatsappLink(directMessage)}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <Icon name="whatsapp" /> WhatsApp
+                </a>
+                <a href={CONTACT.phoneHref}>
+                  <Icon name="phone" /> {CONTACT.phoneDisplay}
+                </a>
+                <a href={mailtoLink('Demande d’information SEALSI', directMessage)}>
+                  <Icon name="mail" /> {CONTACT.email}
+                </a>
+              </div>
+            </div>
           </form>
 
           <SummaryCard cartons={cartons} light final />
@@ -281,31 +533,59 @@ export function RequestPage({ cartons, onNavigate }: RequestPageProps) {
       <dialog
         ref={dialogRef}
         className="demo-dialog"
-        aria-labelledby="demo-dialog-title"
-        onClose={() => setDialogOpen(false)}
+        aria-labelledby="request-dialog-title"
+        onClose={closeDialog}
       >
         <div className="demo-dialog-inner">
-          <span className="eyebrow">MAQUETTE LOCALE</span>
-          <h2 id="demo-dialog-title">Aucune demande n’a été envoyée.</h2>
-          <p>
-            Ce prototype n’est connecté à aucun serveur. Les informations saisies restent dans
-            votre navigateur et ne sont transmises à personne.
-          </p>
-          <p>
-            Votre sélection : <strong>{cartons} cartons</strong> ={' '}
-            {bottlesFor(cartons)} bouteilles = {litresFor(cartons)} L (1 carton ={' '}
-            {PRODUCT.bottlesPerCarton} bouteilles de {PRODUCT.volumeL} L).
-          </p>
-          <p>
-            En production, la demande sera enregistrée avec un identifiant, puis l’équipe SEALSI
-            vous recontactera pour confirmer le tarif et les modalités.
-          </p>
-          <form method="dialog">
-            <button className="btn btn-primary">Fermer</button>
-          </form>
+          {dialogMode === 'sent' && lastRequest ? (
+            <>
+              <span className="eyebrow">DEMANDE ENREGISTRÉE</span>
+              <h2 id="request-dialog-title">Merci, votre demande est partie.</h2>
+              <p className="dialog-reference">
+                Référence : <strong>{lastRequest.reference}</strong>
+              </p>
+              <p>{COMMERCE.responseNote}</p>
+              <p className="small muted">
+                Conservez cette référence pour faciliter nos échanges. Aucun paiement n’a été
+                demandé.
+              </p>
+              <form method="dialog">
+                <button className="btn btn-primary">Fermer</button>
+              </form>
+            </>
+          ) : null}
+
+          {dialogMode === 'handoff' && lastRequest ? (
+            <>
+              <span className="eyebrow">DERNIÈRE ÉTAPE</span>
+              <h2 id="request-dialog-title">Transmettez votre demande.</h2>
+              <p>
+                Votre récapitulatif est prêt. Choisissez WhatsApp ou l’e-mail pour l’envoyer à
+                SEALSI. <strong>Aucune donnée n’a encore été transmise.</strong>
+              </p>
+              {handoffActions}
+              <form method="dialog">
+                <button className="btn btn-quiet">Fermer</button>
+              </form>
+            </>
+          ) : null}
+
+          {dialogMode === 'error' && lastRequest ? (
+            <>
+              <span className="eyebrow">ENVOI INTERROMPU</span>
+              <h2 id="request-dialog-title">La transmission automatique a échoué.</h2>
+              <p>
+                Vos informations restent dans le formulaire. Réessayez, ou envoyez le
+                récapitulatif ci-dessous via WhatsApp ou e-mail.
+              </p>
+              {handoffActions}
+              <form method="dialog">
+                <button className="btn btn-quiet">Fermer</button>
+              </form>
+            </>
+          ) : null}
         </div>
       </dialog>
     </main>
   )
 }
-

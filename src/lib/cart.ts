@@ -32,7 +32,8 @@ export function readCartons(): number {
   if (typeof window === 'undefined') return 0
   try {
     const stored = Number(window.localStorage.getItem(CARTONS_STORAGE_KEY) ?? 0)
-    return Number.isInteger(stored) && stored >= 0 ? stored : 0
+    if (!Number.isInteger(stored) || stored < 0) return 0
+    return stored === 0 ? 0 : clampCartons(stored)
   } catch {
     return 0
   }
