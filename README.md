@@ -41,8 +41,8 @@ Le routage utilise l’API History (URL lisibles, sans `#`).
 | --------------------------- | ---------------------------------------------- |
 | `/`                         | Accueil : hero, signature, produit, pro, étapes |
 | `/lessive/oceanic-5l`       | Fiche produit : galerie, quantité, accordéons   |
-| `/selection`                | Sélection : cartons, raccourcis, récapitulatif  |
-| `/demande`                  | Formulaire de demande de devis                  |
+| `/demande`                  | Commande : quantité, coordonnées et récapitulatif sur une page |
+| `/selection`                | Ancienne URL, redirigée côté client vers `/demande` |
 | `/professionnels`           | Services professionnels et FAQ                  |
 | `/mentions-legales`         | Mentions légales                                |
 | `/confidentialite`          | Politique de confidentialité                    |
@@ -68,20 +68,23 @@ les informations légales sont dans **`src/config/business.ts`**.
 Le plafond de 999 cartons est une **limite de démonstration** : remplacez-la par
 la règle commerciale validée avant mise en ligne.
 
-## Sélection et persistance
+## Commande et persistance
 
-- La sélection est stockée dans `localStorage` sous la clé `sealsi-cartons`.
-- `/selection` ouvre sur **1 carton** lorsqu’aucune sélection n’existe encore.
-- `/demande` avec **0 carton** affiche un état vide avec un lien vers la
-  sélection : aucune quantité d’exemple n’est injectée à l’insu du visiteur.
-- Depuis la fiche produit, « Ajouter à ma sélection » ajoute la quantité au
-  nombre déjà stocké (dans la limite de 999), puis ouvre `/selection`.
+- La quantité est stockée dans `localStorage` sous la clé `sealsi-cartons`.
+- `/demande` réunit la quantité et les coordonnées sur une seule page.
+- Aucune quantité n’est forcée à l’arrivée : la quantité démarre vide et le
+  bouton de confirmation reste bloqué tant qu’un nombre entier de cartons n’a
+  pas été choisi. Le plafond de 999 et les raccourcis restent des valeurs de
+  démonstration.
+- Depuis la fiche produit, « Préparer ma commande » reprend la quantité
+  choisie (ou la quantité déjà stockée), puis ouvre `/demande`.
 
-## Formulaire de demande
+## Formulaire de commande
 
-`src/pages/RequestPage.tsx` valide les champs côté client (nom, téléphone,
-ville, e-mail facultatif, consentement), place le focus sur le premier champ
-invalide et annonce les erreurs via `role="alert"`.
+`src/pages/RequestPage.tsx` réunit la quantité et le formulaire. Il valide les
+champs côté client (nom, téléphone, ville, e-mail facultatif, consentement),
+place le focus sur le premier champ invalide, conserve les valeurs saisies et
+annonce les erreurs via `role="alert"`.
 
 Le formulaire contient un **champ piège** invisible : un robot qui le remplit
 reçoit une confirmation factice sans aucune requête réseau.
@@ -141,9 +144,14 @@ remplacés avant la mise en ligne. Aucune donnée d’entreprise n’est invent�
 
 Les visuels sont dans `public/assets`, avec des variantes WebP responsives :
 
+- hero : `oceanic-hero.webp` (1672 × 941, scène Oceanic générée)
 - packshot : 320 / 480 / 640 px (`sealsi-oceanic-packshot-*.webp`)
 - signature : 700 / 1000 / 1400 px (`sealsi-oceanic-signature*.webp`)
 - Open Graph : `sealsi-og.jpg` (1200 × 630, généré depuis le master)
+
+> La scène hero est une direction visuelle générée. Avant production,
+> remplacez-la par un rendu 3D ou une retouche avec l’étiquette source exacte
+> pour garantir les petits textes et les proportions du packaging.
 
 `npm run optimize:images` régénère ces fichiers depuis
 `assets-src/products/sealsi-oceanic-packshot.png` et
@@ -160,8 +168,8 @@ Le site est prêt à être indexé :
 - `index.html` : `robots` = `index, follow`, canonical absolu, Open Graph et
   Twitter Cards avec une image absolue `1200 × 630`
 - `public/robots.txt` : `Allow: /` et déclaration du sitemap
-- `public/sitemap.xml` : pages produit, sélection, demande, professionnels et
-  pages légales
+- `public/sitemap.xml` : pages produit, demande, professionnels et pages
+  légales
 - le routeur met à jour le titre, la description, le canonical, `og:url` et
   `robots` à chaque navigation ; la page 404 reste en `noindex, follow`
 

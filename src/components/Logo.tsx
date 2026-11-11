@@ -5,13 +5,16 @@ type LogoProps = {
 
 export function Logo({ variant = 'navy', className }: LogoProps) {
   return (
-    <img
-      src={`/assets/sealsi-logo-${variant}.png`}
-      alt="SEALSI"
-      width={880}
-      height={283}
-      className={className}
-      decoding="async"
-    />
+    <span className="logo-lockup">
+      <img
+        src={`/assets/sealsi-logo-${variant}.png`}
+        alt="SEALSI"
+        width={880}
+        height={283}
+        className={className}
+        decoding="async"
+      />
+      <span className="logo-signature">Clean | Soft | Fresh</span>
+    </span>
   )
 }

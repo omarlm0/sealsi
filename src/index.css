@@ -4,17 +4,17 @@
    ========================================================================== */
 
 :root {
-  --navy: #061a40;
+  --navy: #04152f;
   --deep: #020e24;
-  --blue: #0750b9;
-  --cyan: #69dff0;
-  --gold: #d5ac50;
+  --blue: #064aa5;
+  --cyan: #70dfef;
+  --gold: #d6b15d;
   --ivory: #f5f0e5;
   --paper: #fbfcfd;
   /* Darkened from #637086 to keep 4.5:1 contrast on ivory and pale-blue panels. */
   --muted: #5c687b;
   --line: #dfe6ed;
-  --focus: #0750b9;
+  --focus: #064aa5;
   --ease: cubic-bezier(0.2, 0.75, 0.25, 1);
   --font: "Segoe UI", "Inter Variable", Arial, sans-serif;
   --serif: Georgia, "Times New Roman", serif;
@@ -375,10 +375,32 @@ p {
   border-color: #ffffff16;
 }
 
+.brand {
+  display: inline-flex;
+}
+
+.logo-lockup {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  line-height: 1;
+}
+
 .brand img {
   width: 144px;
   height: 48px;
   object-fit: contain;
+}
+
+.logo-signature {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: none;
+  white-space: nowrap;
+  color: inherit;
+  opacity: 0.9;
 }
 
 .nav {
@@ -514,29 +536,51 @@ p {
   background: var(--deep);
   color: white;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
-.hero::before {
+.hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background: var(--navy);
+}
+
+.hero-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: right center;
+}
+
+.hero-media::after {
   content: "";
   position: absolute;
   inset: 0;
-  background:
-    radial-gradient(ellipse at 76% 50%, #083f8b80, transparent 51%),
-    radial-gradient(ellipse at 10% 100%, #06497a35, transparent 60%);
+  background: linear-gradient(
+    90deg,
+    #04152ff7 0%,
+    #04152feb 18%,
+    #04152f9c 36%,
+    #04152f1f 55%,
+    transparent 68%
+  );
 }
 
 .hero .wrap {
+  width: 100%;
   min-height: 755px;
-  display: grid;
-  grid-template-columns: 1.05fr 1fr;
-  gap: 10px;
+  display: flex;
   align-items: center;
   position: relative;
+  z-index: 2;
 }
 
 .hero-copy {
   position: relative;
   z-index: 3;
+  max-width: 590px;
   padding: 65px 0 80px;
 }
 
@@ -579,72 +623,18 @@ p {
   padding-left: 25px;
 }
 
-.hero-visual {
-  height: 735px;
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.hero-water {
-  position: absolute;
-  width: 110%;
-  height: 100%;
-  left: 8%;
-  top: 0;
-  object-fit: cover;
-  opacity: 0.25;
-  mask-image: radial-gradient(ellipse, black 25%, transparent 70%);
-}
-
-.hero-halo {
-  position: absolute;
-  left: 2%;
-  right: -5%;
-  top: 25%;
-  height: 370px;
-  border-radius: 50%;
-  background: radial-gradient(ellipse, #49cfe321, transparent 68%);
-  border: 1px solid #5cdff11b;
-  transform: rotate(-13deg);
-}
-
-.hero-bottle {
-  height: 650px;
-  width: auto;
-  position: relative;
-  z-index: 2;
-  filter: drop-shadow(0 25px 32px #0007);
-  transform: rotate(3deg);
-}
-
 .hero-caption {
   position: absolute;
-  right: -4px;
-  bottom: 140px;
+  right: max(5vw, 24px);
+  bottom: 26px;
   z-index: 3;
   border-left: 1px solid var(--gold);
   padding: 6px 0 6px 13px;
-  font-size: 12px;
+  font-size: 11px;
+  letter-spacing: 0.08em;
   line-height: 1.5;
-  color: #b9daee;
-}
-
-.hero-caption strong {
-  display: block;
-  color: white;
-  font-size: 17px;
-  font-weight: 500;
-}
-
-.hero-bottom {
-  position: absolute;
-  bottom: 24px;
-  left: 36px;
-  font-size: 10px;
-  letter-spacing: 0.12em;
-  color: #7594b5;
+  color: #d8eff8;
+  text-shadow: 0 1px 14px #020e24;
 }
 
 /* --------------------------------------------------------------------------
@@ -1659,6 +1649,150 @@ p {
   margin-top: 13px;
 }
 
+/* Combined quantity + contact flow */
+
+.request-form {
+  display: grid;
+  gap: 22px;
+}
+
+.panel-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.panel-head h2 {
+  margin: 0;
+  font-size: 22px;
+}
+
+.panel-index {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: #e6f4f8;
+  color: #0d7388;
+  display: grid;
+  place-items: center;
+  font-size: 11px;
+  font-weight: 750;
+  flex: none;
+}
+
+.order-steps {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0;
+  list-style: none;
+  margin: 0 0 20px;
+  padding: 0;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.order-steps li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.order-steps li + li::before {
+  content: "";
+  width: 26px;
+  height: 1px;
+  background: var(--line);
+  margin: 0 10px;
+}
+
+.order-steps b {
+  color: #0d7388;
+  font-weight: 750;
+}
+
+.order-steps li:last-child {
+  color: #8a97a8;
+}
+
+.order-product {
+  display: grid;
+  grid-template-columns: 96px 1fr;
+  gap: 20px;
+  align-items: center;
+  padding-bottom: 22px;
+  border-bottom: 1px solid var(--line);
+}
+
+.order-thumb {
+  background: #edf5f8;
+  border-radius: 8px;
+  padding: 10px;
+  display: grid;
+  place-items: center;
+}
+
+.order-thumb img {
+  height: 112px;
+  width: auto;
+  object-fit: contain;
+}
+
+.order-product h3 {
+  font-size: 21px;
+}
+
+.order-product p {
+  font-size: 12px;
+  color: var(--muted);
+  margin: 4px 0 10px;
+}
+
+.order-product .tag {
+  font-size: 10px;
+  padding: 6px 9px;
+}
+
+.order-qty-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 18px;
+  margin-top: 22px;
+  flex-wrap: wrap;
+}
+
+.order-qty-row .quantity-presets {
+  margin-top: 10px;
+}
+
+.order-qty-result {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  margin-top: 18px;
+  padding: 12px 14px;
+  border-radius: 7px;
+  background: #eef7fa;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.order-qty-result strong {
+  color: var(--navy);
+  font-size: 14px;
+}
+
+.optional {
+  font-weight: 400;
+  color: var(--muted);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
 /* --------------------------------------------------------------------------
    Professionals
    -------------------------------------------------------------------------- */
@@ -2148,17 +2282,17 @@ p {
     min-height: 700px;
   }
 
-  .hero-visual {
-    height: 690px;
+  .hero-copy {
+    padding: 55px 0 65px;
   }
 
-  .hero-bottle {
-    height: 590px;
+  .hero-media img {
+    object-fit: cover;
   }
 
   .hero-caption {
-    right: -5px;
-    bottom: 100px;
+    right: 28px;
+    bottom: 22px;
   }
 
   .product-main {
@@ -2217,6 +2351,11 @@ p {
     height: 40px;
   }
 
+  .logo-signature {
+    font-size: 8px;
+    letter-spacing: 0.06em;
+  }
+
   .nav,
   .header-language {
     display: none;
@@ -2241,14 +2380,12 @@ p {
   }
 
   .hero .wrap {
-    display: flex;
-    flex-direction: column;
+    display: block;
     min-height: 0;
-    gap: 0;
   }
 
   .hero-copy {
-    padding: 43px 0 0;
+    padding: 43px 0 36px;
     width: 100%;
   }
 
@@ -2291,42 +2428,27 @@ p {
     padding-left: 12px;
   }
 
-  .hero-visual {
-    height: 440px;
+  .hero-media {
+    position: relative;
+    inset: auto;
+    height: 370px;
     width: 100%;
-    margin-top: 7px;
   }
 
-  .hero-bottle {
-    height: 405px;
-    transform: rotate(4deg);
+  .hero-media img {
+    object-fit: cover;
+    object-position: right center;
+  }
+
+  .hero-media::after {
+    display: none;
   }
 
   .hero-caption {
-    right: 0;
-    bottom: 87px;
-    font-size: 10px;
+    right: 22px;
+    bottom: 14px;
+    font-size: 9px;
     padding-left: 9px;
-  }
-
-  .hero-caption strong {
-    font-size: 13px;
-  }
-
-  .hero-bottom {
-    left: 22px;
-    bottom: 15px;
-    font-size: 8px;
-  }
-
-  .hero-water {
-    left: 0;
-    width: 110%;
-  }
-
-  .hero-halo {
-    top: 20%;
-    height: 260px;
   }
 
   .benefit-bar .wrap {
@@ -2926,5 +3048,53 @@ p {
 
   .dialog-actions {
     gap: 8px;
+  }
+}
+
+@media (max-width: 760px) {
+  .order-steps {
+    font-size: 8px;
+    margin-bottom: 17px;
+  }
+
+  .order-steps li + li::before {
+    width: 14px;
+    margin: 0 6px;
+  }
+
+  .order-product {
+    grid-template-columns: 76px 1fr;
+    gap: 14px;
+  }
+
+  .order-thumb img {
+    height: 90px;
+  }
+
+  .order-product h3 {
+    font-size: 19px;
+  }
+
+  .order-product p {
+    font-size: 11px;
+  }
+
+  .order-qty-row {
+    display: block;
+    margin-top: 20px;
+  }
+
+  .order-qty-row .quantity-presets {
+    margin-top: 13px;
+  }
+
+  .order-qty-result {
+    display: block;
+    font-size: 11px;
+  }
+
+  .order-qty-result span + span {
+    display: block;
+    margin-top: 4px;
   }
 }

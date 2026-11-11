@@ -1,12 +1,12 @@
 {
   "name": "SEALSI — Oceanic Scent",
   "short_name": "SEALSI",
-  "description": "Lessive liquide Oceanic Scent 5 L. Sélection par cartons, tarif sur confirmation.",
+  "description": "Lessive liquide Oceanic Scent 5 L. Commande par cartons, tarif sur confirmation.",
   "lang": "fr",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#FBFCFD",
-  "theme_color": "#061A40",
+  "theme_color": "#04152F",
   "icons": [
     {
       "src": "/assets/sealsi-star.svg",

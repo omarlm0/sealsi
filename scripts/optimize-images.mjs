@@ -6,6 +6,7 @@ import fs from 'node:fs'
  *
  * Sources:
  * - assets-src/products/sealsi-oceanic-packshot.png (master packshot, not deployed)
+ * - assets-src/products/oceanic-hero.png (master hero scene, not deployed)
  * - public/assets/sealsi-oceanic-signature.webp (delivered handoff asset)
  *
  * The delivered WebP files in public/assets remain valid fallbacks.
@@ -19,9 +20,14 @@ async function convert(src, out, width) {
 }
 
 const packshot = 'assets-src/products/sealsi-oceanic-packshot.png'
+const hero = 'assets-src/products/oceanic-hero.png'
 
 if (!fs.existsSync(packshot)) {
   throw new Error(`Master packshot missing: ${packshot}`)
+}
+
+if (!fs.existsSync(hero)) {
+  throw new Error(`Master hero missing: ${hero}`)
 }
 
 for (const width of [320, 480, 640]) {
@@ -43,45 +49,41 @@ for (const width of [700, 1000]) {
 }
 
 /**
- * 1200 × 630 Open Graph card. The packshot is composited over a navy card so
- * social previews use a light, correctly sized JPG instead of the 1.7 MB PNG.
+ * 1200 × 630 Open Graph card. The hero scene already reserves its left half
+ * for readable text, so the card keeps the real product scene instead of a
+ * synthetic mockup. A left gradient guarantees text contrast.
  */
 async function buildOpenGraphCard() {
   const width = 1200
   const height = 630
-  const bottle = await sharp(packshot)
-    .resize({ height: 560, fit: 'inside' })
-    .png()
+  const scene = await sharp(hero)
+    .resize({ width, height, fit: 'cover', position: 'centre' })
     .toBuffer()
-  const bottleMeta = await sharp(bottle).metadata()
-  const bottleWidth = bottleMeta.width ?? 280
-  const bottleHeight = bottleMeta.height ?? 560
-  const bottleLeft = width - bottleWidth - 90
-  const bottleTop = height - bottleHeight - 28
 
-  const overlay = Buffer.from(`
+  const text = Buffer.from(`
     <svg width="${width}" height="${height}" xmlns="http://www.w3.org/2000/svg">
       <defs>
-        <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="#020e24" />
-          <stop offset="1" stop-color="#0750b9" />
+        <linearGradient id="veil" x1="0" y1="0" x2="1" y2="0">
+          <stop offset="0" stop-color="#04152f" stop-opacity="0.96" />
+          <stop offset="0.34" stop-color="#04152f" stop-opacity="0.88" />
+          <stop offset="0.6" stop-color="#04152f" stop-opacity="0.3" />
+          <stop offset="0.8" stop-color="#04152f" stop-opacity="0.02" />
         </linearGradient>
       </defs>
-      <rect width="100%" height="100%" fill="url(#bg)" />
-      <circle cx="1020" cy="90" r="230" fill="#69dff0" opacity="0.08" />
-      <circle cx="90" cy="620" r="270" fill="#69dff0" opacity="0.06" />
-      <text x="80" y="150" fill="#69dff0" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="6">SEALSI / OCEANIC SCENT</text>
-      <text x="80" y="275" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="76" font-weight="700" letter-spacing="-3">Le propre.</text>
-      <text x="80" y="360" fill="#d7f8fe" font-family="Georgia, Times New Roman, serif" font-size="76" font-style="italic" letter-spacing="-2">L’esprit léger.</text>
-      <rect x="80" y="410" width="70" height="3" fill="#d5ac50" />
-      <text x="80" y="474" fill="#c1d0e3" font-family="Segoe UI, Arial, sans-serif" font-size="27">Lessive liquide 5 L — 3 bouteilles par carton</text>
-      <text x="80" y="520" fill="#8fa8c7" font-family="Segoe UI, Arial, sans-serif" font-size="23">1 carton = 15 litres · Tarif sur confirmation</text>
+      <rect width="100%" height="100%" fill="url(#veil)" />
+      <text x="80" y="128" fill="#70dfef" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="6">SEALSI / OCEANIC SCENT</text>
+      <text x="80" y="248" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="72" font-weight="700" letter-spacing="-2">Le propre.</text>
+      <text x="80" y="332" fill="#d7f8fe" font-family="Georgia, Times New Roman, serif" font-size="66" font-style="italic" letter-spacing="-2">Une vague</text>
+      <text x="80" y="408" fill="#d7f8fe" font-family="Georgia, Times New Roman, serif" font-size="66" font-style="italic" letter-spacing="-2">de fraîcheur.</text>
+      <rect x="80" y="446" width="70" height="3" fill="#d6b15d" />
+      <text x="80" y="500" fill="#c9d8ea" font-family="Segoe UI, Arial, sans-serif" font-size="26">Lessive liquide 5 L — 3 bouteilles par carton</text>
+      <text x="80" y="544" fill="#9db3cc" font-family="Segoe UI, Arial, sans-serif" font-size="22">1 carton = 15 litres · Tarif sur confirmation</text>
     </svg>
   `)
 
   const out = 'public/assets/sealsi-og.jpg'
-  await sharp(overlay)
-    .composite([{ input: bottle, left: bottleLeft, top: bottleTop }])
+  await sharp(scene)
+    .composite([{ input: text }])
     .jpeg({ quality: 88, mozjpeg: true })
     .toFile(out)
   outputs.push([out, fs.statSync(out).size])

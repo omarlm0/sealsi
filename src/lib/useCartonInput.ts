@@ -6,7 +6,9 @@ import { clampCartons, parseCartons, quantityError } from '../lib/cart'
  * typing, while exposing the last valid carton count.
  */
 export function useCartonInput(initial: number) {
-  const [text, setText] = useState(String(initial))
+  // Zero means "nothing chosen yet": keep the field empty instead of forcing
+  // a demonstration quantity on production visitors.
+  const [text, setText] = useState(initial > 0 ? String(initial) : '')
   const value = parseCartons(text)
   const error = quantityError(text)
 
@@ -15,7 +17,11 @@ export function useCartonInput(initial: number) {
   }
 
   const step = (delta: 1 | -1) => {
-    setCartons((value ?? initial) + delta)
+    if (value === null) {
+      if (delta === 1) setCartons(1)
+      return
+    }
+    setCartons(value + delta)
   }
 
   return { text, setText, value, error, setCartons, step }

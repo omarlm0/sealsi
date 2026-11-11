@@ -57,7 +57,7 @@ export function Footer({ onNavigate }: FooterProps) {
           <nav aria-label="Commander">
             <h2>Commander</h2>
             <ul>
-              <li>{link('selection', undefined, 'Commander par carton')}</li>
+              <li>{link('demande', undefined, 'Préparer ma commande')}</li>
               <li>{link('professionnels', undefined, 'Devenir revendeur')}</li>
               <li>{link('professionnels', 'faq', 'Questions fréquentes')}</li>
             </ul>

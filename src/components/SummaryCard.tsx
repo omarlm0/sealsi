@@ -36,7 +36,7 @@ export function SummaryCard({
           <dd>{cartons}</dd>
         </div>
         <div>
-          <dt>Bouteilles de 5 L</dt>
+          <dt>Bouteilles</dt>
           <dd>{bottlesFor(cartons)}</dd>
         </div>
         <div>

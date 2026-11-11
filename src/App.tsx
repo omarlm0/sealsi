@@ -3,12 +3,11 @@ import { Header } from './components/Header'
 import { Footer } from './components/Footer'
 import { HomePage } from './pages/HomePage'
 import { ProductPage } from './pages/ProductPage'
-import { SelectionPage } from './pages/SelectionPage'
 import { RequestPage } from './pages/RequestPage'
 import { ProfessionalsPage } from './pages/ProfessionalsPage'
 import { LegalPage } from './pages/LegalPage'
 import { NotFoundPage } from './pages/NotFoundPage'
-import { PAGE_META, PATHS, PRODUCT, href, parseLocation } from './data/site'
+import { PAGE_META, PATHS, href, parseLocation } from './data/site'
 import type { PageId } from './data/site'
 import { isLegalPage } from './data/legal'
 import { absoluteUrl } from './config/business'
@@ -88,17 +87,18 @@ export function App() {
   }, [route.page, route.section])
 
   /**
-   * `/selection` opens on one carton when nothing has been chosen yet.
-   * `/demande` keeps the real (empty) shelf state so it can explain what to do.
+   * The old two-step flow (`/selection` → `/demande`) now lives on a single
+   * request page. Keep the old URL as a client-side redirect for bookmarks.
    */
-  const displayedCartons =
-    route.page === 'selection' && cartons < PRODUCT.minimumCartons
-      ? PRODUCT.minimumCartons
-      : cartons
+  useEffect(() => {
+    if (route.page !== 'selection') return
+    window.history.replaceState(null, '', href('demande'))
+    setRoute({ page: 'demande', section: route.section })
+  }, [route.page, route.section])
 
   const handleAdd = (quantity: number) => {
-    updateCartons(clampCartons(cartons + quantity))
-    navigate('selection')
+    updateCartons(clampCartons(quantity))
+    navigate('demande')
   }
 
   const renderPage = () => {
@@ -108,17 +108,16 @@ export function App() {
 
     switch (route.page) {
       case 'produit':
-        return <ProductPage onAdd={handleAdd} onNavigate={navigate} />
+        return <ProductPage cartons={cartons} onAdd={handleAdd} onNavigate={navigate} />
       case 'selection':
+      case 'demande':
         return (
-          <SelectionPage
-            cartons={displayedCartons}
+          <RequestPage
+            cartons={cartons}
             onCartonsChange={updateCartons}
             onNavigate={navigate}
           />
         )
-      case 'demande':
-        return <RequestPage cartons={cartons} onNavigate={navigate} />
       case 'professionnels':
         return <ProfessionalsPage onNavigate={navigate} />
       case 'introuvable':
@@ -144,7 +143,7 @@ export function App() {
 
       <Header
         page={route.page}
-        cartons={displayedCartons}
+        cartons={cartons}
         dark={route.page === 'accueil'}
         onNavigate={navigate}
       />

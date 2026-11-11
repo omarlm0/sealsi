@@ -10,14 +10,15 @@ import { Packshot } from '../components/Packshot'
 import { QuantityStepper } from '../components/QuantityStepper'
 
 type ProductPageProps = {
+  cartons: number
   onAdd: (cartons: number) => void
   onNavigate: (page: PageId, section?: string) => void
 }
 
 type GalleryView = 'front' | 'rear'
 
-export function ProductPage({ onAdd, onNavigate }: ProductPageProps) {
-  const quantity = useCartonInput(1)
+export function ProductPage({ cartons: currentCartons, onAdd, onNavigate }: ProductPageProps) {
+  const quantity = useCartonInput(currentCartons > 0 ? currentCartons : 1)
   const [gallery, setGallery] = useState<GalleryView>('front')
   const cartons = quantity.value
 
@@ -121,7 +122,7 @@ export function ProductPage({ onAdd, onNavigate }: ProductPageProps) {
                   if (cartons !== null) onAdd(cartons)
                 }}
               >
-                Ajouter à ma sélection <Icon name="arrow" />
+                Préparer ma commande <Icon name="arrow" />
               </button>
               <p className="small">
                 Tarif, disponibilité et livraison confirmés selon votre demande.

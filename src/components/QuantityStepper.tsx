@@ -30,7 +30,7 @@ export function QuantityStepper({
         onClick={() => onStep(-1)}
         aria-label="Retirer un carton"
         aria-controls={inputId}
-        disabled={value !== null && value <= PRODUCT.minimumCartons}
+        disabled={value === null || value <= PRODUCT.minimumCartons}
       >
         <Icon name="minus" />
       </button>
@@ -42,9 +42,12 @@ export function QuantityStepper({
         max={PRODUCT.maximumCartons}
         step={1}
         inputMode="numeric"
+        placeholder="0"
+        required
         value={text}
         onChange={(event) => onChange(event.target.value)}
         aria-label="Nombre de cartons"
+        aria-required="true"
         aria-invalid={invalid}
         aria-describedby={[helpId, describedBy].filter(Boolean).join(' ')}
       />

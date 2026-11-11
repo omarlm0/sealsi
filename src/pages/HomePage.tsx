@@ -31,13 +31,13 @@ const PRO_FEATURES = [
 const STEPS = [
   {
     index: '01 / CHOISIR',
-    title: 'Préparez votre sélection',
-    text: 'Choisissez Oceanic Scent et indiquez le nombre de cartons souhaité.',
+    title: 'Choisissez votre quantité',
+    text: 'Indiquez le nombre de cartons Oceanic Scent dont vous avez besoin.',
   },
   {
     index: '02 / PRÉCISER',
-    title: 'Partagez vos besoins',
-    text: 'Laissez vos coordonnées et votre ville pour organiser la suite.',
+    title: 'Complétez vos coordonnées',
+    text: 'Nom, téléphone et ville, sur la même page, sans créer de compte.',
   },
   {
     index: '03 / CONFIRMER',
@@ -61,50 +61,45 @@ export function HomePage({ onNavigate }: HomePageProps) {
             <h1>
               Le propre.
               <br />
-              <em>L’esprit léger.</em>
+              <em>
+                Une vague
+                <br />
+                de fraîcheur.
+              </em>
             </h1>
             <p>
-              Une lessive liquide inspirée de l’océan. Un univers de fraîcheur et de douceur
-              pour prendre soin de votre linge.
+              La force de l’eau, la douceur du linge. Découvrez l’univers Oceanic de SEALSI.
             </p>
             <div className="btn-row">
-              <a className="btn btn-gold" href={href('produit')} onClick={go('produit')}>
-                Découvrir Oceanic <Icon name="arrow" />
+              <a className="btn btn-gold" href={href('demande')} onClick={go('demande')}>
+                Préparer ma commande <Icon name="arrow" />
               </a>
-              <a className="btn btn-ghost" href={href('selection')} onClick={go('selection')}>
-                Commander en quantité
+              <a className="btn btn-ghost" href={href('produit')} onClick={go('produit')}>
+                Découvrir Oceanic
               </a>
             </div>
             <div className="hero-meta">
-              <span>Format 5 L</span>
+              <span>5 L par bouteille</span>
               <span>100 lavages*</span>
               <span>Formule 4 en 1</span>
             </div>
           </div>
-
-          <div className="hero-visual">
-            <img
-              className="hero-water"
-              src="/assets/sealsi-water-texture.webp"
-              alt=""
-              aria-hidden="true"
-              width={1259}
-              height={1800}
-              loading="eager"
-              fetchPriority="low"
-              decoding="async"
-            />
-            <div className="hero-halo" aria-hidden="true" />
-            <Packshot className="hero-bottle" priority sizes="(max-width: 760px) 70vw, 40vw" />
-            <div className="hero-caption">
-              <strong>Oceanic Scent</strong>
-              La fraîcheur, autrement.
-            </div>
-          </div>
-          <span className="hero-bottom" aria-hidden="true">
-            CLEAN / SOFT / FRESH
-          </span>
         </div>
+
+        <div className="hero-media" aria-hidden="true">
+          <img
+            src="/assets/oceanic-hero.webp"
+            alt=""
+            width={1672}
+            height={941}
+            loading="eager"
+            fetchPriority="high"
+            decoding="async"
+          />
+        </div>
+        <span className="hero-caption" aria-hidden="true">
+          OCEANIC SCENT / LA SIGNATURE SEALSI
+        </span>
       </section>
 
       <BenefitsBar />
@@ -127,13 +122,13 @@ export function HomePage({ onNavigate }: HomePageProps) {
             <span className="eyebrow">NOTRE SIGNATURE</span>
             <div className="mini-rule" aria-hidden="true" />
             <h2>
-              La force de l’eau.
+              Un univers marin.
               <br />
-              La douceur du linge.
+              Un quotidien plus doux.
             </h2>
             <p>
-              Une étoile lumineuse, une vague en mouvement et un tissu blanc. Trois signes qui
-              racontent l’univers SEALSI : le propre, la fraîcheur et le confort du quotidien.
+              Une étoile lumineuse, l’eau en mouvement et un tissu blanc : les signes du propre,
+              de la fraîcheur et du confort SEALSI.
             </p>
             <a className="text-link" href={href('produit')} onClick={go('produit')}>
               Explorer notre lessive <Icon name="arrow" />

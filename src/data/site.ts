@@ -104,7 +104,7 @@ export function parseLocation(location: { pathname: string; hash: string }): {
 
 export const PAGE_META: Record<PageId, { title: string; description: string }> = {
   accueil: {
-    title: 'SEALSI — Le propre. L’esprit léger.',
+    title: 'SEALSI — Le propre. Une vague de fraîcheur.',
     description:
       'Découvrez SEALSI Oceanic Scent, la lessive liquide 5 L inspirée de l’océan. Format 5 litres, 3 bouteilles par carton, tarif sur confirmation.',
   },
@@ -114,14 +114,14 @@ export const PAGE_META: Record<PageId, { title: string; description: string }> =
       'Oceanic Scent, lessive liquide SEALSI 5 L : parfum, nettoyant, adoucissant et anti-taches. 1 carton = 3 bouteilles = 15 litres.',
   },
   selection: {
-    title: 'Votre sélection — SEALSI',
+    title: 'Votre commande — SEALSI',
     description:
       'Choisissez votre nombre de cartons SEALSI Oceanic Scent. 1 carton = 3 bouteilles de 5 L = 15 litres. Tarif et livraison sur confirmation.',
   },
   demande: {
-    title: 'Votre demande — SEALSI',
+    title: 'Votre commande — SEALSI',
     description:
-      'Transmettez vos coordonnées et votre ville pour préparer votre demande SEALSI. Le tarif et les modalités sont confirmés avant la commande.',
+      'Choisissez votre nombre de cartons et laissez vos coordonnées sur une seule page. SEALSI confirme ensuite le tarif, la disponibilité et la livraison.',
   },
   professionnels: {
     title: 'Professionnels et revendeurs — SEALSI',

@@ -88,16 +88,17 @@ export function Header({ page, cartons, dark = false, onNavigate }: HeaderProps)
             <span>WhatsApp</span>
           </a>
           <a
-            href={href('selection')}
+            href={href('demande')}
             className="cart-link"
-            aria-label={`Voir ma sélection : ${cartons} carton${cartons === 1 ? '' : 's'}`}
+            aria-label={`Voir ma commande : ${cartons} carton${cartons === 1 ? '' : 's'}`}
+            aria-current={page === 'demande' ? 'page' : undefined}
             onClick={(event) => {
               event.preventDefault()
-              go('selection')
+              go('demande')
             }}
           >
             <Icon name="bag" />
-            <span className="cart-text">Ma sélection</span>
+            <span className="cart-text">Ma commande</span>
             <span className="cart-badge" aria-hidden="true">
               {cartons}
             </span>
@@ -136,14 +137,14 @@ export function Header({ page, cartons, dark = false, onNavigate }: HeaderProps)
             </a>
           ))}
           <a
-            href={href('selection')}
-            aria-current={page === 'selection' ? 'page' : undefined}
+            href={href('demande')}
+            aria-current={page === 'demande' ? 'page' : undefined}
             onClick={(event) => {
               event.preventDefault()
-              go('selection')
+              go('demande')
             }}
           >
-            Ma sélection
+            Ma commande
           </a>
           <a
             href={whatsappLink(

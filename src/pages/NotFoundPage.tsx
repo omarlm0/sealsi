@@ -36,11 +36,11 @@ export function NotFoundPage({ onNavigate }: NotFoundPageProps) {
         </div>
 
         <nav className="not-found-links" aria-label="Pages utiles">
-          <a href={href('selection')} onClick={go('selection')}>
-            Ma sélection
-          </a>
           <a href={href('demande')} onClick={go('demande')}>
-            Demander un devis
+            Préparer ma commande
+          </a>
+          <a href={href('produit')} onClick={go('produit')}>
+            Voir le produit
           </a>
           <a href={href('professionnels')} onClick={go('professionnels')}>
             Professionnels
