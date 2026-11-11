@@ -1,33 +1,19 @@
 import type { MouseEvent } from 'react'
-import { FAQ, href } from '../data/site'
+import { href } from '../data/site'
 import type { PageId } from '../data/site'
+import { useLanguage } from '../i18n/LanguageContext'
 import { ContactRibbon } from '../components/ContactRibbon'
 import { Icon } from '../components/Icon'
+import type { IconName } from '../components/Icon'
 import { Packshot } from '../components/Packshot'
 
 type ProfessionalsPageProps = {
   onNavigate: (page: PageId, section?: string) => void
 }
 
-const SERVICES = [
-  {
-    icon: 'spark' as const,
-    title: 'Notre gamme SEALSI',
-    text: 'La fabrication de nos produits, avec une identité cohérente et un format 5 L pour la lessive Oceanic Scent.',
-  },
-  {
-    icon: 'box' as const,
-    title: 'Approvisionnement des revendeurs',
-    text: 'Une demande structurée par cartons pour préciser vos besoins et préparer votre prochain réassort.',
-  },
-  {
-    icon: 'message' as const,
-    title: 'Commandes en quantité',
-    text: 'Un échange pour confirmer les volumes, les disponibilités, le tarif et les modalités de livraison.',
-  },
-]
-
 export function ProfessionalsPage({ onNavigate }: ProfessionalsPageProps) {
+  const { c } = useLanguage()
+
   const go = (page: PageId, section?: string) => (event: MouseEvent) => {
     event.preventDefault()
     onNavigate(page, section)
@@ -38,18 +24,15 @@ export function ProfessionalsPage({ onNavigate }: ProfessionalsPageProps) {
       <section className="service-hero">
         <div className="wrap">
           <div>
-            <span className="eyebrow">SEALSI POUR LES PROFESSIONNELS</span>
+            <span className="eyebrow">{c.pros.heroEyebrow}</span>
             <h1>
-              Votre prochain
+              {c.pros.heroTitle1}
               <br />
-              réassort commence ici.
+              {c.pros.heroTitle2}
             </h1>
-            <p>
-              Une gamme SEALSI, un conditionnement par cartons et un échange direct pour
-              organiser vos besoins en quantité.
-            </p>
+            <p>{c.pros.heroLead}</p>
             <a className="btn btn-primary" href={href('demande')} onClick={go('demande')}>
-              Parlons de votre besoin <Icon name="arrow" />
+              {c.pros.heroButton} <Icon name="arrow" />
             </a>
           </div>
 
@@ -61,7 +44,7 @@ export function ProfessionalsPage({ onNavigate }: ProfessionalsPageProps) {
               <Icon name="box" />
               <div>
                 <strong>3 × 5 L</strong>
-                par carton
+                {c.pros.perCarton}
               </div>
             </div>
           </div>
@@ -72,23 +55,20 @@ export function ProfessionalsPage({ onNavigate }: ProfessionalsPageProps) {
         <div className="wrap">
           <div className="section-head">
             <div>
-              <span className="eyebrow">CE QUE NOUS PROPOSONS</span>
+              <span className="eyebrow">{c.pros.servicesEyebrow}</span>
               <h2 id="services-title">
-                Le produit, le volume,
+                {c.pros.servicesTitle1}
                 <br />
-                le bon accompagnement.
+                {c.pros.servicesTitle2}
               </h2>
             </div>
-            <p>
-              Une approche claire pour les revendeurs et les demandes de produits SEALSI en
-              volume.
-            </p>
+            <p>{c.pros.servicesLead}</p>
           </div>
 
           <div className="service-cards">
-            {SERVICES.map((service) => (
+            {c.pros.services.map((service) => (
               <article className="service-card" key={service.title}>
-                <Icon name={service.icon} />
+                <Icon name={service.icon as IconName} />
                 <h3>{service.title}</h3>
                 <p>{service.text}</p>
               </article>
@@ -100,15 +80,15 @@ export function ProfessionalsPage({ onNavigate }: ProfessionalsPageProps) {
       <section className="section editorial" id="faq">
         <div className="wrap faq">
           <div>
-            <span className="eyebrow">VOS QUESTIONS</span>
+            <span className="eyebrow">{c.pros.faqEyebrow}</span>
             <h2>
-              Avant de préparer
+              {c.pros.faqTitle1}
               <br />
-              votre sélection.
+              {c.pros.faqTitle2}
             </h2>
           </div>
           <div>
-            {FAQ.map((item, index) => (
+            {c.pros.faq.map((item, index) => (
               <details key={item.question} open={index === 0}>
                 <summary>{item.question}</summary>
                 <p>{item.answer}</p>
@@ -122,4 +102,3 @@ export function ProfessionalsPage({ onNavigate }: ProfessionalsPageProps) {
     </main>
   )
 }
-

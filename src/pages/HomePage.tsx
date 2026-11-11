@@ -5,6 +5,7 @@ import { useLanguage } from '../i18n/LanguageContext'
 import { BenefitsBar } from '../components/BenefitsBar'
 import { ContactRibbon } from '../components/ContactRibbon'
 import { Icon } from '../components/Icon'
+import type { IconName } from '../components/Icon'
 
 type HomePageProps = {
   onNavigate: (page: PageId, section?: string) => void
@@ -119,7 +120,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
           <div className="pro-features">
             {c.home.proFeatures.map((feature) => (
               <div className="pro-feature" key={feature.title}>
-                <Icon name={feature.icon} />
+                <Icon name={feature.icon as IconName} />
                 <div>
                   <h3>{feature.title}</h3>
                   <p>{feature.text}</p>
