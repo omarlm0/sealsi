@@ -393,16 +393,6 @@ p {
   object-fit: contain;
 }
 
-.logo-signature {
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: none;
-  white-space: nowrap;
-  color: inherit;
-  opacity: 0.9;
-}
-
 .nav {
   display: flex;
   gap: 30px;
@@ -596,8 +586,9 @@ p {
 }
 
 .hero h1 em {
-  font-family: var(--serif);
-  font-weight: 400;
+  font-family: var(--font);
+  font-style: normal;
+  font-weight: 500;
   color: #d7f8fe;
   letter-spacing: -0.055em;
 }
@@ -742,68 +733,6 @@ p {
   margin: 25px 0;
   color: var(--muted);
   font-size: 15px;
-}
-
-.product-teaser {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  border: 1px solid var(--line);
-  border-radius: 14px;
-  background: white;
-  overflow: hidden;
-  min-height: 500px;
-}
-
-.product-image-panel {
-  background: radial-gradient(ellipse, #e6f5fa 0, #f3f7fa 58%, #eaf0f5 100%);
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 30px;
-}
-
-.product-image-panel img {
-  height: 430px;
-  width: auto;
-  filter: drop-shadow(0 15px 16px #082a4b22);
-}
-
-.product-teaser-copy {
-  padding: 55px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.product-teaser-copy h2 {
-  margin: 18px 0;
-}
-
-.product-teaser-copy p {
-  font-size: 14px;
-  color: var(--muted);
-  margin-bottom: 25px;
-}
-
-.spec-row {
-  display: flex;
-  gap: 25px;
-  font-size: 13px;
-  margin-bottom: 30px;
-}
-
-.spec-row strong {
-  display: block;
-  font-size: 24px;
-  margin-bottom: 3px;
-}
-
-.footnote {
-  font-size: 10px;
-  color: var(--muted);
-  margin-top: 18px;
-  line-height: 1.55;
 }
 
 .pro-section {
@@ -2304,10 +2233,6 @@ p {
     grid-template-columns: 1fr 310px;
   }
 
-  .product-teaser-copy {
-    padding: 35px;
-  }
-
   .footer-grid {
     gap: 28px;
   }
@@ -2349,11 +2274,6 @@ p {
   .brand img {
     width: 118px;
     height: 40px;
-  }
-
-  .logo-signature {
-    font-size: 8px;
-    letter-spacing: 0.06em;
   }
 
   .nav,
@@ -2515,39 +2435,6 @@ p {
 
   .editorial-copy p {
     font-size: 13px;
-  }
-
-  .product-teaser {
-    grid-template-columns: 1fr;
-    min-height: 0;
-  }
-
-  .product-image-panel {
-    min-height: 350px;
-  }
-
-  .product-image-panel img {
-    height: 320px;
-  }
-
-  .product-teaser-copy {
-    padding: 30px 25px;
-  }
-
-  .product-teaser-copy h2 {
-    font-size: 35px;
-  }
-
-  .product-teaser-copy p {
-    font-size: 12px;
-  }
-
-  .spec-row {
-    font-size: 11px;
-  }
-
-  .spec-row strong {
-    font-size: 22px;
   }
 
   .pro-grid p {

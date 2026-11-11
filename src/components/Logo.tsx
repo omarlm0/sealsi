@@ -14,7 +14,6 @@ export function Logo({ variant = 'navy', className }: LogoProps) {
         className={className}
         decoding="async"
       />
-      <span className="logo-signature">Clean | Soft | Fresh</span>
     </span>
   )
 }

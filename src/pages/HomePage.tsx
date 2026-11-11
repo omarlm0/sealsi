@@ -1,10 +1,9 @@
 import type { MouseEvent } from 'react'
-import { PRODUCT, href } from '../data/site'
+import { href } from '../data/site'
 import type { PageId } from '../data/site'
 import { BenefitsBar } from '../components/BenefitsBar'
 import { ContactRibbon } from '../components/ContactRibbon'
 import { Icon } from '../components/Icon'
-import { Packshot } from '../components/Packshot'
 
 type HomePageProps = {
   onNavigate: (page: PageId, section?: string) => void
@@ -133,57 +132,6 @@ export function HomePage({ onNavigate }: HomePageProps) {
             <a className="text-link" href={href('produit')} onClick={go('produit')}>
               Explorer notre lessive <Icon name="arrow" />
             </a>
-          </div>
-        </div>
-      </section>
-
-      <section className="section" aria-labelledby="product-teaser-title">
-        <div className="wrap">
-          <div className="section-head">
-            <div>
-              <span className="eyebrow">LA LESSIVE SEALSI</span>
-              <h2 id="product-teaser-title">
-                Votre essentiel.
-                <br />
-                En grand format.
-              </h2>
-            </div>
-            <p>
-              Un format 5 litres et un conditionnement par carton pour préparer facilement vos
-              besoins.
-            </p>
-          </div>
-
-          <div className="product-teaser">
-            <div className="product-image-panel">
-              <Packshot sizes="(max-width: 760px) 80vw, 30vw" />
-            </div>
-            <div className="product-teaser-copy">
-              <span className="tag">VARIANTE OCEANIC</span>
-              <h2>{PRODUCT.name}</h2>
-              <p>
-                Lessive liquide pour le linge. Retrouvez l’univers marin de SEALSI dans votre
-                routine.
-              </p>
-              <div className="spec-row">
-                <div>
-                  <strong>5 L</strong>par bouteille
-                </div>
-                <div>
-                  <strong>3</strong>bouteilles par carton
-                </div>
-                <div>
-                  <strong>4 en 1</strong>sur l’emballage
-                </div>
-              </div>
-              <a className="btn btn-primary" href={href('produit')} onClick={go('produit')}>
-                Voir le produit <Icon name="arrow" />
-              </a>
-              <p className="footnote">
-                *100 lavages sur la base de 50 ml par lavage. Le nombre varie selon le dosage,
-                la charge et la dureté de l’eau.
-              </p>
-            </div>
           </div>
         </div>
       </section>

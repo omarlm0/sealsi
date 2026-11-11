@@ -73,8 +73,8 @@ async function buildOpenGraphCard() {
       <rect width="100%" height="100%" fill="url(#veil)" />
       <text x="80" y="128" fill="#70dfef" font-family="Segoe UI, Arial, sans-serif" font-size="22" font-weight="700" letter-spacing="6">SEALSI / OCEANIC SCENT</text>
       <text x="80" y="248" fill="#ffffff" font-family="Segoe UI, Arial, sans-serif" font-size="72" font-weight="700" letter-spacing="-2">Le propre.</text>
-      <text x="80" y="332" fill="#d7f8fe" font-family="Georgia, Times New Roman, serif" font-size="66" font-style="italic" letter-spacing="-2">Une vague</text>
-      <text x="80" y="408" fill="#d7f8fe" font-family="Georgia, Times New Roman, serif" font-size="66" font-style="italic" letter-spacing="-2">de fraîcheur.</text>
+      <text x="80" y="332" fill="#d7f8fe" font-family="Segoe UI, Arial, sans-serif" font-size="66" font-weight="500" letter-spacing="-2">Une vague</text>
+      <text x="80" y="408" fill="#d7f8fe" font-family="Segoe UI, Arial, sans-serif" font-size="66" font-weight="500" letter-spacing="-2">de fraîcheur.</text>
       <rect x="80" y="446" width="70" height="3" fill="#d6b15d" />
       <text x="80" y="500" fill="#c9d8ea" font-family="Segoe UI, Arial, sans-serif" font-size="26">Lessive liquide 5 L — 3 bouteilles par carton</text>
       <text x="80" y="544" fill="#9db3cc" font-family="Segoe UI, Arial, sans-serif" font-size="22">1 carton = 15 litres · Tarif sur confirmation</text>
