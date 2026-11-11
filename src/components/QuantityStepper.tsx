@@ -1,4 +1,5 @@
 import { PRODUCT } from '../data/site'
+import { useLanguage } from '../i18n/LanguageContext'
 import { Icon } from './Icon'
 
 type QuantityStepperProps = {
@@ -20,6 +21,7 @@ export function QuantityStepper({
   onChange,
   onStep,
 }: QuantityStepperProps) {
+  const { c } = useLanguage()
   const invalid = Boolean(error)
   const helpId = `${inputId}-help`
 
@@ -28,7 +30,7 @@ export function QuantityStepper({
       <button
         type="button"
         onClick={() => onStep(-1)}
-        aria-label="Retirer un carton"
+        aria-label={c.stepper.remove}
         aria-controls={inputId}
         disabled={value === null || value <= PRODUCT.minimumCartons}
       >
@@ -46,7 +48,7 @@ export function QuantityStepper({
         required
         value={text}
         onChange={(event) => onChange(event.target.value)}
-        aria-label="Nombre de cartons"
+        aria-label={c.stepper.inputAria}
         aria-required="true"
         aria-invalid={invalid}
         aria-describedby={[helpId, describedBy].filter(Boolean).join(' ')}
@@ -54,14 +56,14 @@ export function QuantityStepper({
       <button
         type="button"
         onClick={() => onStep(1)}
-        aria-label="Ajouter un carton"
+        aria-label={c.stepper.add}
         aria-controls={inputId}
         disabled={value !== null && value >= PRODUCT.maximumCartons}
       >
         <Icon name="plus" />
       </button>
       <span id={helpId} className="visually-hidden">
-        Entier compris entre {PRODUCT.minimumCartons} et {PRODUCT.maximumCartons} cartons.
+        {c.stepper.help(PRODUCT.minimumCartons, PRODUCT.maximumCartons)}
       </span>
     </div>
   )

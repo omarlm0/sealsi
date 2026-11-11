@@ -7,11 +7,12 @@ import { RequestPage } from './pages/RequestPage'
 import { ProfessionalsPage } from './pages/ProfessionalsPage'
 import { LegalPage } from './pages/LegalPage'
 import { NotFoundPage } from './pages/NotFoundPage'
-import { PAGE_META, PATHS, href, parseLocation } from './data/site'
+import { PATHS, href, parseLocation } from './data/site'
 import type { PageId } from './data/site'
 import { isLegalPage } from './data/legal'
 import { absoluteUrl } from './config/business'
 import { clampCartons, readCartons, writeCartons } from './lib/cart'
+import { useLanguage } from './i18n/LanguageContext'
 
 function setMeta(selector: string, content: string) {
   const element = document.querySelector<HTMLMetaElement>(selector)
@@ -24,6 +25,7 @@ function setLink(selector: string, value: string) {
 }
 
 export function App() {
+  const { c, lang } = useLanguage()
   const [route, setRoute] = useState(() =>
     parseLocation(typeof window === 'undefined' ? { pathname: '/', hash: '' } : window.location),
   )
@@ -60,11 +62,12 @@ export function App() {
   }, [])
 
   useEffect(() => {
-    const meta = PAGE_META[route.page]
+    const meta = c.meta[route.page]
     document.title = meta.title
     setMeta('meta[name="description"]', meta.description)
     setMeta('meta[property="og:title"]', meta.title)
     setMeta('meta[property="og:description"]', meta.description)
+    setMeta('meta[property="og:locale"]', lang === 'ar' ? 'ar_MA' : 'fr_FR')
 
     const indexable = route.page !== 'introuvable'
     const canonical = absoluteUrl(
@@ -73,7 +76,7 @@ export function App() {
     setLink('link[rel="canonical"]', canonical)
     setMeta('meta[property="og:url"]', canonical)
     setMeta('meta[name="robots"]', indexable ? 'index, follow' : 'noindex, follow')
-  }, [route.page])
+  }, [route.page, c, lang])
 
   useEffect(() => {
     const frame = window.requestAnimationFrame(() => {
@@ -138,7 +141,7 @@ export function App() {
           document.getElementById('main-content')?.focus()
         }}
       >
-        Aller au contenu principal
+        {c.skipLink}
       </a>
 
       <Header

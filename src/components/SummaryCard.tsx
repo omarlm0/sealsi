@@ -1,5 +1,6 @@
 import { PRODUCT } from '../data/site'
 import { bottlesFor, litresFor } from '../lib/cart'
+import { useLanguage } from '../i18n/LanguageContext'
 import { Icon } from './Icon'
 
 type SummaryCardProps = {
@@ -17,30 +18,32 @@ export function SummaryCard({
   onContinue,
   continueDisabled = false,
 }: SummaryCardProps) {
+  const { c } = useLanguage()
+
   return (
     <aside
       className={`summary-card${light ? ' summary-light' : ''}`}
       aria-labelledby="summary-title"
     >
       <h2 id="summary-title" className="summary-title">
-        Votre récapitulatif
+        {c.summary.title}
       </h2>
 
       <dl>
         <div>
-          <dt>Produit</dt>
+          <dt>{c.summary.product}</dt>
           <dd>{PRODUCT.name}</dd>
         </div>
         <div>
-          <dt>Cartons</dt>
+          <dt>{c.summary.cartons}</dt>
           <dd>{cartons}</dd>
         </div>
         <div>
-          <dt>Bouteilles</dt>
+          <dt>{c.summary.bottles}</dt>
           <dd>{bottlesFor(cartons)}</dd>
         </div>
         <div>
-          <dt>Volume total</dt>
+          <dt>{c.summary.volume}</dt>
           <dd>{litresFor(cartons)} L</dd>
         </div>
       </dl>
@@ -49,19 +52,19 @@ export function SummaryCard({
 
       <dl>
         <div>
-          <dt>Tarif</dt>
-          <dd>Sur confirmation</dd>
+          <dt>{c.summary.price}</dt>
+          <dd>{c.summary.onConfirmation}</dd>
         </div>
         <div>
-          <dt>Livraison</dt>
-          <dd>Selon votre ville</dd>
+          <dt>{c.summary.delivery}</dt>
+          <dd>{c.summary.byCity}</dd>
         </div>
       </dl>
 
       <div className="divider" />
 
-      <span className="small">Montant de la commande</span>
-      <div className="summary-price">Sur devis</div>
+      <span className="small">{c.summary.amount}</span>
+      <div className="summary-price">{c.summary.quote}</div>
 
       {final ? null : (
         <button
@@ -70,14 +73,11 @@ export function SummaryCard({
           onClick={onContinue}
           disabled={continueDisabled}
         >
-          Continuer <Icon name="arrow" />
+          {c.summary.continue} <Icon name="arrow" />
         </button>
       )}
 
-      <p className="summary-disclaimer">
-        Votre demande permet de confirmer le prix et les modalités avant validation de la
-        commande.
-      </p>
+      <p className="summary-disclaimer">{c.summary.disclaimer}</p>
     </aside>
   )
 }

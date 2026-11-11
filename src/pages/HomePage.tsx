@@ -1,6 +1,7 @@
 import type { MouseEvent } from 'react'
 import { href } from '../data/site'
 import type { PageId } from '../data/site'
+import { useLanguage } from '../i18n/LanguageContext'
 import { BenefitsBar } from '../components/BenefitsBar'
 import { ContactRibbon } from '../components/ContactRibbon'
 import { Icon } from '../components/Icon'
@@ -9,43 +10,9 @@ type HomePageProps = {
   onNavigate: (page: PageId, section?: string) => void
 }
 
-const PRO_FEATURES = [
-  {
-    icon: 'box' as const,
-    title: 'Un conditionnement clair',
-    text: '1 carton = 3 bouteilles de 5 litres.',
-  },
-  {
-    icon: 'grid' as const,
-    title: 'Des commandes en volume',
-    text: 'Choisissez votre nombre de cartons.',
-  },
-  {
-    icon: 'message' as const,
-    title: 'Une proposition adaptée',
-    text: 'Tarif et modalités confirmés avec SEALSI.',
-  },
-]
-
-const STEPS = [
-  {
-    index: '01 / CHOISIR',
-    title: 'Choisissez votre quantité',
-    text: 'Indiquez le nombre de cartons Oceanic Scent dont vous avez besoin.',
-  },
-  {
-    index: '02 / PRÉCISER',
-    title: 'Complétez vos coordonnées',
-    text: 'Nom, téléphone et ville, sur la même page, sans créer de compte.',
-  },
-  {
-    index: '03 / CONFIRMER',
-    title: 'Validez la proposition',
-    text: 'Confirmez le tarif, les disponibilités et les modalités de livraison.',
-  },
-]
-
 export function HomePage({ onNavigate }: HomePageProps) {
+  const { c } = useLanguage()
+
   const go = (page: PageId, section?: string) => (event: MouseEvent) => {
     event.preventDefault()
     onNavigate(page, section)
@@ -56,31 +23,29 @@ export function HomePage({ onNavigate }: HomePageProps) {
       <section className="hero">
         <div className="wrap">
           <div className="hero-copy">
-            <span className="eyebrow">SEALSI / OCEANIC SCENT</span>
+            <span className="eyebrow">{c.hero.eyebrow}</span>
             <h1>
-              Le propre.
+              {c.hero.line1}
               <br />
               <em>
-                Une vague
+                {c.hero.line2}
                 <br />
-                de fraîcheur.
+                {c.hero.line3}
               </em>
             </h1>
-            <p>
-              La force de l’eau, la douceur du linge. Découvrez l’univers Oceanic de SEALSI.
-            </p>
+            <p>{c.hero.lead}</p>
             <div className="btn-row">
               <a className="btn btn-gold" href={href('demande')} onClick={go('demande')}>
-                Préparer ma commande <Icon name="arrow" />
+                {c.hero.primary} <Icon name="arrow" />
               </a>
               <a className="btn btn-ghost" href={href('produit')} onClick={go('produit')}>
-                Découvrir Oceanic
+                {c.hero.secondary}
               </a>
             </div>
             <div className="hero-meta">
-              <span>5 L par bouteille</span>
-              <span>100 lavages*</span>
-              <span>Formule 4 en 1</span>
+              {c.hero.meta.map((item) => (
+                <span key={item}>{item}</span>
+              ))}
             </div>
           </div>
         </div>
@@ -97,7 +62,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
           />
         </div>
         <span className="hero-caption" aria-hidden="true">
-          OCEANIC SCENT / LA SIGNATURE SEALSI
+          {c.hero.caption}
         </span>
       </section>
 
@@ -118,19 +83,16 @@ export function HomePage({ onNavigate }: HomePageProps) {
             />
           </div>
           <div className="editorial-copy">
-            <span className="eyebrow">NOTRE SIGNATURE</span>
+            <span className="eyebrow">{c.home.signatureEyebrow}</span>
             <div className="mini-rule" aria-hidden="true" />
             <h2>
-              Un univers marin.
+              {c.home.signatureTitle1}
               <br />
-              Un quotidien plus doux.
+              {c.home.signatureTitle2}
             </h2>
-            <p>
-              Une étoile lumineuse, l’eau en mouvement et un tissu blanc : les signes du propre,
-              de la fraîcheur et du confort SEALSI.
-            </p>
+            <p>{c.home.signatureLead}</p>
             <a className="text-link" href={href('produit')} onClick={go('produit')}>
-              Explorer notre lessive <Icon name="arrow" />
+              {c.home.signatureLink} <Icon name="arrow" />
             </a>
           </div>
         </div>
@@ -139,26 +101,23 @@ export function HomePage({ onNavigate }: HomePageProps) {
       <section className="section pro-section" aria-labelledby="pro-title">
         <div className="wrap pro-grid">
           <div>
-            <span className="eyebrow">POUR LES PROFESSIONNELS</span>
+            <span className="eyebrow">{c.home.proEyebrow}</span>
             <h2 id="pro-title">
-              Vos quantités.
+              {c.home.proTitle1}
               <br />
-              Notre attention.
+              {c.home.proTitle2}
             </h2>
-            <p>
-              Vous êtes revendeur ou vous préparez un approvisionnement en volume ? Construisons
-              une demande adaptée à vos besoins.
-            </p>
+            <p>{c.home.proLead}</p>
             <a
               className="btn btn-white"
               href={href('professionnels')}
               onClick={go('professionnels')}
             >
-              Découvrir nos services <Icon name="arrow" />
+              {c.home.proButton} <Icon name="arrow" />
             </a>
           </div>
           <div className="pro-features">
-            {PRO_FEATURES.map((feature) => (
+            {c.home.proFeatures.map((feature) => (
               <div className="pro-feature" key={feature.title}>
                 <Icon name={feature.icon} />
                 <div>
@@ -173,10 +132,10 @@ export function HomePage({ onNavigate }: HomePageProps) {
 
       <section className="section" aria-labelledby="steps-title">
         <div className="wrap">
-          <span className="eyebrow">COMMENT COMMANDER</span>
-          <h2 id="steps-title">Simple, du choix au contact.</h2>
+          <span className="eyebrow">{c.home.stepsEyebrow}</span>
+          <h2 id="steps-title">{c.home.stepsTitle}</h2>
           <div className="steps">
-            {STEPS.map((step) => (
+            {c.home.steps.map((step) => (
               <div key={step.index}>
                 <span className="step-index">{step.index}</span>
                 <h3>{step.title}</h3>
@@ -191,4 +150,3 @@ export function HomePage({ onNavigate }: HomePageProps) {
     </main>
   )
 }
-

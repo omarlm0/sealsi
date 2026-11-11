@@ -1,10 +1,12 @@
-import { BENEFITS } from '../data/site'
+import { useLanguage } from '../i18n/LanguageContext'
 
 export function BenefitsBar() {
+  const { c } = useLanguage()
+
   return (
-    <section className="benefit-bar" aria-label="Les quatre fonctions de la formule">
+    <section className="benefit-bar" aria-label={c.benefits.aria}>
       <div className="wrap">
-        {BENEFITS.map((benefit) => (
+        {c.benefits.items.map((benefit) => (
           <div className="benefit" key={benefit.icon}>
             <img
               src={`/assets/icon-${benefit.icon}.svg`}

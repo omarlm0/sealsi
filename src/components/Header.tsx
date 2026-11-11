@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { whatsappLink } from '../config/business'
-import { NAV_ITEMS, href } from '../data/site'
+import { href } from '../data/site'
 import type { PageId } from '../data/site'
+import { useLanguage } from '../i18n/LanguageContext'
 import { Icon } from './Icon'
 import { Logo } from './Logo'
 
@@ -13,6 +14,7 @@ type HeaderProps = {
 }
 
 export function Header({ page, cartons, dark = false, onNavigate }: HeaderProps) {
+  const { c, lang, setLang } = useLanguage()
   const [menuOpen, setMenuOpen] = useState(false)
   const menuButtonRef = useRef<HTMLButtonElement>(null)
 
@@ -37,13 +39,37 @@ export function Header({ page, cartons, dark = false, onNavigate }: HeaderProps)
     onNavigate(target, section)
   }
 
+  const languageSwitch = (
+    <div className="header-language" role="group" aria-label={c.header.languageAria}>
+      <button
+        type="button"
+        lang="fr"
+        aria-pressed={lang === 'fr'}
+        onClick={() => setLang('fr')}
+      >
+        FR
+      </button>
+      <span className="lang-separator" aria-hidden="true">
+        /
+      </span>
+      <button
+        type="button"
+        lang="ar"
+        aria-pressed={lang === 'ar'}
+        onClick={() => setLang('ar')}
+      >
+        AR
+      </button>
+    </div>
+  )
+
   return (
     <header className={dark ? 'site-header dark' : 'site-header'}>
       <div className="wrap">
         <a
           href={href('accueil')}
           className="brand"
-          aria-label="SEALSI — Accueil"
+          aria-label={c.header.homeAria}
           onClick={(event) => {
             event.preventDefault()
             go('accueil')
@@ -52,8 +78,8 @@ export function Header({ page, cartons, dark = false, onNavigate }: HeaderProps)
           <Logo variant={dark ? 'white' : 'navy'} />
         </a>
 
-        <nav className="nav" aria-label="Navigation principale">
-          {NAV_ITEMS.map((item) => {
+        <nav className="nav" aria-label={c.header.mainNavAria}>
+          {c.nav.map((item) => {
             const active = page === item.page && !item.section
             return (
               <a
@@ -72,17 +98,13 @@ export function Header({ page, cartons, dark = false, onNavigate }: HeaderProps)
         </nav>
 
         <div className="header-right">
-          <span className="header-language" aria-label="Langue du site : français">
-            FR
-          </span>
+          {languageSwitch}
           <a
             className="header-contact"
-            href={whatsappLink(
-              'Bonjour SEALSI, je souhaite des informations sur la lessive Oceanic Scent 5 L.',
-            )}
+            href={whatsappLink(c.request.directMessage)}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Contacter SEALSI sur WhatsApp"
+            aria-label={c.header.whatsappAria}
           >
             <Icon name="whatsapp" />
             <span>WhatsApp</span>
@@ -90,7 +112,7 @@ export function Header({ page, cartons, dark = false, onNavigate }: HeaderProps)
           <a
             href={href('demande')}
             className="cart-link"
-            aria-label={`Voir ma commande : ${cartons} carton${cartons === 1 ? '' : 's'}`}
+            aria-label={c.header.cartAria(cartons)}
             aria-current={page === 'demande' ? 'page' : undefined}
             onClick={(event) => {
               event.preventDefault()
@@ -98,7 +120,7 @@ export function Header({ page, cartons, dark = false, onNavigate }: HeaderProps)
             }}
           >
             <Icon name="bag" />
-            <span className="cart-text">Ma commande</span>
+            <span className="cart-text">{c.header.cart}</span>
             <span className="cart-badge" aria-hidden="true">
               {cartons}
             </span>
@@ -107,7 +129,7 @@ export function Header({ page, cartons, dark = false, onNavigate }: HeaderProps)
             ref={menuButtonRef}
             type="button"
             className="menu-button"
-            aria-label={menuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+            aria-label={menuOpen ? c.header.closeMenu : c.header.openMenu}
             aria-expanded={menuOpen}
             aria-controls="mobile-navigation"
             onClick={() => setMenuOpen((open) => !open)}
@@ -121,9 +143,9 @@ export function Header({ page, cartons, dark = false, onNavigate }: HeaderProps)
         <nav
           id="mobile-navigation"
           className="mobile-nav open"
-          aria-label="Navigation mobile"
+          aria-label={c.header.mobileNavAria}
         >
-          {NAV_ITEMS.map((item) => (
+          {c.nav.map((item) => (
             <a
               key={item.label}
               href={href(item.page, item.section)}
@@ -144,18 +166,17 @@ export function Header({ page, cartons, dark = false, onNavigate }: HeaderProps)
               go('demande')
             }}
           >
-            Ma commande
+            {c.header.cart}
           </a>
           <a
-            href={whatsappLink(
-              'Bonjour SEALSI, je souhaite des informations sur la lessive Oceanic Scent 5 L.',
-            )}
+            href={whatsappLink(c.request.directMessage)}
             className="mobile-contact"
             target="_blank"
             rel="noopener noreferrer"
           >
             <Icon name="whatsapp" /> WhatsApp
           </a>
+          {languageSwitch}
         </nav>
       ) : null}
     </header>

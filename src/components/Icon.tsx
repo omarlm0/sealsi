@@ -49,7 +49,7 @@ type IconProps = {
 export function Icon({ name, className = '' }: IconProps) {
   return (
     <svg
-      className={`icon ${className}`.trim()}
+      className={`icon icon-${name} ${className}`.trim()}
       viewBox="0 0 24 24"
       aria-hidden="true"
       focusable="false"
