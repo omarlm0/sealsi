@@ -12,7 +12,7 @@ type HomePageProps = {
 }
 
 export function HomePage({ onNavigate }: HomePageProps) {
-  const { c } = useLanguage()
+  const { c, lang } = useLanguage()
 
   const go = (page: PageId, section?: string) => (event: MouseEvent) => {
     event.preventDefault()
@@ -53,7 +53,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
 
         <div className="hero-media" aria-hidden="true">
           <img
-            src="/assets/oceanic-hero.webp"
+            src={lang === 'ar' ? '/assets/oceanic-hero-ar.webp' : '/assets/oceanic-hero.webp'}
             alt=""
             width={1672}
             height={941}

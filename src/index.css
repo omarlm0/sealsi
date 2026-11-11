@@ -591,9 +591,20 @@ p {
   );
 }
 
-/* RTL: mirror the entire hero media so the product appears on the left */
-:root[dir='rtl'] .hero-media {
-  transform: scaleX(-1);
+/* RTL: bottle sits on the left, gradient overlay fades from right to left */
+:root[dir='rtl'] .hero-media img {
+  object-position: left center;
+}
+
+:root[dir='rtl'] .hero-media::after {
+  background: linear-gradient(
+    270deg,
+    #04152ff7 0%,
+    #04152feb 18%,
+    #04152f9c 36%,
+    #04152f1f 55%,
+    transparent 68%
+  );
 }
 
 .hero .wrap {
@@ -2404,6 +2415,10 @@ p {
   .hero-media img {
     object-fit: cover;
     object-position: right center;
+  }
+
+  :root[dir='rtl'] .hero-media img {
+    object-position: left center;
   }
 
   .hero-media::after {
