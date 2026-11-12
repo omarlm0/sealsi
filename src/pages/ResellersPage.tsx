@@ -3,6 +3,7 @@ import type { PageId } from '../data/site'
 import { useLanguage } from '../i18n/LanguageContext'
 import { ContactRibbon } from '../components/ContactRibbon'
 import { Icon } from '../components/Icon'
+import { InfoRequestForm } from '../components/InfoRequestForm'
 import type { IconName } from '../components/Icon'
 import { Packshot } from '../components/Packshot'
 import { whatsappLink } from '../config/business'
@@ -38,7 +39,11 @@ export function ResellersPage({ onNavigate, onSelectVolume }: ResellersPageProps
             </h1>
             <p>{c.resellers.heroLead}</p>
             <div className="btn-row">
-              <a className="btn btn-gold" href={hrefFor('demande')} onClick={go('demande')}>
+              <a
+                className="btn btn-gold"
+                href={hrefFor('revendeurs', 'infos')}
+                onClick={go('revendeurs', 'infos')}
+              >
                 {c.resellers.heroButton} <Icon name="arrow" />
               </a>
               <a
@@ -151,6 +156,8 @@ export function ResellersPage({ onNavigate, onSelectVolume }: ResellersPageProps
           </div>
         </div>
       </section>
+
+      <InfoRequestForm audience="reseller" onNavigate={onNavigate} />
 
       <ContactRibbon onNavigate={onNavigate} />
     </main>

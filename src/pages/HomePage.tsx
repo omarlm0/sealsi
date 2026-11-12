@@ -152,22 +152,6 @@ export function HomePage({ onNavigate }: HomePageProps) {
         </div>
       </section>
 
-      <section className="section" aria-labelledby="steps-title">
-        <div className="wrap">
-          <span className="eyebrow">{c.home.stepsEyebrow}</span>
-          <h2 id="steps-title">{c.home.stepsTitle}</h2>
-          <div className="steps">
-            {c.home.steps.map((step) => (
-              <div key={step.index}>
-                <span className="step-index">{step.index}</span>
-                <h3>{step.title}</h3>
-                <p>{step.text}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       <ContactRibbon onNavigate={onNavigate} />
     </main>
   )

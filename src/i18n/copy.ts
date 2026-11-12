@@ -138,25 +138,6 @@ const fr = {
         text: 'Tarif et modalités confirmés avec SEALSI.',
       },
     ],
-    stepsEyebrow: 'COMMENT COMMANDER',
-    stepsTitle: 'Simple, du choix au contact.',
-    steps: [
-      {
-        index: '01 / CHOISIR',
-        title: 'Choisissez votre quantité',
-        text: 'Indiquez le nombre de cartons Oceanic Scent dont vous avez besoin.',
-      },
-      {
-        index: '02 / PRÉCISER',
-        title: 'Complétez vos coordonnées',
-        text: 'Nom, téléphone et ville, sur la même page, sans créer de compte.',
-      },
-      {
-        index: '03 / CONFIRMER',
-        title: 'Validez la proposition',
-        text: 'Confirmez le tarif, les disponibilités et les modalités de livraison.',
-      },
-    ],
   },
   request: {
     breadcrumbAria: 'Fil d’Ariane',
@@ -226,7 +207,7 @@ const fr = {
       copyError:
         'La copie automatique est indisponible. Sélectionnez le texte du message ou utilisez WhatsApp / e-mail.',
       handoffSmall:
-        'Le message contient vos coordonnées et votre sélection. Vérifiez-le avant l’envoi.',
+        'Le message contient vos coordonnées et le détail de votre demande. Vérifiez-le avant l’envoi.',
       errorEyebrow: 'ENVOI INTERROMPU',
       errorTitle: 'La transmission automatique a échoué.',
       errorLead:
@@ -263,6 +244,50 @@ const fr = {
       cartons: (n: number) => `${n} carton${n === 1 ? '' : 's'}`,
       subject: (reference: string, cartons: number) =>
         `Demande SEALSI ${reference} — ${cartons} carton${cartons === 1 ? '' : 's'}`,
+    },
+  },
+  infoRequest: {
+    eyebrow: 'DEMANDE D’INFORMATION',
+    title: 'Parlons de votre établissement.',
+    lead:
+      'Laissez vos coordonnées : nous revenons vers vous avec une proposition adaptée à vos volumes et à votre ville.',
+    nameLabel: 'Nom complet',
+    namePlaceholder: 'Votre nom et prénom',
+    companyLabel: 'Nom de la société',
+    companyPlaceholder: 'Votre établissement',
+    emailLabel: 'E-mail',
+    emailPlaceholder: 'Votre adresse e-mail',
+    phoneLabel: 'Téléphone',
+    phonePlaceholder: '06 XX XX XX XX',
+    addressLabel: 'Adresse',
+    addressPlaceholder: 'Rue et numéro',
+    cityLabel: 'Ville',
+    cityPlaceholder: 'Votre ville',
+    submit: 'Envoyer ma demande',
+    footnote:
+      'Ces informations servent uniquement à répondre à votre demande. Aucun paiement n’est demandé.',
+    sentNote: 'Nous revenons vers vous avec une proposition adaptée à votre établissement.',
+    mailSubject: 'Demande d’information SEALSI',
+    directMessage:
+      'Bonjour SEALSI, je souhaite être contacté au sujet de votre offre professionnelle.',
+    errors: {
+      name: 'Indiquez votre nom complet.',
+      company: 'Indiquez le nom de votre société.',
+      address: 'Indiquez votre adresse.',
+    },
+    recap: {
+      heading: (reference: string) => `Demande d’information SEALSI — ${reference}`,
+      type: 'Type de demande',
+      professional: 'Professionnel',
+      reseller: 'Revendeur',
+      company: 'Société',
+      name: 'Nom complet',
+      email: 'E-mail',
+      phone: 'Téléphone',
+      address: 'Adresse',
+      city: 'Ville',
+      created: (date: string) => `Créée le ${date}.`,
+      subject: (reference: string) => `Demande d’information SEALSI ${reference}`,
     },
   },
   resellers: {
@@ -815,25 +840,6 @@ const ar: Copy = {
         text: 'يُؤكَّد السعر والشروط مع SEALSI.',
       },
     ],
-    stepsEyebrow: 'كيف تطلب',
-    stepsTitle: 'بسيط، من الاختيار إلى التواصل.',
-    steps: [
-      {
-        index: '01 / اختيار',
-        title: 'اختر الكمية',
-        text: 'حدّد عدد كراتين Oceanic Scent التي تحتاجها.',
-      },
-      {
-        index: '02 / توضيح',
-        title: 'أكمل بياناتك',
-        text: 'الاسم والهاتف والمدينة، في صفحة واحدة، دون إنشاء حساب.',
-      },
-      {
-        index: '03 / تأكيد',
-        title: 'أكّد العرض',
-        text: 'أكّد السعر والتوفر وشروط التوصيل.',
-      },
-    ],
   },
   request: {
     breadcrumbAria: 'مسار التنقل',
@@ -899,7 +905,7 @@ const ar: Copy = {
       copied: 'تم نسخ الملخص',
       copyError:
         'النسخ التلقائي غير متاح. حدّد نص الرسالة أو استخدم واتساب / البريد الإلكتروني.',
-      handoffSmall: 'تحتوي الرسالة على بياناتك واختيارك. راجعها قبل الإرسال.',
+      handoffSmall: 'تحتوي الرسالة على بياناتك وتفاصيل طلبك. راجعها قبل الإرسال.',
       errorEyebrow: 'توقف الإرسال',
       errorTitle: 'فشل الإرسال التلقائي.',
       errorLead:
@@ -935,6 +941,47 @@ const ar: Copy = {
       cartons: (n: number) => `${n} كرتونة`,
       subject: (reference: string, cartons: number) =>
         `طلب SEALSI ${reference} — ${cartons} كرتونة`,
+    },
+  },
+  infoRequest: {
+    eyebrow: 'طلب معلومات',
+    title: 'لنتحدث عن مؤسستك.',
+    lead: 'اترك بياناتك وسنعود إليك بعرض يناسب كمياتك ومدينتك.',
+    nameLabel: 'الاسم الكامل',
+    namePlaceholder: 'اسمك ونسبك',
+    companyLabel: 'اسم الشركة',
+    companyPlaceholder: 'مؤسستك',
+    emailLabel: 'البريد الإلكتروني',
+    emailPlaceholder: 'بريدك الإلكتروني',
+    phoneLabel: 'الهاتف',
+    phonePlaceholder: '06 XX XX XX XX',
+    addressLabel: 'العنوان',
+    addressPlaceholder: 'الشارع والرقم',
+    cityLabel: 'المدينة',
+    cityPlaceholder: 'مدينتك',
+    submit: 'أرسل طلبي',
+    footnote: 'تُستخدم هذه المعلومات للرد على طلبك فقط. لا يُطلب أي دفع.',
+    sentNote: 'سنعود إليك بعرض يناسب مؤسستك.',
+    mailSubject: 'طلب معلومات SEALSI',
+    directMessage: 'مرحبًا SEALSI، أريد أن يتم التواصل معي بخصوص عرضكم المهني.',
+    errors: {
+      name: 'أدخل اسمك الكامل.',
+      company: 'أدخل اسم الشركة.',
+      address: 'أدخل عنوانك.',
+    },
+    recap: {
+      heading: (reference: string) => `طلب معلومات SEALSI — ${reference}`,
+      type: 'نوع الطلب',
+      professional: 'محترف',
+      reseller: 'موزّع',
+      company: 'الشركة',
+      name: 'الاسم الكامل',
+      email: 'البريد الإلكتروني',
+      phone: 'الهاتف',
+      address: 'العنوان',
+      city: 'المدينة',
+      created: (date: string) => `أُنشئ في ${date}.`,
+      subject: (reference: string) => `طلب معلومات SEALSI ${reference}`,
     },
   },
   resellers: {

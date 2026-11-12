@@ -142,6 +142,65 @@ export function buildRequestSubject(details: RequestDetails, recap: RequestRecap
   return recap.subject(details.reference, details.cartons)
 }
 
+/** Audience of a short information request: no quantity is involved. */
+export type InfoAudience = 'professional' | 'reseller'
+
+export type InfoRequestDetails = {
+  reference: string
+  createdAt: string
+  audience: InfoAudience
+  company: string
+  name: string
+  email: string
+  phone: string
+  address: string
+  city: string
+}
+
+/**
+ * Labels for the information-request recap. `infoRequest.recap` in
+ * `src/i18n/copy.ts` provides one per language.
+ */
+export type InfoRecapCopy = {
+  heading: (reference: string) => string
+  type: string
+  professional: string
+  reseller: string
+  company: string
+  name: string
+  email: string
+  phone: string
+  address: string
+  city: string
+  created: (date: string) => string
+  subject: (reference: string) => string
+}
+
+/** Plain-text recap for the information form handoff (WhatsApp, e-mail, copy). */
+export function buildInfoMessage(
+  details: InfoRequestDetails,
+  recap: InfoRecapCopy,
+  locale: string,
+): string {
+  const audience =
+    details.audience === 'professional' ? recap.professional : recap.reseller
+  const lines = [recap.heading(details.reference), '', `${recap.type} : ${audience}`]
+
+  if (details.company.trim()) lines.push(`${recap.company} : ${details.company.trim()}`)
+  if (details.name.trim()) lines.push(`${recap.name} : ${details.name.trim()}`)
+
+  lines.push(`${recap.email} : ${details.email.trim()}`)
+  lines.push(`${recap.phone} : ${details.phone.trim()}`)
+  lines.push(`${recap.address} : ${details.address.trim()}`)
+  lines.push(`${recap.city} : ${details.city.trim()}`)
+  lines.push('', recap.created(formatDate(details.createdAt, locale)))
+  return lines.join('\n')
+}
+
+export function buildInfoSubject(details: InfoRequestDetails, recap: InfoRecapCopy): string {
+  return recap.subject(details.reference)
+}
+
 export function whatsappLink(message: string): string {
   return `https://wa.me/${CONTACT.whatsappNumber}?text=${encodeURIComponent(message)}`
 }

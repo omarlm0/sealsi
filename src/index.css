@@ -880,30 +880,6 @@ p {
   margin: 6px 0 0;
 }
 
-.steps {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 55px;
-  margin-top: 45px;
-}
-
-.step-index {
-  display: block;
-  font-size: 13px;
-  color: #8a702f;
-  margin-bottom: 22px;
-}
-
-.steps h3 {
-  font-size: 21px;
-  margin-bottom: 14px;
-}
-
-.steps p {
-  font-size: 13px;
-  color: var(--muted);
-}
-
 /* --------------------------------------------------------------------------
    Contact ribbon
    -------------------------------------------------------------------------- */
@@ -2325,6 +2301,77 @@ p {
 }
 
 /* --------------------------------------------------------------------------
+   Info request — professionals & resellers
+   -------------------------------------------------------------------------- */
+
+.info-grid {
+  display: grid;
+  grid-template-columns: 0.85fr 1.15fr;
+  gap: 70px;
+  align-items: start;
+}
+
+.info-intro h2 {
+  font-size: 42px;
+  margin: 16px 0 20px;
+}
+
+.info-intro .lead {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--muted);
+  max-width: 420px;
+}
+
+.info-intro .form-direct h3 {
+  font-size: 18px;
+  color: var(--navy);
+  margin: 0 0 9px;
+}
+
+.info-panel {
+  background: var(--ivory);
+  border-radius: 16px;
+  padding: 38px;
+  box-shadow: 0 4px 14px rgba(24, 60, 89, 0.04);
+}
+
+.info-panel .field input {
+  border-color: #d8d2c2;
+}
+
+.info-panel .consent-note {
+  max-width: none;
+}
+
+@media (max-width: 900px) {
+  .info-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+
+  .info-intro .lead {
+    max-width: none;
+  }
+}
+
+@media (max-width: 760px) {
+  .info-panel {
+    padding: 24px;
+    border-radius: 12px;
+  }
+
+  .info-intro h2 {
+    font-size: 34px;
+  }
+
+  .info-intro .form-direct {
+    margin-top: 22px;
+    padding-top: 20px;
+  }
+}
+
+/* --------------------------------------------------------------------------
    Request dialog
    -------------------------------------------------------------------------- */
 
@@ -2631,20 +2678,6 @@ p {
 
   .pro-feature p {
     font-size: 11px;
-  }
-
-  .steps {
-    grid-template-columns: 1fr;
-    gap: 30px;
-    margin-top: 28px;
-  }
-
-  .step-index {
-    margin-bottom: 12px;
-  }
-
-  .steps p {
-    font-size: 12px;
   }
 
   .contact-ribbon {

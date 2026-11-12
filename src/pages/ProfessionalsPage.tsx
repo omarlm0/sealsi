@@ -3,6 +3,7 @@ import type { PageId } from '../data/site'
 import { useLanguage } from '../i18n/LanguageContext'
 import { ContactRibbon } from '../components/ContactRibbon'
 import { Icon } from '../components/Icon'
+import { InfoRequestForm } from '../components/InfoRequestForm'
 import type { IconName } from '../components/Icon'
 import { Packshot } from '../components/Packshot'
 import { whatsappLink } from '../config/business'
@@ -38,7 +39,11 @@ export function ProfessionalsPage({ onNavigate, onSelectVolume }: ProfessionalsP
             </h1>
             <p>{c.pros.heroLead}</p>
             <div className="btn-row">
-              <a className="btn btn-primary" href={hrefFor('demande')} onClick={go('demande')}>
+              <a
+                className="btn btn-primary"
+                href={hrefFor('professionnels', 'infos')}
+                onClick={go('professionnels', 'infos')}
+              >
                 {c.pros.heroButton} <Icon name="arrow" />
               </a>
               <a
@@ -151,6 +156,8 @@ export function ProfessionalsPage({ onNavigate, onSelectVolume }: ProfessionalsP
           </div>
         </div>
       </section>
+
+      <InfoRequestForm audience="professional" onNavigate={onNavigate} />
 
       <ContactRibbon onNavigate={onNavigate} />
     </main>

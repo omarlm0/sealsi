@@ -53,11 +53,11 @@ Le routage utilise l’API History (URL lisibles, sans `#`).
 
 | URL (préfixer par `/ar` pour l’arabe) | Page                                           |
 | ------------------------------------- | ---------------------------------------------- |
-| `/`                                   | Accueil : hero, signature, produit, pro, étapes |
+| `/`                                   | Accueil : hero, signature, produit, pro         |
 | `/demande`                            | Commande : quantité, coordonnées et récapitulatif sur une page |
 | `/selection`                          | Ancienne URL, redirigée côté client vers `/demande` |
-| `/revendeurs`                         | Offre revendeurs et commerces                  |
-| `/professionnels`                     | Services professionnels et FAQ                  |
+| `/revendeurs`                         | Offre revendeurs, volumes et formulaire d’information |
+| `/professionnels`                     | Services professionnels, volumes, FAQ et formulaire d’information |
 | `/mentions-legales`                   | Mentions légales                                |
 | `/confidentialite`                    | Politique de confidentialité                    |
 | `/conditions-de-vente`                | Conditions générales de vente                   |
@@ -92,8 +92,9 @@ la règle commerciale validée avant mise en ligne.
   bouton de confirmation reste bloqué tant qu’un nombre entier de cartons n’a
   pas été choisi. Le plafond de 999 et les raccourcis restent des valeurs de
   démonstration.
-- Depuis l’accueil ou une page métier, le bouton de commande ouvre `/demande`
-  dans la langue active.
+- Depuis une page métier, le bouton du hero mène au formulaire d’information
+  (`/professionnels#infos`, `/revendeurs#infos`) ; les boutons de volume
+  ouvrent `/demande` avec le nombre de cartons choisi.
 
 ## Formulaire de commande
 
@@ -147,6 +148,22 @@ indique clairement qu’aucune donnée n’a encore été transmise. Le brouillo
 WhatsApp / e-mail est rédigé dans la langue active (`fr-FR` ou `ar-MA`) et
 formate la date avec la locale correspondante ; les champs téléphone et e-mail
 restent en `dir="ltr"` pour préserver l’ordre des caractères.
+
+## Formulaire d’information (professionnels / revendeurs)
+
+`src/components/InfoRequestForm.tsx` ajoute un formulaire court dans la section
+`#infos` des pages `/professionnels` et `/revendeurs`, sur une carte ivoire
+(comme le récapitulatif « Sur devis »). Le bouton principal du hero y mène
+directement.
+
+- **Professionnel** : nom de la société, e-mail, téléphone, adresse, ville.
+- **Revendeur** : nom complet, e-mail, téléphone, adresse, ville.
+
+Les deux variantes partagent la validation, le champ piège, le consentement et
+la transmission de `RequestPage` : POST JSON si `VITE_REQUEST_ENDPOINT` est
+défini, sinon fenêtre WhatsApp / e-mail / copie avec une référence dédiée. Le
+payload contient `reference`, `createdAt`, `audience` (`professional` ou
+`reseller`), puis `company` ou `name`, `email`, `phone`, `address` et `city`.
 
 ## Coordonnées et informations légales
 
