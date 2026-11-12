@@ -27,6 +27,7 @@ export type PageId =
   | 'accueil'
   | 'selection'
   | 'demande'
+  | 'revendeurs'
   | 'professionnels'
   | 'mentions-legales'
   | 'confidentialite'
@@ -37,6 +38,7 @@ export const PATHS: Record<PageId, string> = {
   accueil: '/',
   selection: '/selection',
   demande: '/demande',
+  revendeurs: '/revendeurs',
   professionnels: '/professionnels',
   'mentions-legales': '/mentions-legales',
   confidentialite: '/confidentialite',

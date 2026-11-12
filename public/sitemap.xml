@@ -13,8 +13,14 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://www.sealsi.com/revendeurs</loc>
+    <lastmod>2026-11-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://www.sealsi.com/professionnels</loc>
-    <lastmod>2026-11-04</lastmod>
+    <lastmod>2026-11-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

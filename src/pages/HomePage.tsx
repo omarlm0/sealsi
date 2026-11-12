@@ -36,15 +36,15 @@ export function HomePage({ onNavigate }: HomePageProps) {
             </h1>
             <p>{c.hero.lead}</p>
             <div className="btn-row">
-              <a className="btn btn-gold" href={href('demande')} onClick={go('demande')}>
-                {c.hero.primary} <Icon name="arrow" />
+              <a className="btn btn-gold" href={href('revendeurs')} onClick={go('revendeurs')}>
+                {c.hero.resellers} <Icon name="arrow" />
               </a>
               <a
                 className="btn btn-ghost"
-                href={href('accueil', 'univers')}
-                onClick={go('accueil', 'univers')}
+                href={href('professionnels')}
+                onClick={go('professionnels')}
               >
-                {c.hero.secondary}
+                {c.hero.professionals} <Icon name="arrow" />
               </a>
             </div>
             <div className="hero-meta">
@@ -113,13 +113,22 @@ export function HomePage({ onNavigate }: HomePageProps) {
               {c.home.proTitle2}
             </h2>
             <p>{c.home.proLead}</p>
-            <a
-              className="btn btn-white"
-              href={href('professionnels')}
-              onClick={go('professionnels')}
-            >
-              {c.home.proButton} <Icon name="arrow" />
-            </a>
+            <div className="btn-row">
+              <a
+                className="btn btn-white"
+                href={href('revendeurs')}
+                onClick={go('revendeurs')}
+              >
+                {c.hero.resellers} <Icon name="arrow" />
+              </a>
+              <a
+                className="btn btn-ghost"
+                href={href('professionnels')}
+                onClick={go('professionnels')}
+              >
+                {c.hero.professionals} <Icon name="arrow" />
+              </a>
+            </div>
           </div>
           <div className="pro-features">
             {c.home.proFeatures.map((feature) => (

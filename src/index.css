@@ -1890,6 +1890,82 @@ p {
   color: var(--muted);
 }
 
+.service-cards.cols-4 {
+  grid-template-columns: repeat(4, 1fr);
+}
+
+@media (max-width: 1024px) {
+  .service-cards.cols-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.volume-packages {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+  margin-top: 30px;
+}
+
+.volume-card {
+  background: white;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 26px 22px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 14px rgba(24, 60, 89, 0.04);
+  transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.volume-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--gold);
+  box-shadow: 0 8px 20px rgba(24, 60, 89, 0.08);
+}
+
+.volume-card-qty {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--deep);
+  line-height: 1.1;
+  margin-bottom: 8px;
+}
+
+.volume-card-qty .volume-unit {
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+.volume-card-sub {
+  font-size: 12px;
+  color: var(--muted);
+  margin-bottom: 14px;
+}
+
+.volume-card-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--navy);
+  margin-bottom: 22px;
+  min-height: 40px;
+  line-height: 1.4;
+}
+
+@media (max-width: 900px) {
+  .volume-packages {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 580px) {
+  .volume-packages {
+    grid-template-columns: 1fr;
+  }
+}
+
 .faq {
   display: grid;
   grid-template-columns: 1fr 1.2fr;

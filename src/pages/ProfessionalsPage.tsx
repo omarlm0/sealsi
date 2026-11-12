@@ -6,17 +6,24 @@ import { ContactRibbon } from '../components/ContactRibbon'
 import { Icon } from '../components/Icon'
 import type { IconName } from '../components/Icon'
 import { Packshot } from '../components/Packshot'
+import { whatsappLink } from '../config/business'
 
 type ProfessionalsPageProps = {
   onNavigate: (page: PageId, section?: string) => void
+  onSelectVolume?: (cartons: number) => void
 }
 
-export function ProfessionalsPage({ onNavigate }: ProfessionalsPageProps) {
+export function ProfessionalsPage({ onNavigate, onSelectVolume }: ProfessionalsPageProps) {
   const { c } = useLanguage()
 
   const go = (page: PageId, section?: string) => (event: MouseEvent) => {
     event.preventDefault()
     onNavigate(page, section)
+  }
+
+  const handleSelectPackage = (cartons: number) => {
+    onSelectVolume?.(cartons)
+    onNavigate('demande')
   }
 
   return (
@@ -31,9 +38,19 @@ export function ProfessionalsPage({ onNavigate }: ProfessionalsPageProps) {
               {c.pros.heroTitle2}
             </h1>
             <p>{c.pros.heroLead}</p>
-            <a className="btn btn-primary" href={href('demande')} onClick={go('demande')}>
-              {c.pros.heroButton} <Icon name="arrow" />
-            </a>
+            <div className="btn-row">
+              <a className="btn btn-primary" href={href('demande')} onClick={go('demande')}>
+                {c.pros.heroButton} <Icon name="arrow" />
+              </a>
+              <a
+                className="btn btn-outline"
+                href={whatsappLink(c.pros.directMessage)}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <Icon name="whatsapp" /> {c.pros.whatsappButton}
+              </a>
+            </div>
           </div>
 
           <div className="service-visual" aria-hidden="true">
@@ -65,7 +82,7 @@ export function ProfessionalsPage({ onNavigate }: ProfessionalsPageProps) {
             <p>{c.pros.servicesLead}</p>
           </div>
 
-          <div className="service-cards">
+          <div className="service-cards cols-4">
             {c.pros.services.map((service) => (
               <article className="service-card" key={service.title}>
                 <Icon name={service.icon as IconName} />
@@ -77,7 +94,42 @@ export function ProfessionalsPage({ onNavigate }: ProfessionalsPageProps) {
         </div>
       </section>
 
-      <section className="section editorial" id="faq">
+      <section className="section editorial" id="volumes" aria-labelledby="packages-title">
+        <div className="wrap">
+          <div className="section-head">
+            <div>
+              <span className="eyebrow">{c.pros.packagesEyebrow}</span>
+              <h2 id="packages-title">{c.pros.packagesTitle}</h2>
+            </div>
+            <p>{c.pros.packagesLead}</p>
+          </div>
+
+          <div className="volume-packages">
+            {c.pros.packages.map((pkg) => (
+              <div className="volume-card" key={pkg.cartons}>
+                <div>
+                  <div className="volume-card-qty">
+                    {pkg.cartons} <span className="volume-unit">cartons</span>
+                  </div>
+                  <div className="volume-card-sub">
+                    {pkg.bottles} bouteilles · {pkg.litres} L · {pkg.bottles * 100} lavages
+                  </div>
+                  <div className="volume-card-label">{pkg.label}</div>
+                </div>
+                <button
+                  type="button"
+                  className="btn btn-outline full"
+                  onClick={() => handleSelectPackage(pkg.cartons)}
+                >
+                  {c.pros.selectVolume} <Icon name="arrow" />
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="section" id="faq">
         <div className="wrap faq">
           <div>
             <span className="eyebrow">{c.pros.faqEyebrow}</span>

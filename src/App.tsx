@@ -3,6 +3,7 @@ import { Header } from './components/Header'
 import { Footer } from './components/Footer'
 import { HomePage } from './pages/HomePage'
 import { RequestPage } from './pages/RequestPage'
+import { ResellersPage } from './pages/ResellersPage'
 import { ProfessionalsPage } from './pages/ProfessionalsPage'
 import { LegalPage } from './pages/LegalPage'
 import { NotFoundPage } from './pages/NotFoundPage'
@@ -113,8 +114,20 @@ export function App() {
             onNavigate={navigate}
           />
         )
+      case 'revendeurs':
+        return (
+          <ResellersPage
+            onNavigate={navigate}
+            onSelectVolume={updateCartons}
+          />
+        )
       case 'professionnels':
-        return <ProfessionalsPage onNavigate={navigate} />
+        return (
+          <ProfessionalsPage
+            onNavigate={navigate}
+            onSelectVolume={updateCartons}
+          />
+        )
       case 'introuvable':
         return <NotFoundPage onNavigate={navigate} />
       case 'accueil':

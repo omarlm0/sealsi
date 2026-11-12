@@ -5,10 +5,12 @@ export type Lang = 'fr' | 'ar'
 export type BenefitIcon = 'parfum' | 'nettoyant' | 'adoucissant' | 'anti-taches'
 export type ServiceIcon = 'spark' | 'box' | 'message' | 'grid'
 
+export type NavItem = { label: string; page: PageId; section?: string }
 export type BenefitItem = { icon: BenefitIcon; title: string; text: string }
 export type FeatureItem = { icon: ServiceIcon; title: string; text: string }
 export type StepItem = { index: string; title: string; text: string }
 export type FaqItem = { question: string; answer: string }
+export type VolumePackage = { cartons: number; bottles: number; litres: number; label: string }
 export type LegalSectionCopy = { title: string; paragraphs: string[]; list?: string[] }
 export type LegalDocumentCopy = {
   title: string
@@ -40,10 +42,15 @@ const fr = {
       description:
         'Choisissez votre nombre de cartons et laissez vos coordonnées sur une seule page. SEALSI confirme ensuite le tarif, la disponibilité et la livraison.',
     },
-    professionnels: {
-      title: 'Professionnels et revendeurs — SEALSI',
+    revendeurs: {
+      title: 'Offre Revendeurs & Grossistes — SEALSI',
       description:
-        'Revendeurs et approvisionnements en volume : une gamme SEALSI, un conditionnement par cartons de 3 bouteilles et un échange direct.',
+        'Commercialisez la lessive liquide 5 L Oceanic Scent dans votre magasin. Cartons de 3 bouteilles, marges attractives et livraison rapide.',
+    },
+    professionnels: {
+      title: 'Hôtels & Professionnels — SEALSI',
+      description:
+        'Solution linge pour hôtels, riads, résidences et blanchisseries : format 5 L concentré 4-en-1, 100 lavages, fraîcheur marine et devis sur-mesure.',
     },
     'mentions-legales': {
       title: 'Mentions légales — SEALSI',
@@ -67,9 +74,9 @@ const fr = {
   },
   nav: [
     { label: 'Accueil', page: 'accueil' as PageId },
-    { label: "L'univers SEALSI", page: 'accueil' as PageId, section: 'univers' },
-    { label: 'Professionnels', page: 'professionnels' as PageId },
-  ],
+    { label: 'Revendeurs', page: 'revendeurs' as PageId },
+    { label: 'Hôtels & Pros', page: 'professionnels' as PageId },
+  ] as NavItem[],
   header: {
     homeAria: 'SEALSI — Accueil',
     mainNavAria: 'Navigation principale',
@@ -91,6 +98,8 @@ const fr = {
     lead: 'La force de l’eau, la douceur du linge. Découvrez l’univers Oceanic de SEALSI.',
     primary: 'Préparer ma commande',
     secondary: 'Découvrir Oceanic',
+    resellers: 'Offre Revendeurs',
+    professionals: 'Hôtels & Professionnels',
     meta: ['5 L par bouteille', '100 lavages*', 'Formule 4 en 1'],
     caption: 'OCEANIC SCENT / LA SIGNATURE SEALSI',
   },
@@ -277,59 +286,155 @@ const fr = {
     directMessage:
       'Bonjour SEALSI, je souhaite des informations sur la lessive Oceanic Scent 5 L.',
   },
-  pros: {
-    heroEyebrow: 'SEALSI POUR LES PROFESSIONNELS',
-    heroTitle1: 'Votre prochain',
-    heroTitle2: 'réassort commence ici.',
+  resellers: {
+    heroEyebrow: 'SEALSI POUR LES REVENDEURS & COMMERCES',
+    heroTitle1: 'Développez vos ventes',
+    heroTitle2: 'avec Oceanic Scent 5 L.',
     heroLead:
-      'Une gamme SEALSI, un conditionnement par cartons et un échange direct pour organiser vos besoins en quantité.',
-    heroButton: 'Parlons de votre besoin',
-    perCarton: 'par carton',
-    servicesEyebrow: 'CE QUE NOUS PROPOSONS',
-    servicesTitle1: 'Le produit, le volume,',
-    servicesTitle2: 'le bon accompagnement.',
+      'Épiceries, drogueries, supérettes et grossistes : proposez à vos clients une lessive liquide 5 L haut de gamme, conditionnée par cartons de 3 bouteilles, avec une marge commerciale attractive.',
+    heroButton: 'Commander pour mon commerce',
+    whatsappButton: 'Tarifs revendeurs WhatsApp',
+    perCarton: 'par carton (3 × 5 L = 15 L)',
+    servicesEyebrow: 'LES ATOUTS REVENDEURS',
+    servicesTitle1: 'Rentabilité, rotation,',
+    servicesTitle2: 'un produit qui fidélise.',
     servicesLead:
-      'Une approche claire pour les revendeurs et les demandes de produits SEALSI en volume.',
+      'Une formule 4 en 1 plébiscitée par les ménages et un format économique qui génère des réachats réguliers dans votre point de vente.',
     services: [
       {
         icon: 'spark',
-        title: 'Notre gamme SEALSI',
-        text: 'La fabrication de nos produits, avec une identité cohérente et un format 5 L pour la lessive Oceanic Scent.',
+        title: 'Forte rotation en rayon',
+        text: 'Le format 5 L 4-en-1 répond parfaitement à la recherche de volume et d’économie des familles, garantissant des ventes rapides.',
+      },
+      {
+        icon: 'grid',
+        title: 'Marges & tarifs dégressifs',
+        text: 'Bénéficiez de conditions d’achat grossiste étudiées pour préserver votre marge commerciale sur chaque carton vendu.',
       },
       {
         icon: 'box',
-        title: 'Approvisionnement des revendeurs',
-        text: 'Une demande structurée par cartons pour préciser vos besoins et préparer votre prochain réassort.',
+        title: 'Cartons protecteurs 3 × 5 L',
+        text: 'Conditionnement robuste de 15 L, facile à empiler en réserve, évitant les risques de casse et facilitant la manutention.',
       },
       {
         icon: 'message',
-        title: 'Commandes en quantité',
-        text: 'Un échange pour confirmer les volumes, les disponibilités, le tarif et les modalités de livraison.',
+        title: 'Approvisionnement direct',
+        text: 'Un contact direct avec notre équipe commerciale pour des réassorts fluides, des stocks sécurisés et des livraisons rapides.',
       },
     ],
-    faqEyebrow: 'VOS QUESTIONS',
-    faqTitle1: 'Avant de préparer',
-    faqTitle2: 'votre sélection.',
+    packagesEyebrow: 'ESTIMEZ VOTRE COMMANDE',
+    packagesTitle: 'Des volumes adaptés à votre commerce',
+    packagesLead:
+      'Choisissez le volume de cartons correspondant à la taille de votre rayon ou magasin.',
+    packages: [
+      { cartons: 5, bottles: 15, litres: 75, label: 'Découverte / Test en rayon' },
+      { cartons: 10, bottles: 30, litres: 150, label: 'Réassort régulier commerce' },
+      { cartons: 30, bottles: 90, litres: 450, label: 'Approvisionnement supérette' },
+      { cartons: 50, bottles: 150, litres: 750, label: 'Volume grossiste & distributeur' },
+    ],
+    selectVolume: 'Sélectionner ce volume',
+    faqEyebrow: 'QUESTIONS REVENDEURS',
+    faqTitle1: 'Tout savoir avant',
+    faqTitle2: 'votre première commande.',
     faq: [
       {
-        question: 'Combien de bouteilles contient un carton ?',
-        answer: 'Un carton contient 3 bouteilles de 5 L, soit 15 litres au total.',
-      },
-      {
-        question: 'Comment connaître le tarif de ma quantité ?',
+        question: 'Quel est le minimum de commande pour les revendeurs ?',
         answer:
-          'Préparez votre sélection et transmettez vos coordonnées. Le prix et les modalités seront confirmés selon votre demande.',
+          'Vous pouvez démarrer dès 1 à 5 cartons pour tester la demande de vos clients avant d’engager des volumes plus importants.',
       },
       {
-        question: 'Puis-je demander un approvisionnement régulier ?',
-        answer: "Précisez votre besoin dans le formulaire afin d'en discuter avec SEALSI.",
-      },
-      {
-        question: 'Comment se passe la livraison ?',
+        question: 'Comment obtenir les tarifs revendeurs et les conditions de remise ?',
         answer:
-          'Indiquez votre ville. La zone desservie, les frais et le délai sont à confirmer avant la commande.',
+          'Transmettez votre demande via le formulaire ou contactez-nous directement sur WhatsApp en indiquant le nom de votre commerce et votre ville.',
+      },
+      {
+        question: 'Quels sont les délais et zones de livraison ?',
+        answer:
+          'Nous assurons des livraisons rapides sur les principales agglomérations. Le délai exact et les modalités d’acheminement sont confirmés selon votre localisation.',
+      },
+      {
+        question: 'Fournissez-vous une facture avec mention légale ?',
+        answer:
+          'Oui, toute commande commerciale fait l’objet d’une facturation en bonne et due forme pour votre comptabilité.',
       },
     ],
+    directMessage:
+      'Bonjour SEALSI, je suis revendeur / commerçant et je souhaite obtenir les tarifs et conditions pour la lessive Oceanic Scent 5 L.',
+  },
+  pros: {
+    heroEyebrow: 'SEALSI POUR LES HÔTELS & PROFESSIONNELS',
+    heroTitle1: 'L’exigence du propre',
+    heroTitle2: 'pour votre établissement.',
+    heroLead:
+      'Hôtels, riads, résidences, blanchisseries et collectivités : garantissez à vos résidents un linge d’une douceur irréprochable et un parfum marin signature, tout en maîtrisant votre coût par cycle de lavage.',
+    heroButton: 'Demander un devis établissement',
+    whatsappButton: 'Devis rapide sur WhatsApp',
+    perCarton: 'par carton (3 × 5 L = 300 lavages)',
+    servicesEyebrow: 'SOLUTIONS ÉTABLISSEMENTS',
+    servicesTitle1: 'Soin du linge, rentabilité,',
+    servicesTitle2: 'fraîcheur hôtelière.',
+    servicesLead:
+      'Une lessive professionnelle 4 en 1 conçue pour répondre aux exigences élevées de l’hôtellerie et du nettoyage de gros volumes.',
+    services: [
+      {
+        icon: 'spark',
+        title: 'Éclat du linge blanc & fibres préservées',
+        text: 'Draps, serviettes, peignoirs et nappes : propreté profonde dès 30°C sans agresser les textiles, préservant la longévité de votre linge.',
+      },
+      {
+        icon: 'grid',
+        title: '100 lavages par bidon (50 ml/cycle)',
+        text: 'Un coût par lavage maîtrisé grâce à une concentration optimale. La formule intègre adoucissant et détachant pour simplifier vos achats.',
+      },
+      {
+        icon: 'box',
+        title: 'Signature parfumée Oceanic',
+        text: 'Une fraîcheur marine raffinée qui sublime l’atmosphère de vos chambres et valorise la qualité perçue par vos clients.',
+      },
+      {
+        icon: 'message',
+        title: 'Livraison sur site & régularité',
+        text: 'Approvisionnements programmés selon votre taux d’occupation, avec suivi personnalisé et facturation professionnelle adaptée.',
+      },
+    ],
+    packagesEyebrow: 'VOS BESOINS EN VOLUME',
+    packagesTitle: 'Adapté à votre capacité d’accueil',
+    packagesLead:
+      'Estimez vos besoins selon le nombre de chambres ou de cycles quotidiens.',
+    packages: [
+      { cartons: 5, bottles: 15, litres: 75, label: 'Maison d’hôtes / Riad (10-15 chambres)' },
+      { cartons: 10, bottles: 30, litres: 150, label: 'Hôtel boutique (20-40 chambres)' },
+      { cartons: 25, bottles: 75, litres: 375, label: 'Hôtel grande capacité / Blanchisserie' },
+      { cartons: 50, bottles: 150, litres: 750, label: 'Approvisionnement mensuel groupe' },
+    ],
+    selectVolume: 'Sélectionner ce volume',
+    faqEyebrow: 'QUESTIONS PROFESSIONNELS',
+    faqTitle1: 'Conçu pour vos',
+    faqTitle2: 'exigences d’exploitation.',
+    faq: [
+      {
+        question: 'La formule est-elle adaptée aux lave-linges professionnels ?',
+        answer:
+          'Oui, la formule liquide est parfaitement soluble, ne laisse aucun dépôt dans les bacs de dosage et s’adapte aux machines professionnelles et semi-professionnelles.',
+      },
+      {
+        question: 'Peut-on réaliser un essai avant un approvisionnement régulier ?',
+        answer:
+          'Oui, nous pouvons vous fournir un échantillon ou un premier carton de test afin que votre équipe d’étages ou buanderie valide le rendu sur votre linge.',
+      },
+      {
+        question: 'Proposez-vous des livraisons échelonnées ?',
+        answer:
+          'Absolument. Nous planifions des livraisons récurrentes adaptées à la saisonnalité et à la fréquence de lavage de votre établissement.',
+      },
+      {
+        question: 'Comment obtenir un devis pro avec facturation TVA ?',
+        answer:
+          'Contactez-nous via le formulaire ou directement par WhatsApp avec votre nom d’établissement et votre besoin mensuel estimé.',
+      },
+    ],
+    directMessage:
+      'Bonjour SEALSI, je représente un établissement (hôtel / blanchisserie / société) et je souhaite un devis professionnel pour la lessive Oceanic 5 L.',
   },
   notFound: {
     eyebrow: 'ERREUR 404',
@@ -341,7 +446,8 @@ const fr = {
     usefulPages: 'Pages utiles',
     order: 'Préparer ma commande',
     viewProduct: 'Voir le produit',
-    pros: 'Professionnels',
+    resellers: 'Offre Revendeurs',
+    pros: 'Hôtels & Professionnels',
     legal: 'Mentions légales',
   },
   footer: {
@@ -355,7 +461,8 @@ const fr = {
     universe: 'Notre univers',
     tips: "Conseils d'utilisation",
     orderLink: 'Préparer ma commande',
-    reseller: 'Devenir revendeur',
+    reseller: 'Offre Revendeurs',
+    pros: 'Hôtels & Professionnels',
     faq: 'Questions fréquentes',
     write: 'Nous écrire',
     rights: '© 2026 SEALSI. Tous droits réservés.',
@@ -627,10 +734,15 @@ const ar: Copy = {
       description:
         'اختر عدد الكراتين واترك بياناتك في صفحة واحدة. تؤكد SEALSI بعد ذلك السعر والتوفر والتوصيل.',
     },
-    professionnels: {
-      title: 'للمحترفين والموزعين — SEALSI',
+    revendeurs: {
+      title: 'عرض الموزعين ونقاط البيع — SEALSI',
       description:
-        'الموزعون والتموين بكميات كبيرة: تشكيلة SEALSI، تغليف بكراتين من 3 زجاجات وتواصل مباشر.',
+        'بيع غسول أوشيانيك 5 لتر في محلاتكم: تعبئة كرتونية من 3 زجاجات، هوامش ربح مجزية وتوصيل سريع وموثوق.',
+    },
+    professionnels: {
+      title: 'الفنادق والمحترفين — SEALSI',
+      description:
+        'حلول الغسيل للفنادق، الرياضات، دور الضيافة والمغاسل: غسول 5 لتر 4 في 1، 100 غسلة وانتعاش بحري مع عروض أسعار مخصصة.',
     },
     'mentions-legales': {
       title: 'المعلومات القانونية — SEALSI',
@@ -652,9 +764,9 @@ const ar: Copy = {
   },
   nav: [
     { label: 'الرئيسية', page: 'accueil' as PageId },
-    { label: 'عالم SEALSI', page: 'accueil' as PageId, section: 'univers' },
-    { label: 'للمحترفين', page: 'professionnels' as PageId },
-  ],
+    { label: 'الموزعون', page: 'revendeurs' as PageId },
+    { label: 'الفنادق والمحترفون', page: 'professionnels' as PageId },
+  ] as NavItem[],
   header: {
     homeAria: 'SEALSI — الرئيسية',
     mainNavAria: 'التنقل الرئيسي',
@@ -675,6 +787,8 @@ const ar: Copy = {
     lead: 'قوة الماء، ونعومة الغسيل. اكتشف عالم Oceanic من SEALSI.',
     primary: 'حضّر طلبي',
     secondary: 'اكتشف Oceanic',
+    resellers: 'عرض الموزعين',
+    professionals: 'الفنادق والمحترفين',
     meta: ['5 لترات للزجاجة', '100 غسلة*', 'تركيبة 4 في 1'],
     caption: 'OCEANIC SCENT / توقيع SEALSI',
   },
@@ -856,59 +970,145 @@ const ar: Copy = {
     mailSubject: 'طلب معلومات SEALSI',
     directMessage: 'مرحبًا SEALSI، أريد معلومات عن سائل الغسيل Oceanic Scent 5 لتر.',
   },
-  pros: {
-    heroEyebrow: 'SEALSI للمحترفين',
-    heroTitle1: 'تموينك القادم',
-    heroTitle2: 'يبدأ من هنا.',
+  resellers: {
+    heroEyebrow: 'SEALSI للموزعين ونقاط البيع',
+    heroTitle1: 'طوّروا مبيعاتكم',
+    heroTitle2: 'مع غسول أوشيانيك 5 لتر.',
     heroLead:
-      'تشكيلة SEALSI، تغليف بالكراتين وتواصل مباشر لتنظيم احتياجاتك بكميات كبيرة.',
-    heroButton: 'لنتحدث عن احتياجك',
-    perCarton: 'لكل كرتونة',
-    servicesEyebrow: 'ما نقدمه',
-    servicesTitle1: 'المنتج، الكمية،',
-    servicesTitle2: 'والمرافقة المناسبة.',
+      'محلات البقالة، مستودعات المنظفات، الأسواق الممتازة والموزعون: وفروا لزبائنكم غسولاً سائلاً ممتازاً سعة 5 لتر، معبأ في كراتين من 3 زجاجات، بهامش ربح تجاري مجزٍ.',
+    heroButton: 'طلب كراتين لمحلي التجاري',
+    whatsappButton: 'أسعار الموزعين عبر واتساب',
+    perCarton: 'لكل كرتونة (3 × 5 لتر = 15 لتر)',
+    servicesEyebrow: 'مزايا الموزعين',
+    servicesTitle1: 'مردودية ممتازة، مبيعات سريعة،',
+    servicesTitle2: 'ومنتج يكسب وفاء الزبائن.',
     servicesLead:
-      'مقاربة واضحة للموزّعين وطلبات منتجات SEALSI بكميات كبيرة.',
+      'تركيبة 4 في 1 يفضلها المستهلكون وحجم اقتصادي يضمن مشتريات متكررة في نقطة بيعكم.',
     services: [
       {
         icon: 'spark',
-        title: 'تشكيلة SEALSI',
-        text: 'تصنيع منتجاتنا بهوية متناسقة وحجم 5 لترات لسائل الغسيل Oceanic Scent.',
+        title: 'إقبال سريع في الرفوف',
+        text: 'حجم 5 لتر مع تركيبة 4 في 1 يلبي متطلبات الأسر من حيث التوفير والفعالية، مما يضمن مبيعات سريعة.',
+      },
+      {
+        icon: 'grid',
+        title: 'هوامش ربح وأسعار تنازلية',
+        text: 'استفيدوا من شروط تسعير مخصصة للجملة للحفاظ على هامش ربحكم في كل كرتونة تباع.',
       },
       {
         icon: 'box',
-        title: 'تموين الموزعين',
-        text: 'طلب منظم بالكراتين لتحديد احتياجاتك وتحضير تموينك القادم.',
+        title: 'كراتين متينة 3 × 5 لتر',
+        text: 'تعبئة متينة سعة 15 لتر تسهل التخزين والترتيب في المستودع وتقلل من مخاطر التلف.',
       },
       {
         icon: 'message',
-        title: 'طلبات بكميات كبيرة',
-        text: 'تواصل لتأكيد الكميات والتوفر والسعر وشروط التوصيل.',
+        title: 'تزويد مباشر ومستمر',
+        text: 'تواصل مباشر مع فريقنا التجاري لتأمين التموين المنتظم وتفادي أي نفاد في المخزون.',
       },
     ],
-    faqEyebrow: 'أسئلتك',
-    faqTitle1: 'قبل تحضير',
-    faqTitle2: 'اختيارك.',
+    packagesEyebrow: 'قدّر طلبيتك',
+    packagesTitle: 'كميات تناسب حجم نشاطكم',
+    packagesLead: 'اختر كمية الكراتين المناسبة لحجم متجرك أو مستودعك.',
+    packages: [
+      { cartons: 5, bottles: 15, litres: 75, label: 'تجربة / اختبار الرف' },
+      { cartons: 10, bottles: 30, litres: 150, label: 'تموين منتظم للمحل' },
+      { cartons: 30, bottles: 90, litres: 450, label: 'تموين سوبرماركت' },
+      { cartons: 50, bottles: 150, litres: 750, label: 'كميات الجملة والتوزيع' },
+    ],
+    selectVolume: 'اختر هذه الكمية',
+    faqEyebrow: 'أسئلة الموزعين',
+    faqTitle1: 'كل ما تحتاج معرفته',
+    faqTitle2: 'قبل أول طلبية.',
     faq: [
       {
-        question: 'كم زجاجة تحتوي الكرتونة؟',
-        answer: 'تحتوي الكرتونة على 3 زجاجات سعة 5 لترات، أي 15 لترًا إجمالًا.',
+        question: 'ما هو الحد الأدنى للطلب للموزعين؟',
+        answer: 'يمكنك البدء من 1 إلى 5 كراتين لاختبار إقبال الزبائن قبل الانتقال إلى كميات أكبر.',
       },
       {
-        question: 'كيف أعرف سعر كميتي؟',
-        answer:
-          'حضّر اختيارك وأرسل بياناتك. سيُؤكَّد السعر والشروط حسب طلبك.',
+        question: 'كيف أحصل على لائحة أسعار الموزعين وشروط التخفيض؟',
+        answer: 'أرسل طلبك عبر النموذج أو تواصل معنا مباشرة عبر واتساب مع ذكر اسم محلك ومدينتك.',
       },
       {
-        question: 'هل يمكنني طلب تموين منتظم؟',
-        answer: 'وضّح احتياجك في النموذج لمناقشته مع SEALSI.',
+        question: 'ما هي مواعيد ومناطق التوصيل؟',
+        answer: 'نوفر التوصيل السريع إلى المدن الرئيسية، ويتم تأكيد الموعد المحدد بناءً على موقعكم.',
       },
       {
-        question: 'كيف يتم التوصيل؟',
-        answer:
-          'اذكر مدينتك. تُؤكَّد منطقة الخدمة والتكاليف والمدة قبل الطلب.',
+        question: 'هل تقدمون فواتير قانونية؟',
+        answer: 'نعم، نوفر فواتير رسمية مطابقة لكافة المعاملات التجارية لمحاسبتكم.',
       },
     ],
+    directMessage:
+      'مرحباً SEALSI، أنا تاجر / موزع وأرغب في الحصول على أسعار وشروط غسول أوشيانيك 5 لتر.',
+  },
+  pros: {
+    heroEyebrow: 'SEALSI للفنادق والمحترفين',
+    heroTitle1: 'نظافة استثنائية',
+    heroTitle2: 'لمؤسستكم الفندقية.',
+    heroLead:
+      'فنادق، رياضات، دور ضيافة، مصبغات ومؤسسات: اضمنوا لزبائنكم غسيلاً فائق النعومة بعطر بحري مميز، مع التحكم الكامل في تكلفة كل دورة غسيل.',
+    heroButton: 'طلب عرض أسعار للمؤسسات',
+    whatsappButton: 'عرض أسعار سريع عبر واتساب',
+    perCarton: 'لكل كرتونة (3 × 5 لتر = 300 غسلة)',
+    servicesEyebrow: 'حلول المؤسسات',
+    servicesTitle1: 'العناية بالأقمشة، المردودية،',
+    servicesTitle2: 'وانتعاش فندقي رفيع.',
+    servicesLead:
+      'غسول احترافي 4 في 1 مصمم ليلبي المعايير العالية للفندقة والمغاسل ذات الحجم الكبير.',
+    services: [
+      {
+        icon: 'spark',
+        title: 'نصاعة البياض وحماية الألياف',
+        text: 'ملاءات، مناشف، أرواب وأغطية: نظافة عميقة من 30 درجة مئوية دون إتلاف الأقمشة، للحفاظ على متانة بياضاتكم.',
+      },
+      {
+        icon: 'grid',
+        title: '100 غسلة للزجاجة (50 مل/دورة)',
+        text: 'تحكم مثالي في تكلفة كل غسلة بفضل التركيز الفعال. تركيبة متكاملة تشمل المنعم ومزيل البقع لتسهيل مشترياتكم.',
+      },
+      {
+        icon: 'box',
+        title: 'عطر أوشيانيك المميز',
+        text: 'انتعاش بحري راقٍ يضفي لمسة نقاء ونظافة داخل الغرف، مما يعزز رضا ضيوفكم.',
+      },
+      {
+        icon: 'message',
+        title: 'توصيل مباشر وتزويد دوري',
+        text: 'تزويد مبرمج حسب نسبة إشغال مؤسستكم مع متابعة مخصصة وفواتير مهنية متكاملة.',
+      },
+    ],
+    packagesEyebrow: 'احتياجاتكم حسب الحجم',
+    packagesTitle: 'مخصص لقدرة استيعاب مؤسستكم',
+    packagesLead: 'قدّروا احتياجكم حسب عدد الغرف أو دورات الغسيل اليومية.',
+    packages: [
+      { cartons: 5, bottles: 15, litres: 75, label: 'دار ضيافة / رياض (10-15 غرفة)' },
+      { cartons: 10, bottles: 30, litres: 150, label: 'فندق بوتيك (20-40 غرفة)' },
+      { cartons: 25, bottles: 75, litres: 375, label: 'فندق كبير / مصبغة احترافية' },
+      { cartons: 50, bottles: 150, litres: 750, label: 'تموين شهري لمجموعة فندقية' },
+    ],
+    selectVolume: 'اختر هذه الكمية',
+    faqEyebrow: 'أسئلة المحترفين',
+    faqTitle1: 'مصمم لمتطلبات',
+    faqTitle2: 'نشاطكم الفندقي.',
+    faq: [
+      {
+        question: 'هل التركيبة متوافقة مع الغسالات الاحترافية؟',
+        answer: 'نعم، التركيبة السائلة تذوب فورياً دون ترك أي رواسب وتلائم الغسالات المنزلية وشبه الاحترافية والصناعية.',
+      },
+      {
+        question: 'هل يمكن طلب عينة تجريبية للمغسلة؟',
+        answer: 'بالتأكيد، يمكننا توفير كرتونة تجريبية لتقييم النتيجة وجودة النظافة على بياضاتكم.',
+      },
+      {
+        question: 'هل توفرون جدول تموين دوري؟',
+        answer: 'نعم، نقوم بجدولة شحنات منتظمة تتوافق مع موسمية ونشاط مؤسستكم.',
+      },
+      {
+        question: 'كيف أحصل على عرض أسعار مهني مع فاتورة ضريبية؟',
+        answer: 'تواصلوا معنا عبر النموذج أو مباشرة عبر واتساب مع ذكر اسم المؤسسة وحجم الاستهلاك التقديري.',
+      },
+    ],
+    directMessage:
+      'مرحباً SEALSI، أمثل مؤسسة (فندق / دار ضيافة / مصبغة) وأرغب في الحصول على عرض أسعار احترافي لغسول أوشيانيك 5 لتر.',
   },
   notFound: {
     eyebrow: 'خطأ 404',
@@ -920,7 +1120,8 @@ const ar: Copy = {
     usefulPages: 'صفحات مفيدة',
     order: 'حضّر طلبي',
     viewProduct: 'عرض المنتج',
-    pros: 'للمحترفين',
+    resellers: 'عرض الموزعين',
+    pros: 'الفنادق والمحترفين',
     legal: 'المعلومات القانونية',
   },
   footer: {
@@ -934,7 +1135,8 @@ const ar: Copy = {
     universe: 'عالمنا',
     tips: 'نصائح الاستخدام',
     orderLink: 'حضّر طلبي',
-    reseller: 'كن موزّعًا',
+    reseller: 'عرض الموزعين',
+    pros: 'الفنادق والمحترفين',
     faq: 'الأسئلة الشائعة',
     write: 'راسلنا',
     rights: '© 2026 SEALSI. جميع الحقوق محفوظة.',

@@ -7,6 +7,7 @@ describe('site routing', () => {
     expect(parseLocation({ pathname: '/lessive/oceanic-5l', hash: '' }).page).toBe('accueil')
     expect(parseLocation({ pathname: '/selection', hash: '' }).page).toBe('selection')
     expect(parseLocation({ pathname: '/demande', hash: '' }).page).toBe('demande')
+    expect(parseLocation({ pathname: '/revendeurs', hash: '' }).page).toBe('revendeurs')
     expect(parseLocation({ pathname: '/professionnels', hash: '' }).page).toBe(
       'professionnels',
     )

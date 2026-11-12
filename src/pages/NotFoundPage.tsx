@@ -42,6 +42,9 @@ export function NotFoundPage({ onNavigate }: NotFoundPageProps) {
           <a href={href('demande')} onClick={go('demande')}>
             {c.notFound.order}
           </a>
+          <a href={href('revendeurs')} onClick={go('revendeurs')}>
+            {c.notFound.resellers}
+          </a>
           <a href={href('professionnels')} onClick={go('professionnels')}>
             {c.notFound.pros}
           </a>

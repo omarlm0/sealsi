@@ -56,7 +56,8 @@ export function Footer({ onNavigate }: FooterProps) {
             <h2>{c.footer.order}</h2>
             <ul>
               <li>{link('demande', undefined, c.footer.orderLink)}</li>
-              <li>{link('professionnels', undefined, c.footer.reseller)}</li>
+              <li>{link('revendeurs', undefined, c.footer.reseller)}</li>
+              <li>{link('professionnels', undefined, c.footer.pros)}</li>
               <li>{link('professionnels', 'faq', c.footer.faq)}</li>
             </ul>
           </nav>
