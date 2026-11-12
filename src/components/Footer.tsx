@@ -47,9 +47,8 @@ export function Footer({ onNavigate }: FooterProps) {
           <nav aria-label={c.footer.discover}>
             <h2>{c.footer.discover}</h2>
             <ul>
-              <li>{link('produit', undefined, c.footer.oceanic)}</li>
+              <li>{link('accueil', undefined, c.footer.oceanic)}</li>
               <li>{link('accueil', 'univers', c.footer.universe)}</li>
-              <li>{link('produit', 'conseils', c.footer.tips)}</li>
             </ul>
           </nav>
 

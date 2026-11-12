@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from 'react'
 import { Header } from './components/Header'
 import { Footer } from './components/Footer'
 import { HomePage } from './pages/HomePage'
-import { ProductPage } from './pages/ProductPage'
 import { RequestPage } from './pages/RequestPage'
 import { ProfessionalsPage } from './pages/ProfessionalsPage'
 import { LegalPage } from './pages/LegalPage'
@@ -11,7 +10,7 @@ import { PATHS, href, parseLocation } from './data/site'
 import type { PageId } from './data/site'
 import { isLegalPage } from './data/legal'
 import { absoluteUrl } from './config/business'
-import { clampCartons, readCartons, writeCartons } from './lib/cart'
+import { readCartons, writeCartons } from './lib/cart'
 import { useLanguage } from './i18n/LanguageContext'
 
 function setMeta(selector: string, content: string) {
@@ -99,19 +98,12 @@ export function App() {
     setRoute({ page: 'demande', section: route.section })
   }, [route.page, route.section])
 
-  const handleAdd = (quantity: number) => {
-    updateCartons(clampCartons(quantity))
-    navigate('demande')
-  }
-
   const renderPage = () => {
     if (isLegalPage(route.page)) {
       return <LegalPage page={route.page} onNavigate={navigate} />
     }
 
     switch (route.page) {
-      case 'produit':
-        return <ProductPage cartons={cartons} onAdd={handleAdd} onNavigate={navigate} />
       case 'selection':
       case 'demande':
         return (

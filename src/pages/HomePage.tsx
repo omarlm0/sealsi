@@ -39,7 +39,11 @@ export function HomePage({ onNavigate }: HomePageProps) {
               <a className="btn btn-gold" href={href('demande')} onClick={go('demande')}>
                 {c.hero.primary} <Icon name="arrow" />
               </a>
-              <a className="btn btn-ghost" href={href('produit')} onClick={go('produit')}>
+              <a
+                className="btn btn-ghost"
+                href={href('accueil', 'univers')}
+                onClick={go('accueil', 'univers')}
+              >
                 {c.hero.secondary}
               </a>
             </div>
@@ -92,7 +96,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               {c.home.signatureTitle2}
             </h2>
             <p>{c.home.signatureLead}</p>
-            <a className="text-link" href={href('produit')} onClick={go('produit')}>
+            <a className="text-link" href={href('demande')} onClick={go('demande')}>
               {c.home.signatureLink} <Icon name="arrow" />
             </a>
           </div>

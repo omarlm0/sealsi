@@ -25,7 +25,6 @@ export const QUANTITY_ERROR = `Indiquez un nombre entier entre ${PRODUCT.minimum
 
 export type PageId =
   | 'accueil'
-  | 'produit'
   | 'selection'
   | 'demande'
   | 'professionnels'
@@ -36,7 +35,6 @@ export type PageId =
 
 export const PATHS: Record<PageId, string> = {
   accueil: '/',
-  produit: '/lessive/oceanic-5l',
   selection: '/selection',
   demande: '/demande',
   professionnels: '/professionnels',
@@ -68,6 +66,12 @@ export function parseLocation(location: { pathname: string; hash: string }): {
   const rawPath = decode(location.pathname)
   const path = rawPath.replace(/\/+$/, '') || '/'
   const section = decode(location.hash.replace(/^#/, '')) || null
+
+  // Legacy route: /lessive/oceanic-5l redirects to home
+  if (path === '/lessive/oceanic-5l') {
+    return { page: 'accueil', section }
+  }
+
   return {
     page: PATH_TO_PAGE[path] ?? 'introuvable',
     section,

@@ -66,7 +66,7 @@ const fr = {
     },
   },
   nav: [
-    { label: 'Notre lessive', page: 'produit' as PageId },
+    { label: 'Accueil', page: 'accueil' as PageId },
     { label: "L'univers SEALSI", page: 'accueil' as PageId, section: 'univers' },
     { label: 'Professionnels', page: 'professionnels' as PageId },
   ],
@@ -651,7 +651,7 @@ const ar: Copy = {
     },
   },
   nav: [
-    { label: 'غسولنا', page: 'produit' as PageId },
+    { label: 'الرئيسية', page: 'accueil' as PageId },
     { label: 'عالم SEALSI', page: 'accueil' as PageId, section: 'univers' },
     { label: 'للمحترفين', page: 'professionnels' as PageId },
   ],
