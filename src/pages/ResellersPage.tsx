@@ -1,5 +1,4 @@
 import type { MouseEvent } from 'react'
-import { href } from '../data/site'
 import type { PageId } from '../data/site'
 import { useLanguage } from '../i18n/LanguageContext'
 import { ContactRibbon } from '../components/ContactRibbon'
@@ -14,7 +13,7 @@ type ResellersPageProps = {
 }
 
 export function ResellersPage({ onNavigate, onSelectVolume }: ResellersPageProps) {
-  const { c } = useLanguage()
+  const { c, hrefFor } = useLanguage()
 
   const go = (page: PageId, section?: string) => (event: MouseEvent) => {
     event.preventDefault()
@@ -39,7 +38,7 @@ export function ResellersPage({ onNavigate, onSelectVolume }: ResellersPageProps
             </h1>
             <p>{c.resellers.heroLead}</p>
             <div className="btn-row">
-              <a className="btn btn-gold" href={href('demande')} onClick={go('demande')}>
+              <a className="btn btn-gold" href={hrefFor('demande')} onClick={go('demande')}>
                 {c.resellers.heroButton} <Icon name="arrow" />
               </a>
               <a
@@ -109,10 +108,13 @@ export function ResellersPage({ onNavigate, onSelectVolume }: ResellersPageProps
               <div className="volume-card" key={pkg.cartons}>
                 <div>
                   <div className="volume-card-qty">
-                    {pkg.cartons} <span className="volume-unit">cartons</span>
+                    {pkg.cartons}{' '}
+                    <span className="volume-unit">{c.common.cartonWord(pkg.cartons)}</span>
                   </div>
                   <div className="volume-card-sub">
-                    {pkg.bottles} bouteilles · {pkg.litres} L · 1 carton = 3 × 5 L
+                    {pkg.bottles} {c.common.bottleWord(pkg.bottles)} · {pkg.litres}{' '}
+                    {c.common.litreWord()} · 1 {c.common.cartonWord(1)} = 3 × 5{' '}
+                    {c.common.litreWord()}
                   </div>
                   <div className="volume-card-label">{pkg.label}</div>
                 </div>

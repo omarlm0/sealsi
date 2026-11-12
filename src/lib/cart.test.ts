@@ -21,14 +21,15 @@ describe('carton calculations', () => {
   })
 
   it('rejects zero, fractions, out-of-range and non-numeric values', () => {
+    const message = 'Indiquez un nombre entier entre 1 et 999 cartons.'
     expect(parseCartons('0')).toBeNull()
     expect(parseCartons('1.5')).toBeNull()
     expect(parseCartons('-2')).toBeNull()
     expect(parseCartons('1000')).toBeNull()
     expect(parseCartons('')).toBeNull()
     expect(parseCartons('abc')).toBeNull()
-    expect(quantityError('0')).toContain('entier')
-    expect(quantityError('4')).toBe('')
+    expect(quantityError('0', message)).toBe(message)
+    expect(quantityError('4', message)).toBe('')
   })
 
   it('clamps stepper values to the demonstration range', () => {

@@ -1,7 +1,6 @@
-import { LEGAL_DOCUMENTS } from '../data/legal'
-import type { LegalPageId } from '../data/legal'
-import { href } from '../data/site'
-import type { PageId } from '../data/site'
+import type { LegalPageId, PageId } from '../data/site'
+import type { LegalDocumentCopy } from '../i18n/copy'
+import { useLanguage } from '../i18n/LanguageContext'
 import { Icon } from '../components/Icon'
 
 type LegalPageProps = {
@@ -9,44 +8,47 @@ type LegalPageProps = {
   onNavigate: (page: PageId, section?: string) => void
 }
 
+const PLACEHOLDER_MARKER = '[À COMPLÉTER'
+
 export function LegalPage({ page, onNavigate }: LegalPageProps) {
-  const document = LEGAL_DOCUMENTS[page]
+  const { c, hrefFor } = useLanguage()
+  const document: LegalDocumentCopy = c.legal.docs[page]
   const hasPlaceholders = document.sections.some((section) =>
     [...section.paragraphs, ...(section.list ?? [])].some((text) =>
-      text.includes('[À COMPLÉTER'),
+      text.includes(PLACEHOLDER_MARKER),
     ),
   )
 
   return (
     <main id="main-content" tabIndex={-1}>
       <div className="wrap legal-page">
-        <nav className="breadcrumb" aria-label="Fil d’Ariane">
+        <nav className="breadcrumb" aria-label={c.common.breadcrumbAria}>
           <a
-            href={href('accueil')}
+            href={hrefFor('accueil')}
             onClick={(event) => {
               event.preventDefault()
               onNavigate('accueil')
             }}
           >
-            Accueil
+            {c.common.home}
           </a>{' '}
           / {document.title}
         </nav>
 
         <header className="legal-head">
-          <span className="eyebrow">INFORMATIONS LÉGALES</span>
+          <span className="eyebrow">{c.legal.eyebrow}</span>
           <h1>{document.title}</h1>
           <p className="lead">{document.description}</p>
-          <p className="legal-updated">Dernière mise à jour : {document.updated}</p>
+          <p className="legal-updated">{c.legal.updatedPrefix(document.updated)}</p>
         </header>
 
         {hasPlaceholders ? (
           <div className="legal-notice" role="note">
             <Icon name="shield" />
             <p>
-              Les champs marqués <strong>[À COMPLÉTER]</strong> doivent être renseignés avec les
-              informations validées de l’entreprise avant la mise en ligne. Ils ne constituent pas
-              des données définitives.
+              {c.legal.noticeBefore}
+              <strong>{c.legal.noticeTag}</strong>
+              {c.legal.noticeAfter}
             </p>
           </div>
         ) : null}
@@ -73,13 +75,13 @@ export function LegalPage({ page, onNavigate }: LegalPageProps) {
 
         <p className="legal-back">
           <a
-            href={href('accueil')}
+            href={hrefFor('accueil')}
             onClick={(event) => {
               event.preventDefault()
               onNavigate('accueil')
             }}
           >
-            <Icon name="arrow" /> Retour à l’accueil
+            <Icon name="arrow" /> {c.legal.back}
           </a>
         </p>
       </div>

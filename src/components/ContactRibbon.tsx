@@ -1,5 +1,4 @@
 import { CONTACT, mailtoLink, whatsappLink } from '../config/business'
-import { href } from '../data/site'
 import type { PageId } from '../data/site'
 import { useLanguage } from '../i18n/LanguageContext'
 import { Icon } from './Icon'
@@ -9,7 +8,7 @@ type ContactRibbonProps = {
 }
 
 export function ContactRibbon({ onNavigate }: ContactRibbonProps) {
-  const { c } = useLanguage()
+  const { c, hrefFor } = useLanguage()
 
   return (
     <section className="contact-ribbon" aria-labelledby="contact-ribbon-title">
@@ -21,7 +20,7 @@ export function ContactRibbon({ onNavigate }: ContactRibbonProps) {
         <div className="contact-ribbon-actions">
           <a
             className="btn btn-primary"
-            href={href('demande')}
+            href={hrefFor('demande')}
             onClick={(event) => {
               event.preventDefault()
               onNavigate('demande')

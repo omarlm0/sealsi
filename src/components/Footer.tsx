@@ -1,7 +1,5 @@
 import { CONTACT, mailtoLink, whatsappLink } from '../config/business'
-import type { LegalPageId } from '../data/legal'
-import { href } from '../data/site'
-import type { PageId } from '../data/site'
+import type { LegalPageId, PageId } from '../data/site'
 import { useLanguage } from '../i18n/LanguageContext'
 import { Icon } from './Icon'
 import { Logo } from './Logo'
@@ -11,11 +9,11 @@ type FooterProps = {
 }
 
 export function Footer({ onNavigate }: FooterProps) {
-  const { c } = useLanguage()
+  const { c, hrefFor } = useLanguage()
 
   const link = (page: PageId, section: string | undefined, label: string) => (
     <a
-      href={href(page, section)}
+      href={hrefFor(page, section)}
       onClick={(event) => {
         event.preventDefault()
         onNavigate(page, section)
@@ -94,7 +92,7 @@ export function Footer({ onNavigate }: FooterProps) {
             </ul>
             <a
               className="text-link"
-              href={href('demande')}
+              href={hrefFor('demande')}
               onClick={(event) => {
                 event.preventDefault()
                 onNavigate('demande')
@@ -111,7 +109,7 @@ export function Footer({ onNavigate }: FooterProps) {
             {legalLinks.map(({ page, label }) => (
               <span key={page}>
                 <a
-                  href={href(page)}
+                  href={hrefFor(page)}
                   onClick={(event) => {
                     event.preventDefault()
                     onNavigate(page)

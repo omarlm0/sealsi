@@ -14,6 +14,8 @@ Oceanic Scent 5 L**, construit à partir du pack de livraison final
 - Vite 8
 - CSS design system maison (`src/index.css`), sans Tailwind
 - Vitest pour les tests unitaires
+- Polices auto-hébergées : Inter (latin) et Noto Sans Arabic (arabe), via
+  `@fontsource-variable`
 
 ## Démarrage
 
@@ -30,33 +32,47 @@ Le site est servi sur <http://localhost:5173>.
 | `npm run build`           | Vérification TypeScript + build de production dans `dist/` |
 | `npm run preview`         | Prévisualisation du build                                  |
 | `npm run typecheck`       | TypeScript seul                                            |
-| `npm test`                | Tests Vitest (routing, calculs, helpers de demande)        |
+| `npm test`                | Tests Vitest (routing, calculs, i18n, helpers de demande)  |
 | `npm run optimize:images` | Régénère les variantes WebP et l’image Open Graph          |
 
-## Routes
+## Langues et routes
+
+Le site est bilingue **français / arabe**. La langue fait partie de l’URL :
+le français vit à la racine, l’arabe sous le préfixe `/ar`. Chaque version est
+donc indexable, partageable et restaurable depuis un signet — il n’y a plus de
+préférence stockée dans `localStorage`.
+
+- `/` et `/demande` → français, `lang="fr"`, `dir="ltr"`
+- `/ar` et `/ar/demande` → arabe, `lang="ar"`, `dir="rtl"`
+- Le sélecteur FR / AR du header réécrit l’URL (`pushState`) en conservant la
+  page courante ; Précédent / Suivant resynchronisent la langue depuis l’URL.
+- Les balises `hreflang` (`fr`, `ar`, `x-default`), le canonical, `og:locale` et
+  le JSON-LD suivent la page et la langue actives.
 
 Le routage utilise l’API History (URL lisibles, sans `#`).
 
-| URL                         | Page                                           |
-| --------------------------- | ---------------------------------------------- |
-| `/`                         | Accueil : hero, signature, produit, pro, étapes |
-| `/lessive/oceanic-5l`       | Fiche produit : galerie, quantité, accordéons   |
-| `/demande`                  | Commande : quantité, coordonnées et récapitulatif sur une page |
-| `/selection`                | Ancienne URL, redirigée côté client vers `/demande` |
-| `/professionnels`           | Services professionnels et FAQ                  |
-| `/mentions-legales`         | Mentions légales                                |
-| `/confidentialite`          | Politique de confidentialité                    |
-| `/conditions-de-vente`      | Conditions générales de vente                   |
-| `/404` (et toute URL inconnue) | Page introuvable, en `noindex`               |
+| URL (préfixer par `/ar` pour l’arabe) | Page                                           |
+| ------------------------------------- | ---------------------------------------------- |
+| `/`                                   | Accueil : hero, signature, produit, pro, étapes |
+| `/demande`                            | Commande : quantité, coordonnées et récapitulatif sur une page |
+| `/selection`                          | Ancienne URL, redirigée côté client vers `/demande` |
+| `/revendeurs`                         | Offre revendeurs et commerces                  |
+| `/professionnels`                     | Services professionnels et FAQ                  |
+| `/mentions-legales`                   | Mentions légales                                |
+| `/confidentialite`                    | Politique de confidentialité                    |
+| `/conditions-de-vente`                | Conditions générales de vente                   |
+| `/404` (et toute URL inconnue)        | Page introuvable, en `noindex`                  |
 
-Les liens de section utilisent des ancres (`/#univers`,
-`/lessive/oceanic-5l#conseils`).
+Les liens de section utilisent des ancres (`/#univers`, `/ar#univers`).
 
 ## Contenu et règles produit
 
-Tout est centralisé dans **`src/data/site.ts`** : faits produit, textes,
-routes, métadonnées et éléments de navigation. L’identité, les coordonnées et
-les informations légales sont dans **`src/config/business.ts`**.
+Les textes des deux langues vivent dans **`src/i18n/copy.ts`** (source unique :
+`COPY.fr` et `COPY.ar` partagent la même structure, vérifiée par un test). Les
+faits produit, les routes et les helpers de langue sont dans
+**`src/data/site.ts`**. L’identité, les coordonnées et les champs légaux sont
+dans **`src/config/business.ts`** ; le contenu des trois pages légales est dans
+`COPY.*.legal.docs`.
 
 - Bouteille : **5 L**
 - Carton : **3 bouteilles = 15 L**
@@ -76,8 +92,8 @@ la règle commerciale validée avant mise en ligne.
   bouton de confirmation reste bloqué tant qu’un nombre entier de cartons n’a
   pas été choisi. Le plafond de 999 et les raccourcis restent des valeurs de
   démonstration.
-- Depuis la fiche produit, « Préparer ma commande » reprend la quantité
-  choisie (ou la quantité déjà stockée), puis ouvre `/demande`.
+- Depuis l’accueil ou une page métier, le bouton de commande ouvre `/demande`
+  dans la langue active.
 
 ## Formulaire de commande
 
@@ -113,7 +129,9 @@ accepte un `POST` JSON. Le payload contient :
 ```
 
 La réponse doit avoir un statut HTTP 2xx. En cas d’échec, le visiteur voit un
-message d’erreur et peut transmettre la demande via WhatsApp ou e-mail.
+message d’erreur et peut transmettre la demande via WhatsApp ou e-mail. Le
+champ `type` reprend le libellé de la langue active (`Particulier` /
+`Professionnel / revendeur`, ou leur équivalent arabe).
 
 ### Sans backend
 
@@ -125,7 +143,10 @@ automatiquement**. La soumission ouvre une fenêtre de transmission avec :
 3. un bouton « Copier le récapitulatif ».
 
 Une référence de demande est générée et incluse dans le message. L’interface
-indique clairement qu’aucune donnée n’a encore été transmise.
+indique clairement qu’aucune donnée n’a encore été transmise. Le brouillon
+WhatsApp / e-mail est rédigé dans la langue active (`fr-FR` ou `ar-MA`) et
+formate la date avec la locale correspondante ; les champs téléphone et e-mail
+restent en `dir="ltr"` pour préserver l’ordre des caractères.
 
 ## Coordonnées et informations légales
 
@@ -139,22 +160,31 @@ indique clairement qu’aucune donnée n’a encore été transmise.
 
 Les pages légales affichent un encart rappelant que ces champs doivent être
 remplacés avant la mise en ligne. Aucune donnée d’entreprise n’est inventée.
+Leur contenu bilingue est dans `src/i18n/copy.ts` (`legal.docs`) : c’est la
+seule source, aucune copie n’est maintenue ailleurs.
 
 ## Images
 
 Les visuels sont dans `public/assets`, avec des variantes WebP responsives :
 
-- hero : `oceanic-hero.webp` (1672 × 941, scène Oceanic générée)
+- hero FR : `oceanic-hero.webp` (1672 × 941) et `-640` / `-960` / `-1280`
+- hero AR : `oceanic-hero-ar.webp` (bouteille à gauche) et `-640` / `-960` / `-1280`
 - packshot : 320 / 480 / 640 px (`sealsi-oceanic-packshot-*.webp`)
 - signature : 700 / 1000 / 1400 px (`sealsi-oceanic-signature*.webp`)
 - Open Graph : `sealsi-og.jpg` (1200 × 630, généré depuis le master)
+
+Le script inline de `index.html` applique `lang` / `dir` avant le premier
+rendu, puis précharge le hero de la langue demandée (`imagesrcset`). La page
+d’accueil pointe le reste du temps vers le bon `srcset`.
 
 > La scène hero est une direction visuelle générée. Avant production,
 > remplacez-la par un rendu 3D ou une retouche avec l’étiquette source exacte
 > pour garantir les petits textes et les proportions du packaging.
 
 `npm run optimize:images` régénère ces fichiers depuis
-`assets-src/products/sealsi-oceanic-packshot.png` et
+`assets-src/products/sealsi-oceanic-packshot.png`,
+`assets-src/products/oceanic-hero.png`,
+`assets-src/products/oceanic-hero-ar.png` et
 `public/assets/sealsi-oceanic-signature.webp`. Le dossier `assets-src/` n’est
 **pas versionné** : conservez-le localement pour pouvoir relancer le script.
 
@@ -165,13 +195,17 @@ l’image Open Graph sont déployées.
 
 Le site est prêt à être indexé :
 
-- `index.html` : `robots` = `index, follow`, canonical absolu, Open Graph et
-  Twitter Cards avec une image absolue `1200 × 630`
+- `index.html` : `robots` = `index, follow`, canonical absolu, `hreflang`
+  (`fr`, `ar`, `x-default`), Open Graph et Twitter Cards avec une image
+  absolue `1200 × 630` et un texte alternatif localisé
+- JSON-LD `Organization` / `WebSite` / `Product` injecté par `App.tsx`, avec
+  `inLanguage` et `url` qui suivent la langue
 - `public/robots.txt` : `Allow: /` et déclaration du sitemap
-- `public/sitemap.xml` : pages produit, demande, professionnels et pages
-  légales
-- le routeur met à jour le titre, la description, le canonical, `og:url` et
-  `robots` à chaque navigation ; la page 404 reste en `noindex, follow`
+- `public/sitemap.xml` : chaque page en version FR et `/ar`, avec les liens
+  `xhtml:link` réciproques
+- le routeur met à jour le titre, la description, le canonical, `og:url`,
+  `og:locale`, `hreflang` et `robots` à chaque navigation ; la page 404 reste
+  en `noindex, follow`
 
 Avant mise en ligne, confirmez le domaine, les coordonnées et les informations
 légales, puis vérifiez le sitemap dans la Search Console.
@@ -180,12 +214,15 @@ légales, puis vérifiez le sitemap dans la Search Console.
 
 - Lien d’évitement vers le contenu principal
 - Vrais liens et boutons, navigation clavier complète
-- Focus visible, `aria-current`, `aria-expanded`
+- Focus visible, `aria-current`, `aria-expanded`, `aria-pressed` sur FR / AR
 - Labels explicites, `aria-invalid` et `aria-describedby` sur les erreurs
 - Erreurs annoncées avec `role="alert"`
 - `<dialog>` native pour la transmission de la demande
 - Titres hiérarchisés (`h1` → `h2` → `h3`), y compris dans le pied de page
 - Prise en charge de `prefers-reduced-motion`
+- RTL complet : propriétés logiques (`inset-inline-*`, `padding-inline-*`,
+  `border-inline-*`, `text-align: end`), flèches directionnelles inversées et
+  interlignage/letter-spacing adaptés à l’arabe
 - Aucun débordement horizontal, mise en page sur une colonne en mobile
 
 ## Déploiement
@@ -212,12 +249,14 @@ si vous activez l’envoi automatique.
 ## Checklist avant mise en ligne
 
 - [ ] Confirmer le domaine et mettre à jour `SITE.url`, `index.html`,
-      `robots.txt` et `sitemap.xml` si nécessaire
+      `robots.txt`, `sitemap.xml` et les URL `hreflang` si nécessaire
 - [ ] Remplacer tous les champs `[À COMPLÉTER]` dans `src/config/business.ts`
+      et dans les pages légales (`COPY.*.legal`)
 - [ ] Confirmer `contact@sealsi.com` et le numéro de téléphone/WhatsApp
 - [ ] Brancher `VITE_REQUEST_ENDPOINT` ou valider le parcours WhatsApp/e-mail
 - [ ] Valider la quantité maximale, les zones de livraison et les délais
 - [ ] Vérifier les pages légales avec un conseil juridique
 - [ ] Relancer `npm run typecheck`, `npm test`, `npm run build` et
       `npm run optimize:images`
-- [ ] Contrôler le rendu à 360 / 768 / 1024 px et lancer Lighthouse
+- [ ] Contrôler le rendu FR et `/ar` (RTL) à 360 / 768 / 1024 px, puis lancer
+      Lighthouse

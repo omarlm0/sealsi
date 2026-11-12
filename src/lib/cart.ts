@@ -1,4 +1,4 @@
-import { PRODUCT, QUANTITY_ERROR } from '../data/site'
+import { PRODUCT } from '../data/site'
 
 export const CARTONS_STORAGE_KEY = 'sealsi-cartons'
 
@@ -12,8 +12,8 @@ export function parseCartons(raw: string): number | null {
   return value
 }
 
-export function quantityError(raw: string): string {
-  return parseCartons(raw) === null ? QUANTITY_ERROR : ''
+export function quantityError(raw: string, message: string): string {
+  return parseCartons(raw) === null ? message : ''
 }
 
 export function bottlesFor(cartons: number): number {

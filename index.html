@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" dir="ltr">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -11,14 +11,53 @@
       content="Découvrez SEALSI Oceanic Scent, la lessive liquide 5 L inspirée de l’océan. Format 5 litres, 3 bouteilles par carton, tarif sur confirmation."
     />
     <link rel="canonical" href="https://www.sealsi.com/" />
+    <link rel="alternate" hreflang="fr" href="https://www.sealsi.com/" />
+    <link rel="alternate" hreflang="ar" href="https://www.sealsi.com/ar" />
+    <link rel="alternate" hreflang="x-default" href="https://www.sealsi.com/" />
 
     <meta name="robots" content="index, follow" />
     <meta name="theme-color" content="#04152F" />
+
+    <!--
+      Set the language and direction before the first paint, and preload the
+      hero that matches the URL, so Arabic visitors never see a flash of the
+      French layout or download the wrong hero image.
+    -->
+    <script>
+      (function () {
+        var pathname = location.pathname.replace(/\/+$/, '') || '/'
+        var isArabic = pathname === '/ar' || pathname.indexOf('/ar/') === 0
+        var root = document.documentElement
+        root.lang = isArabic ? 'ar' : 'fr'
+        root.dir = isArabic ? 'rtl' : 'ltr'
+
+        var hero = isArabic ? 'oceanic-hero-ar' : 'oceanic-hero'
+        var preload = document.createElement('link')
+        preload.rel = 'preload'
+        preload.as = 'image'
+        preload.setAttribute(
+          'imagesrcset',
+          '/assets/' +
+            hero +
+            '-640.webp 640w, /assets/' +
+            hero +
+            '-960.webp 960w, /assets/' +
+            hero +
+            '-1280.webp 1280w, /assets/' +
+            hero +
+            '.webp 1672w',
+        )
+        preload.setAttribute('imagesizes', '100vw')
+        preload.setAttribute('fetchpriority', 'high')
+        document.head.appendChild(preload)
+      })()
+    </script>
 
     <!-- Open Graph / aperçu social. Domaine à confirmer avant mise en ligne. -->
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="SEALSI" />
     <meta property="og:locale" content="fr_FR" />
+    <meta property="og:locale:alternate" content="ar_MA" />
     <meta property="og:url" content="https://www.sealsi.com/" />
     <meta property="og:title" content="SEALSI — Le propre. Une vague de fraîcheur." />
     <meta
@@ -41,21 +80,16 @@
       content="Oceanic Scent, lessive liquide SEALSI 5 L. Tarif et modalités confirmés selon votre demande."
     />
     <meta name="twitter:image" content="https://www.sealsi.com/assets/sealsi-og.jpg" />
-
-    <!--
-      The Oceanic hero scene is the home page LCP element. It is rendered by
-      React, so preload it here to make the request discoverable in the initial
-      HTML and avoid a late discovery round-trip.
-    -->
-    <link
-      rel="preload"
-      as="image"
-      href="/assets/oceanic-hero.webp"
-      fetchpriority="high"
+    <meta
+      name="twitter:image:alt"
+      content="Bouteille SEALSI Oceanic Scent 5 litres sur fond marine"
     />
 
     <link rel="icon" type="image/svg+xml" href="/assets/sealsi-star.svg" />
     <link rel="manifest" href="/manifest.webmanifest" />
+
+    <!-- Rempli par React avec les données localisées (Organization/WebSite/Product). -->
+    <script type="application/ld+json" id="site-schema"></script>
   </head>
   <body>
     <div id="root"></div>
@@ -65,6 +99,10 @@
         <p>
           Ce site nécessite JavaScript pour afficher le produit et préparer votre commande.
           Activez JavaScript pour poursuivre la visite.
+        </p>
+        <p lang="ar" dir="rtl" style="font-family: 'Segoe UI', Tahoma, sans-serif;">
+          يحتاج هذا الموقع إلى JavaScript لعرض المنتج وإعداد طلبك. يُرجى تفعيل
+          JavaScript لمتابعة الزيارة.
         </p>
       </div>
     </noscript>

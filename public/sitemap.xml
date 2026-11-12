@@ -1,43 +1,128 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://www.sealsi.com/</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.sealsi.com/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.sealsi.com/ar"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.sealsi.com/"/>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>1.0</priority>
+  </url>
+  <url>
+    <loc>https://www.sealsi.com/ar</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.sealsi.com/"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.sealsi.com/ar"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.sealsi.com/"/>
     <lastmod>2026-11-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://www.sealsi.com/demande</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.sealsi.com/demande"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.sealsi.com/ar/demande"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.sealsi.com/demande"/>
+    <lastmod>2026-11-05</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
+    <loc>https://www.sealsi.com/ar/demande</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.sealsi.com/demande"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.sealsi.com/ar/demande"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.sealsi.com/demande"/>
     <lastmod>2026-11-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://www.sealsi.com/revendeurs</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.sealsi.com/revendeurs"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.sealsi.com/ar/revendeurs"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.sealsi.com/revendeurs"/>
+    <lastmod>2026-11-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sealsi.com/ar/revendeurs</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.sealsi.com/revendeurs"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.sealsi.com/ar/revendeurs"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.sealsi.com/revendeurs"/>
     <lastmod>2026-11-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.sealsi.com/professionnels</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.sealsi.com/professionnels"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.sealsi.com/ar/professionnels"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.sealsi.com/professionnels"/>
+    <lastmod>2026-11-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://www.sealsi.com/ar/professionnels</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.sealsi.com/professionnels"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.sealsi.com/ar/professionnels"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.sealsi.com/professionnels"/>
     <lastmod>2026-11-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://www.sealsi.com/mentions-legales</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.sealsi.com/mentions-legales"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.sealsi.com/ar/mentions-legales"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.sealsi.com/mentions-legales"/>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://www.sealsi.com/ar/mentions-legales</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.sealsi.com/mentions-legales"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.sealsi.com/ar/mentions-legales"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.sealsi.com/mentions-legales"/>
     <lastmod>2026-11-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
   </url>
   <url>
     <loc>https://www.sealsi.com/confidentialite</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.sealsi.com/confidentialite"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.sealsi.com/ar/confidentialite"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.sealsi.com/confidentialite"/>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  <url>
+    <loc>https://www.sealsi.com/ar/confidentialite</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.sealsi.com/confidentialite"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.sealsi.com/ar/confidentialite"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.sealsi.com/confidentialite"/>
     <lastmod>2026-11-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.2</priority>
   </url>
   <url>
     <loc>https://www.sealsi.com/conditions-de-vente</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.sealsi.com/conditions-de-vente"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.sealsi.com/ar/conditions-de-vente"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.sealsi.com/conditions-de-vente"/>
+    <lastmod>2026-11-04</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://www.sealsi.com/ar/conditions-de-vente</loc>
+    <xhtml:link rel="alternate" hreflang="fr" href="https://www.sealsi.com/conditions-de-vente"/>
+    <xhtml:link rel="alternate" hreflang="ar" href="https://www.sealsi.com/ar/conditions-de-vente"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.sealsi.com/conditions-de-vente"/>
     <lastmod>2026-11-04</lastmod>
     <changefreq>yearly</changefreq>
     <priority>0.3</priority>

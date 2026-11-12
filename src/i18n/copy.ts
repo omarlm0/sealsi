@@ -1,6 +1,6 @@
-import type { PageId } from '../data/site'
+import type { Lang, PageId } from '../data/site'
 
-export type Lang = 'fr' | 'ar'
+export type { Lang } from '../data/site'
 
 export type BenefitIcon = 'parfum' | 'nettoyant' | 'adoucissant' | 'anti-taches'
 export type ServiceIcon = 'spark' | 'box' | 'message' | 'grid'
@@ -18,7 +18,6 @@ export type LegalDocumentCopy = {
   updated: string
   sections: LegalSectionCopy[]
 }
-export type LegalPageId = 'mentions-legales' | 'confidentialite' | 'conditions-de-vente'
 
 const fr = {
   meta: {
@@ -26,11 +25,6 @@ const fr = {
       title: 'SEALSI — Le propre. Une vague de fraîcheur.',
       description:
         'Découvrez SEALSI Oceanic Scent, la lessive liquide 5 L inspirée de l’océan. Format 5 litres, 3 bouteilles par carton, tarif sur confirmation.',
-    },
-    produit: {
-      title: 'Oceanic Scent 5 L — Lessive liquide SEALSI',
-      description:
-        'Oceanic Scent, lessive liquide SEALSI 5 L : parfum, nettoyant, adoucissant et anti-taches. 1 carton = 3 bouteilles = 15 litres.',
     },
     selection: {
       title: 'Votre commande — SEALSI',
@@ -118,6 +112,8 @@ const fr = {
     signatureTitle2: 'Un quotidien plus doux.',
     signatureLead:
       'Une étoile lumineuse, l’eau en mouvement et un tissu blanc : les signes du propre, de la fraîcheur et du confort SEALSI.',
+    signatureAlt:
+      'La signature SEALSI : étoile bleue, vague et tissu blanc',
     signatureLink: 'Explorer notre lessive',
     proEyebrow: 'POUR LES PROFESSIONNELS',
     proTitle1: 'Vos quantités.',
@@ -159,40 +155,6 @@ const fr = {
         index: '03 / CONFIRMER',
         title: 'Validez la proposition',
         text: 'Confirmez le tarif, les disponibilités et les modalités de livraison.',
-      },
-    ],
-  },
-  product: {
-    breadcrumbAria: 'Fil d’Ariane',
-    breadcrumbHome: 'Accueil',
-    breadcrumbCurrent: 'Notre lessive',
-    galleryAlt: 'Vue arrière de la bouteille SEALSI et de son étiquette',
-    gallerySwitchAria: 'Choisir la vue du produit',
-    front: 'Face avant',
-    label: 'Étiquette',
-    eyebrow: 'LA LESSIVE LIQUIDE SEALSI',
-    title: 'Oceanic Scent',
-    subtitle: 'L’inspiration marine, pour votre linge.',
-    tags: ['5 L', '100 lavages*', '4 en 1'],
-    lead: 'Parfum, nettoyant, adoucissant et anti-taches : les quatre fonctions réunies sur l’emballage SEALSI, dans un grand format pensé pour vos besoins.',
-    quantityLabel: 'Votre quantité',
-    cartonsOfBottles: (n: number) => `carton(s) de ${n} bouteilles`,
-    bottlesLitres: (bottles: number, litres: number) =>
-      `${bottles} bouteilles / ${litres} litres au total`,
-    primary: 'Préparer ma commande',
-    priceNote: 'Tarif, disponibilité et livraison confirmés selon votre demande.',
-    details: [
-      {
-        summary: 'Dosage et nombre de lavages',
-        text: '*100 lavages sur la base d’une dose de 50 ml. Ajuster à la charge, au degré de salissure et à la dureté de l’eau. Se référer à l’étiquette du produit.',
-      },
-      {
-        summary: 'Conseils et précautions',
-        text: 'Respecter l’étiquette des textiles et les instructions de la machine. Conserver hors de portée des enfants et lire les précautions sur l’emballage avant utilisation.',
-      },
-      {
-        summary: 'Conditionnement',
-        text: 'Une bouteille contient 5 litres. Un carton contient 3 bouteilles, soit 15 litres. Les commandes sont préparées en nombres entiers de cartons.',
       },
     ],
   },
@@ -285,6 +247,23 @@ const fr = {
     mailSubject: 'Demande d’information SEALSI',
     directMessage:
       'Bonjour SEALSI, je souhaite des informations sur la lessive Oceanic Scent 5 L.',
+    recap: {
+      heading: (reference: string) => `Demande SEALSI — ${reference}`,
+      product: 'Produit',
+      selection: (cartons: number, bottles: number, litres: number) =>
+        `Sélection : ${cartons} carton${cartons === 1 ? '' : 's'} = ${bottles} bouteille${bottles === 1 ? '' : 's'} = ${litres} L`,
+      type: 'Type de demande',
+      name: 'Nom',
+      company: 'Société',
+      phone: 'Téléphone',
+      city: 'Ville',
+      email: 'E-mail',
+      message: 'Message',
+      created: (date: string) => `Créée le ${date}.`,
+      cartons: (n: number) => `${n} carton${n === 1 ? '' : 's'}`,
+      subject: (reference: string, cartons: number) =>
+        `Demande SEALSI ${reference} — ${cartons} carton${cartons === 1 ? '' : 's'}`,
+    },
   },
   resellers: {
     heroEyebrow: 'SEALSI POUR LES REVENDEURS & COMMERCES',
@@ -440,12 +419,10 @@ const fr = {
     eyebrow: 'ERREUR 404',
     title: 'Cette page a pris le large.',
     lead:
-      'L’adresse demandée n’existe pas ou a été déplacée. Retrouvez le produit, votre sélection ou l’accueil du site.',
+      'L’adresse demandée n’existe pas ou a été déplacée. Retrouvez l’accueil, votre commande ou nos offres.',
     home: 'Retour à l’accueil',
-    product: 'Découvrir Oceanic Scent',
     usefulPages: 'Pages utiles',
     order: 'Préparer ma commande',
-    viewProduct: 'Voir le produit',
     resellers: 'Offre Revendeurs',
     pros: 'Hôtels & Professionnels',
     legal: 'Mentions légales',
@@ -459,7 +436,6 @@ const fr = {
     contactIntro: 'Votre projet commence par une conversation.',
     oceanic: 'Oceanic Scent',
     universe: 'Notre univers',
-    tips: "Conseils d'utilisation",
     orderLink: 'Préparer ma commande',
     reseller: 'Offre Revendeurs',
     pros: 'Hôtels & Professionnels',
@@ -500,6 +476,18 @@ const fr = {
     inputAria: 'Nombre de cartons',
     help: (min: number, max: number) =>
       `Entier compris entre ${min} et ${max} cartons.`,
+    error: (min: number, max: number) =>
+      `Indiquez un nombre entier entre ${min} et ${max} cartons.`,
+  },
+  common: {
+    breadcrumbAria: 'Fil d’Ariane',
+    home: 'Accueil',
+    packshotAlt:
+      'Bouteille SEALSI Oceanic Scent 5 litres, bleue avec bouchon doré et étiquette étoile',
+    cartonWord: (n: number): string => (n === 1 ? 'carton' : 'cartons'),
+    bottleWord: (n: number): string => (n === 1 ? 'bouteille' : 'bouteilles'),
+    litreWord: (): string => 'L',
+    washWord: (n: number): string => (n === 1 ? 'lavage' : 'lavages'),
   },
   legal: {
     eyebrow: 'INFORMATIONS LÉGALES',
@@ -719,11 +707,6 @@ const ar: Copy = {
       description:
         'اكتشف SEALSI Oceanic Scent، سائل الغسيل 5 لترات المستوحى من المحيط. حجم 5 لترات، 3 زجاجات لكل كرتونة، والسعر عند التأكيد.',
     },
-    produit: {
-      title: 'Oceanic Scent 5 لترات — سائل الغسيل SEALSI',
-      description:
-        'Oceanic Scent، سائل الغسيل SEALSI 5 لترات: عطر، منظّف، منعّم وضد البقع. كرتونة واحدة = 3 زجاجات = 15 لترًا.',
-    },
     selection: {
       title: 'طلبك — SEALSI',
       description:
@@ -807,6 +790,7 @@ const ar: Copy = {
     signatureTitle2: 'ويوم أكثر نعومة.',
     signatureLead:
       'نجمة مضيئة، وماء متحرك، وقماش أبيض: علامات النقاء والانتعاش والراحة من SEALSI.',
+    signatureAlt: 'توقيع SEALSI: نجمة زرقاء وموجة وقماش أبيض',
     signatureLink: 'اكتشف غسولنا',
     proEyebrow: 'للمحترفين',
     proTitle1: 'كمياتك.',
@@ -848,40 +832,6 @@ const ar: Copy = {
         index: '03 / تأكيد',
         title: 'أكّد العرض',
         text: 'أكّد السعر والتوفر وشروط التوصيل.',
-      },
-    ],
-  },
-  product: {
-    breadcrumbAria: 'مسار التنقل',
-    breadcrumbHome: 'الرئيسية',
-    breadcrumbCurrent: 'غسولنا',
-    galleryAlt: 'الوجه الخلفي لزجاجة SEALSI وملصقها',
-    gallerySwitchAria: 'اختر عرض المنتج',
-    front: 'الوجه الأمامي',
-    label: 'الملصق',
-    eyebrow: 'سائل الغسيل SEALSI',
-    title: 'Oceanic Scent',
-    subtitle: 'إلهام بحري لغسيلك.',
-    tags: ['5 لترات', '100 غسلة*', '4 في 1'],
-    lead: 'عطر، منظّف، منعّم وضد البقع: أربع وظائف مجتمعة على عبوة SEALSI، بحجم كبير مصمم لاحتياجاتك.',
-    quantityLabel: 'كميتك',
-    cartonsOfBottles: (n: number) => `كرتونة من ${n} زجاجات`,
-    bottlesLitres: (bottles: number, litres: number) =>
-      `${bottles} زجاجة / ${litres} لترًا إجمالًا`,
-    primary: 'حضّر طلبي',
-    priceNote: 'يُؤكَّد السعر والتوفر والتوصيل حسب طلبك.',
-    details: [
-      {
-        summary: 'الجرعة وعدد الغسلات',
-        text: '*100 غسلة على أساس جرعة 50 مل. عدّل حسب الحمولة ودرجة الاتساخ وعسر الماء. راجع ملصق المنتج.',
-      },
-      {
-        summary: 'نصائح واحتياطات',
-        text: 'احترم ملصق الأقمشة وتعليمات الغسالة. احفظه بعيدًا عن متناول الأطفال واقرأ الاحتياطات على العبوة قبل الاستخدام.',
-      },
-      {
-        summary: 'التغليف',
-        text: 'تحتوي الزجاجة على 5 لترات. تحتوي الكرتونة على 3 زجاجات، أي 15 لترًا. تُحضَّر الطلبات بأعداد كاملة من الكراتين.',
       },
     ],
   },
@@ -969,6 +919,23 @@ const ar: Copy = {
     typeIndividual: 'فرد',
     mailSubject: 'طلب معلومات SEALSI',
     directMessage: 'مرحبًا SEALSI، أريد معلومات عن سائل الغسيل Oceanic Scent 5 لتر.',
+    recap: {
+      heading: (reference: string) => `طلب SEALSI — ${reference}`,
+      product: 'المنتج',
+      selection: (cartons: number, bottles: number, litres: number) =>
+        `الاختيار: ${cartons} كرتونة = ${bottles} زجاجة = ${litres} لتر`,
+      type: 'نوع الطلب',
+      name: 'الاسم',
+      company: 'الشركة',
+      phone: 'الهاتف',
+      city: 'المدينة',
+      email: 'البريد الإلكتروني',
+      message: 'الرسالة',
+      created: (date: string) => `أُنشئ في ${date}.`,
+      cartons: (n: number) => `${n} كرتونة`,
+      subject: (reference: string, cartons: number) =>
+        `طلب SEALSI ${reference} — ${cartons} كرتونة`,
+    },
   },
   resellers: {
     heroEyebrow: 'SEALSI للموزعين ونقاط البيع',
@@ -1114,12 +1081,10 @@ const ar: Copy = {
     eyebrow: 'خطأ 404',
     title: 'هذه الصفحة أبحرت بعيدًا.',
     lead:
-      'العنوان المطلوب غير موجود أو تم نقله. عُد إلى المنتج أو اختيارك أو الصفحة الرئيسية.',
+      'العنوان المطلوب غير موجود أو تم نقله. عُد إلى الصفحة الرئيسية أو طلبك أو عروضنا.',
     home: 'العودة إلى الرئيسية',
-    product: 'اكتشف Oceanic Scent',
     usefulPages: 'صفحات مفيدة',
     order: 'حضّر طلبي',
-    viewProduct: 'عرض المنتج',
     resellers: 'عرض الموزعين',
     pros: 'الفنادق والمحترفين',
     legal: 'المعلومات القانونية',
@@ -1133,7 +1098,6 @@ const ar: Copy = {
     contactIntro: 'مشروعك يبدأ بمحادثة.',
     oceanic: 'Oceanic Scent',
     universe: 'عالمنا',
-    tips: 'نصائح الاستخدام',
     orderLink: 'حضّر طلبي',
     reseller: 'عرض الموزعين',
     pros: 'الفنادق والمحترفين',
@@ -1173,6 +1137,17 @@ const ar: Copy = {
     inputAria: 'عدد الكراتين',
     help: (min: number, max: number) =>
       `عدد صحيح بين ${min} و${max} كرتونة.`,
+    error: (min: number, max: number) =>
+      `أدخل عددًا صحيحًا بين ${min} و${max} كرتونة.`,
+  },
+  common: {
+    breadcrumbAria: 'مسار التنقل',
+    home: 'الرئيسية',
+    packshotAlt: 'زجاجة SEALSI Oceanic Scent 5 لترات، زرقاء بغطاء ذهبي وملصق نجمة',
+    cartonWord: (n: number): string => (n <= 2 ? 'كرتونة' : n <= 10 ? 'كراتين' : 'كرتونة'),
+    bottleWord: (n: number): string => (n <= 2 ? 'زجاجة' : n <= 10 ? 'زجاجات' : 'زجاجة'),
+    litreWord: (): string => 'لتر',
+    washWord: (n: number): string => (n <= 2 ? 'غسلة' : n <= 10 ? 'غسلات' : 'غسلة'),
   },
   legal: {
     eyebrow: 'معلومات قانونية',
@@ -1382,9 +1357,3 @@ const ar: Copy = {
 }
 
 export const COPY: Record<Lang, Copy> = { fr, ar }
-
-export const LANG_STORAGE_KEY = 'sealsi-lang'
-
-export function isLang(value: string | null): value is Lang {
-  return value === 'fr' || value === 'ar'
-}

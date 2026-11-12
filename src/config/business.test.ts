@@ -8,6 +8,10 @@ import {
   whatsappLink,
 } from './business'
 import type { RequestDetails } from './business'
+import { COPY } from '../i18n/copy'
+
+const RECAP_FR = COPY.fr.request.recap
+const RECAP_AR = COPY.ar.request.recap
 
 const DETAILS: RequestDetails = {
   reference: 'SLS-20261104-ABCD',
@@ -36,7 +40,7 @@ describe('business helpers', () => {
   })
 
   it('formats the handoff message with the full selection and contact details', () => {
-    const message = buildRequestMessage(DETAILS)
+    const message = buildRequestMessage(DETAILS, RECAP_FR, 'fr-FR')
     expect(message).toContain('Demande SEALSI — SLS-20261104-ABCD')
     expect(message).toContain('Sélection : 6 cartons = 18 bouteilles = 90 L')
     expect(message).toContain('Société : Épicerie du Port')
@@ -45,20 +49,36 @@ describe('business helpers', () => {
     expect(message).toContain('Message : Besoin d’un réassort mensuel.')
   })
 
+  it('formats the handoff message in Arabic for the Arabic site', () => {
+    const message = buildRequestMessage(DETAILS, RECAP_AR, 'ar-MA')
+    expect(message).toContain('طلب SEALSI — SLS-20261104-ABCD')
+    expect(message).toContain('الاختيار: 6 كرتونة = 18 زجاجة = 90 لتر')
+    expect(message).toContain('المدينة : Casablanca')
+    expect(message).not.toContain('Sélection')
+  })
+
   it('uses the singular for a one-carton request', () => {
-    const message = buildRequestMessage({ ...DETAILS, cartons: 1, bottles: 3, litres: 15 })
+    const message = buildRequestMessage(
+      { ...DETAILS, cartons: 1, bottles: 3, litres: 15 },
+      RECAP_FR,
+      'fr-FR',
+    )
     expect(message).toContain('Sélection : 1 carton = 3 bouteilles = 15 L')
   })
 
   it('omits optional empty fields from the message', () => {
-    const message = buildRequestMessage({ ...DETAILS, company: '', email: '', message: '' })
+    const message = buildRequestMessage(
+      { ...DETAILS, company: '', email: '', message: '' },
+      RECAP_FR,
+      'fr-FR',
+    )
     expect(message).not.toContain('Société :')
     expect(message).not.toContain('E-mail :')
     expect(message).not.toContain('Message :')
   })
 
   it('builds the e-mail subject and channel links', () => {
-    expect(buildRequestSubject(DETAILS)).toBe(
+    expect(buildRequestSubject(DETAILS, RECAP_FR)).toBe(
       'Demande SEALSI SLS-20261104-ABCD — 6 cartons',
     )
     expect(whatsappLink('Bonjour SEALSI')).toContain(

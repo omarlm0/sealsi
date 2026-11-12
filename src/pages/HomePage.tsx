@@ -1,5 +1,4 @@
 import type { MouseEvent } from 'react'
-import { href } from '../data/site'
 import type { PageId } from '../data/site'
 import { useLanguage } from '../i18n/LanguageContext'
 import { BenefitsBar } from '../components/BenefitsBar'
@@ -12,7 +11,9 @@ type HomePageProps = {
 }
 
 export function HomePage({ onNavigate }: HomePageProps) {
-  const { c, lang } = useLanguage()
+  const { c, lang, hrefFor } = useLanguage()
+
+  const heroBase = lang === 'ar' ? '/assets/oceanic-hero-ar' : '/assets/oceanic-hero'
 
   const go = (page: PageId, section?: string) => (event: MouseEvent) => {
     event.preventDefault()
@@ -36,12 +37,12 @@ export function HomePage({ onNavigate }: HomePageProps) {
             </h1>
             <p>{c.hero.lead}</p>
             <div className="btn-row">
-              <a className="btn btn-gold" href={href('revendeurs')} onClick={go('revendeurs')}>
+              <a className="btn btn-gold" href={hrefFor('revendeurs')} onClick={go('revendeurs')}>
                 {c.hero.resellers} <Icon name="arrow" />
               </a>
               <a
                 className="btn btn-ghost"
-                href={href('professionnels')}
+                href={hrefFor('professionnels')}
                 onClick={go('professionnels')}
               >
                 {c.hero.professionals} <Icon name="arrow" />
@@ -57,7 +58,14 @@ export function HomePage({ onNavigate }: HomePageProps) {
 
         <div className="hero-media" aria-hidden="true">
           <img
-            src={lang === 'ar' ? '/assets/oceanic-hero-ar.webp' : '/assets/oceanic-hero.webp'}
+            src={`${heroBase}.webp`}
+            srcSet={[
+              `${heroBase}-640.webp 640w`,
+              `${heroBase}-960.webp 960w`,
+              `${heroBase}-1280.webp 1280w`,
+              `${heroBase}.webp 1672w`,
+            ].join(', ')}
+            sizes="100vw"
             alt=""
             width={1672}
             height={941}
@@ -80,7 +88,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               src="/assets/sealsi-oceanic-signature.webp"
               srcSet="/assets/sealsi-oceanic-signature-700.webp 700w, /assets/sealsi-oceanic-signature-1000.webp 1000w, /assets/sealsi-oceanic-signature.webp 1400w"
               sizes="(max-width: 760px) 90vw, 45vw"
-              alt="La signature SEALSI : étoile bleue, vague et tissu blanc"
+              alt={c.home.signatureAlt}
               width={1400}
               height={1078}
               loading="lazy"
@@ -96,7 +104,7 @@ export function HomePage({ onNavigate }: HomePageProps) {
               {c.home.signatureTitle2}
             </h2>
             <p>{c.home.signatureLead}</p>
-            <a className="text-link" href={href('demande')} onClick={go('demande')}>
+            <a className="text-link" href={hrefFor('demande')} onClick={go('demande')}>
               {c.home.signatureLink} <Icon name="arrow" />
             </a>
           </div>
@@ -116,14 +124,14 @@ export function HomePage({ onNavigate }: HomePageProps) {
             <div className="btn-row">
               <a
                 className="btn btn-white"
-                href={href('revendeurs')}
+                href={hrefFor('revendeurs')}
                 onClick={go('revendeurs')}
               >
                 {c.hero.resellers} <Icon name="arrow" />
               </a>
               <a
                 className="btn btn-ghost"
-                href={href('professionnels')}
+                href={hrefFor('professionnels')}
                 onClick={go('professionnels')}
               >
                 {c.hero.professionals} <Icon name="arrow" />

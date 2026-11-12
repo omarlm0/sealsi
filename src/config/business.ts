@@ -43,9 +43,6 @@ export const COMMERCE = {
   quoteOnly: true,
   /** Contact details are kept for this long after the last exchange. */
   dataRetentionMonths: 12,
-  /** Shown in the request confirmation so expectations stay explicit. */
-  responseNote:
-    'Nous revenons vers vous avec une proposition adaptée à votre quantité et à votre ville.',
 } as const
 
 /**
@@ -86,43 +83,63 @@ export function buildReference(date = new Date()): string {
   return `SLS-${year}${month}${day}-${suffix}`
 }
 
-function formatDate(isoDate: string): string {
+function formatDate(isoDate: string, locale: string): string {
   const date = new Date(isoDate)
   if (Number.isNaN(date.getTime())) return isoDate
-  return new Intl.DateTimeFormat('fr-FR', {
+  return new Intl.DateTimeFormat(locale, {
     dateStyle: 'long',
     timeStyle: 'short',
   }).format(date)
 }
 
-function formatCartons(cartons: number): string {
-  return `${cartons} carton${cartons === 1 ? '' : 's'}`
+/**
+ * Labels for the plain-text recap. `request.recap` in `src/i18n/copy.ts`
+ * provides one per language, so the WhatsApp/e-mail draft follows the page.
+ */
+export type RequestRecapCopy = {
+  heading: (reference: string) => string
+  product: string
+  selection: (cartons: number, bottles: number, litres: number) => string
+  type: string
+  name: string
+  company: string
+  phone: string
+  city: string
+  email: string
+  message: string
+  created: (date: string) => string
+  cartons: (cartons: number) => string
+  subject: (reference: string, cartons: number) => string
 }
 
 /** Plain-text recap used by WhatsApp, e-mail and the copy button. */
-export function buildRequestMessage(details: RequestDetails): string {
+export function buildRequestMessage(
+  details: RequestDetails,
+  recap: RequestRecapCopy,
+  locale: string,
+): string {
   const lines = [
-    `Demande SEALSI — ${details.reference}`,
+    recap.heading(details.reference),
     '',
-    `Produit : ${details.product}`,
-    `Sélection : ${formatCartons(details.cartons)} = ${details.bottles} bouteilles = ${details.litres} L`,
-    `Type de demande : ${details.type}`,
-    `Nom : ${details.name}`,
+    `${recap.product} : ${details.product}`,
+    recap.selection(details.cartons, details.bottles, details.litres),
+    `${recap.type} : ${details.type}`,
+    `${recap.name} : ${details.name}`,
   ]
 
-  if (details.company.trim()) lines.push(`Société : ${details.company.trim()}`)
-  lines.push(`Téléphone : ${details.phone}`)
-  lines.push(`Ville : ${details.city}`)
+  if (details.company.trim()) lines.push(`${recap.company} : ${details.company.trim()}`)
+  lines.push(`${recap.phone} : ${details.phone}`)
+  lines.push(`${recap.city} : ${details.city}`)
 
-  if (details.email.trim()) lines.push(`E-mail : ${details.email.trim()}`)
-  if (details.message.trim()) lines.push(`Message : ${details.message.trim()}`)
+  if (details.email.trim()) lines.push(`${recap.email} : ${details.email.trim()}`)
+  if (details.message.trim()) lines.push(`${recap.message} : ${details.message.trim()}`)
 
-  lines.push('', `Créée le ${formatDate(details.createdAt)}.`)
+  lines.push('', recap.created(formatDate(details.createdAt, locale)))
   return lines.join('\n')
 }
 
-export function buildRequestSubject(details: RequestDetails): string {
-  return `Demande SEALSI ${details.reference} — ${formatCartons(details.cartons)}`
+export function buildRequestSubject(details: RequestDetails, recap: RequestRecapCopy): string {
+  return recap.subject(details.reference, details.cartons)
 }
 
 export function whatsappLink(message: string): string {

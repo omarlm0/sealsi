@@ -11,10 +11,12 @@ import {
   whatsappLink,
 } from '../config/business'
 import type { RequestDetails } from '../config/business'
-import { PRODUCT, href } from '../data/site'
+import { PRODUCT } from '../data/site'
 import type { PageId } from '../data/site'
+import type { Copy } from '../i18n/copy'
 import { bottlesFor, litresFor } from '../lib/cart'
 import { useCartonInput } from '../lib/useCartonInput'
+import { useLanguage } from '../i18n/LanguageContext'
 import { Icon } from '../components/Icon'
 import { Packshot } from '../components/Packshot'
 import { QuantityStepper } from '../components/QuantityStepper'
@@ -54,24 +56,24 @@ const INITIAL_VALUES: FormValues = {
 
 const FIELD_ORDER: Array<keyof FormValues> = ['name', 'phone', 'city', 'email', 'consent']
 
-function validate(values: FormValues): FormErrors {
-  const errors: FormErrors = {}
-  if (!values.name.trim()) errors.name = 'Indiquez votre nom et prénom.'
-  if (!/^[+0-9 ()-]{8,20}$/.test(values.phone.trim())) {
-    errors.phone = 'Indiquez un numéro de téléphone valide (8 à 20 caractères).'
-  }
-  if (!values.city.trim()) errors.city = 'Indiquez votre ville.'
+function validate(values: FormValues, errors: Copy['request']['errors']): FormErrors {
+  const next: FormErrors = {}
+  if (!values.name.trim()) next.name = errors.name
+  if (!/^[+0-9 ()-]{8,20}$/.test(values.phone.trim())) next.phone = errors.phone
+  if (!values.city.trim()) next.city = errors.city
   if (values.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(values.email.trim())) {
-    errors.email = 'Indiquez une adresse e-mail valide.'
+    next.email = errors.email
   }
-  if (!values.consent) {
-    errors.consent = 'Veuillez accepter l’utilisation de vos coordonnées pour cette demande.'
-  }
-  return errors
+  if (!values.consent) next.consent = errors.consent
+  return next
 }
 
 export function RequestPage({ cartons, onCartonsChange, onNavigate }: RequestPageProps) {
-  const quantity = useCartonInput(cartons)
+  const { c, lang, hrefFor } = useLanguage()
+  const quantity = useCartonInput(
+    cartons,
+    c.stepper.error(PRODUCT.minimumCartons, PRODUCT.maximumCartons),
+  )
   const [quantityTouched, setQuantityTouched] = useState(false)
   const [values, setValues] = useState<FormValues>(INITIAL_VALUES)
   const [errors, setErrors] = useState<FormErrors>({})
@@ -127,7 +129,7 @@ export function RequestPage({ cartons, onCartonsChange, onNavigate }: RequestPag
       return
     }
 
-    const nextErrors = validate(values)
+    const nextErrors = validate(values, c.request.errors)
     setErrors(nextErrors)
     const firstInvalid = FIELD_ORDER.find((field) => nextErrors[field])
     if (firstInvalid) {
@@ -143,7 +145,7 @@ export function RequestPage({ cartons, onCartonsChange, onNavigate }: RequestPag
       cartons: selectedCartons,
       bottles: bottlesFor(selectedCartons),
       litres: litresFor(selectedCartons),
-      type: values.company.trim() ? 'Professionnel / revendeur' : 'Particulier',
+      type: values.company.trim() ? c.request.typePro : c.request.typeIndividual,
       name: values.name.trim(),
       company: values.company.trim(),
       phone: values.phone.trim(),
@@ -183,9 +185,7 @@ export function RequestPage({ cartons, onCartonsChange, onNavigate }: RequestPag
       }
       setDialogMode('sent')
     } catch {
-      setSubmitError(
-        'L’envoi automatique n’a pas abouti. Réessayez ou transmettez votre demande via WhatsApp ou e-mail.',
-      )
+      setSubmitError(c.request.errors.submit)
       setDialogMode('error')
     } finally {
       setSubmitting(false)
@@ -195,7 +195,7 @@ export function RequestPage({ cartons, onCartonsChange, onNavigate }: RequestPag
   const copyMessage = async () => {
     if (!lastRequest) return
     try {
-      await navigator.clipboard.writeText(buildRequestMessage(lastRequest))
+      await navigator.clipboard.writeText(recapMessage)
       setCopyState('copied')
     } catch {
       setCopyState('error')
@@ -209,42 +209,40 @@ export function RequestPage({ cartons, onCartonsChange, onNavigate }: RequestPag
 
   const hasErrors = Object.keys(errors).length > 0
   const describedBy = (field: keyof FormValues) => (errors[field] ? `${field}-error` : undefined)
-  const message = lastRequest ? buildRequestMessage(lastRequest) : ''
-  const subject = lastRequest ? buildRequestSubject(lastRequest) : ''
-  const directMessage =
-    'Bonjour SEALSI, je souhaite des informations sur la lessive Oceanic Scent 5 L.'
+  const recapMessage = lastRequest
+    ? buildRequestMessage(lastRequest, c.request.recap, lang === 'ar' ? 'ar-MA' : 'fr-FR')
+    : ''
+  const subject = lastRequest ? buildRequestSubject(lastRequest, c.request.recap) : ''
+  const directMessage = c.request.directMessage
 
   const handoffActions = lastRequest ? (
     <>
       <p className="dialog-reference">
-        Référence : <strong>{lastRequest.reference}</strong>
+        {c.request.dialog.reference} <strong>{lastRequest.reference}</strong>
       </p>
       <div className="dialog-actions">
         <a
           className="btn btn-primary full"
-          href={whatsappLink(message)}
+          href={whatsappLink(recapMessage)}
           target="_blank"
           rel="noopener noreferrer"
         >
-          <Icon name="whatsapp" /> Envoyer sur WhatsApp
+          <Icon name="whatsapp" /> {c.request.dialog.whatsapp}
         </a>
-        <a className="btn btn-outline full" href={mailtoLink(subject, message)}>
-          <Icon name="mail" /> Envoyer par e-mail
+        <a className="btn btn-outline full" href={mailtoLink(subject, recapMessage)}>
+          <Icon name="mail" /> {c.request.dialog.email}
         </a>
         <button type="button" className="btn btn-quiet full" onClick={copyMessage}>
           <Icon name="copy" />
-          {copyState === 'copied' ? 'Récapitulatif copié' : 'Copier le récapitulatif'}
+          {copyState === 'copied' ? c.request.dialog.copied : c.request.dialog.copy}
         </button>
       </div>
       {copyState === 'error' ? (
         <p className="field-error" role="alert">
-          La copie automatique est indisponible. Sélectionnez le texte du message ou utilisez
-          WhatsApp / e-mail.
+          {c.request.dialog.copyError}
         </p>
       ) : null}
-      <p className="small muted">
-        Le message contient vos coordonnées et votre sélection. Vérifiez-le avant l’envoi.
-      </p>
+      <p className="small muted">{c.request.dialog.handoffSmall}</p>
     </>
   ) : null
 
@@ -252,36 +250,29 @@ export function RequestPage({ cartons, onCartonsChange, onNavigate }: RequestPag
     <main id="main-content" tabIndex={-1}>
       <div className="wrap">
         <div className="page-head">
-          <nav className="breadcrumb" aria-label="Fil d’Ariane">
+          <nav className="breadcrumb" aria-label={c.common.breadcrumbAria}>
             <a
-              href={href('accueil')}
+              href={hrefFor('accueil')}
               onClick={(event) => {
                 event.preventDefault()
                 onNavigate('accueil')
               }}
             >
-              Accueil
+              {c.common.home}
             </a>{' '}
-            / Ma commande
+            / {c.request.breadcrumbCurrent}
           </nav>
 
-          <ol className="order-steps" aria-label="Étapes de la commande">
-            <li>
-              <b>01</b> Quantité
-            </li>
-            <li>
-              <b>02</b> Coordonnées
-            </li>
-            <li>
-              <b>03</b> Confirmation SEALSI
-            </li>
+          <ol className="order-steps" aria-label={c.request.stepsAria}>
+            {c.request.steps.map((step, index) => (
+              <li key={step}>
+                <b>{String(index + 1).padStart(2, '0')}</b> {step}
+              </li>
+            ))}
           </ol>
 
-          <h1>Votre commande, simplement.</h1>
-          <p className="lead">
-            Choisissez vos cartons et laissez vos coordonnées. Nous confirmons ensemble le tarif
-            et la livraison avant validation.
-          </p>
+          <h1>{c.request.title}</h1>
+          <p className="lead">{c.request.lead}</p>
         </div>
 
         <section className="checkout-grid">
@@ -291,19 +282,21 @@ export function RequestPage({ cartons, onCartonsChange, onNavigate }: RequestPag
                 <span className="panel-index" aria-hidden="true">
                   1
                 </span>
-                <h2 id="quantity-title">Votre quantité</h2>
+                <h2 id="quantity-title">{c.request.quantityTitle}</h2>
               </div>
 
               <div className="order-product">
                 <div className="order-thumb">
-                  <Packshot sizes="96px" />
+                  <Packshot sizes="96px" alt={c.common.packshotAlt} />
                 </div>
                 <div>
                   <h3>{PRODUCT.name}</h3>
-                  <p>Lessive liquide · Bouteille 5 L</p>
+                  <p>{c.request.liquidBottle}</p>
                   <span className="tag">
-                    1 carton = {PRODUCT.bottlesPerCarton} bouteilles ={' '}
-                    {PRODUCT.litresPerCarton} L
+                    {c.request.cartonContents(
+                      PRODUCT.bottlesPerCarton,
+                      PRODUCT.litresPerCarton,
+                    )}
                   </span>
                 </div>
               </div>
@@ -311,7 +304,7 @@ export function RequestPage({ cartons, onCartonsChange, onNavigate }: RequestPag
               <div className="order-qty-row">
                 <div>
                   <span className="field-label" id="quantity-label">
-                    Nombre de cartons
+                    {c.request.cartonsLabel}
                   </span>
                   <QuantityStepper
                     text={quantity.text}
@@ -329,7 +322,7 @@ export function RequestPage({ cartons, onCartonsChange, onNavigate }: RequestPag
                     }}
                   />
                 </div>
-                <div className="quantity-presets" role="group" aria-label="Quantités rapides">
+                <div className="quantity-presets" role="group" aria-label={c.request.presetsAria}>
                   {PRESETS.map((preset) => (
                     <button
                       key={preset}
@@ -340,7 +333,7 @@ export function RequestPage({ cartons, onCartonsChange, onNavigate }: RequestPag
                         quantity.setCartons(preset)
                       }}
                     >
-                      {preset} carton{preset > 1 ? 's' : ''}
+                      {c.request.cartonsOption(preset)}
                     </button>
                   ))}
                 </div>
@@ -348,16 +341,15 @@ export function RequestPage({ cartons, onCartonsChange, onNavigate }: RequestPag
 
               <div className="order-qty-result">
                 {quantity.value === null ? (
-                  <span>Choisissez au moins un carton pour continuer.</span>
+                  <span>{c.request.selectAtLeastOne}</span>
                 ) : (
                   <>
+                    <span>{c.request.selected(quantity.value)}</span>
                     <span>
-                      <strong>{quantity.value}</strong> carton
-                      {quantity.value > 1 ? 's' : ''} sélectionné
-                      {quantity.value > 1 ? 's' : ''}
-                    </span>
-                    <span>
-                      {bottlesFor(quantity.value)} bouteilles · {litresFor(quantity.value)} L
+                      {c.request.bottlesLitres(
+                        bottlesFor(quantity.value),
+                        litresFor(quantity.value),
+                      )}
                     </span>
                   </>
                 )}
@@ -372,12 +364,12 @@ export function RequestPage({ cartons, onCartonsChange, onNavigate }: RequestPag
                 <span className="panel-index" aria-hidden="true">
                   2
                 </span>
-                <h2 id="contact-title">Où vous contacter ?</h2>
+                <h2 id="contact-title">{c.request.contactTitle}</h2>
               </div>
 
               {hasErrors ? (
                 <p className="form-alert" role="alert">
-                  Vérifiez les champs signalés ci-dessous.
+                  {c.request.formAlert}
                 </p>
               ) : null}
 
@@ -396,13 +388,13 @@ export function RequestPage({ cartons, onCartonsChange, onNavigate }: RequestPag
 
               <div className="form-grid">
                 <div className="field">
-                  <label htmlFor="name">Nom et prénom *</label>
+                  <label htmlFor="name">{c.request.fields.nameLabel}</label>
                   <input
                     id="name"
                     name="name"
                     autoComplete="name"
                     required
-                    placeholder="Votre nom"
+                    placeholder={c.request.fields.namePlaceholder}
                     value={values.name}
                     onChange={(event) => update('name', event.target.value)}
                     aria-invalid={Boolean(errors.name)}
@@ -417,28 +409,30 @@ export function RequestPage({ cartons, onCartonsChange, onNavigate }: RequestPag
 
                 <div className="field">
                   <label htmlFor="company">
-                    Société / commerce <span className="optional">facultatif</span>
+                    {c.request.fields.companyLabel}{' '}
+                    <span className="optional">{c.request.fields.optional}</span>
                   </label>
                   <input
                     id="company"
                     name="company"
                     autoComplete="organization"
-                    placeholder="Votre établissement"
+                    placeholder={c.request.fields.companyPlaceholder}
                     value={values.company}
                     onChange={(event) => update('company', event.target.value)}
                   />
                 </div>
 
                 <div className="field">
-                  <label htmlFor="phone">Téléphone *</label>
+                  <label htmlFor="phone">{c.request.fields.phoneLabel}</label>
                   <input
                     id="phone"
                     name="phone"
                     type="tel"
+                    dir="ltr"
                     autoComplete="tel"
                     required
                     pattern="[+0-9 ()-]{8,20}"
-                    placeholder="06 XX XX XX XX"
+                    placeholder={c.request.fields.phonePlaceholder}
                     value={values.phone}
                     onChange={(event) => update('phone', event.target.value)}
                     aria-invalid={Boolean(errors.phone)}
@@ -452,13 +446,13 @@ export function RequestPage({ cartons, onCartonsChange, onNavigate }: RequestPag
                 </div>
 
                 <div className="field">
-                  <label htmlFor="city">Ville *</label>
+                  <label htmlFor="city">{c.request.fields.cityLabel}</label>
                   <input
                     id="city"
                     name="city"
                     autoComplete="address-level2"
                     required
-                    placeholder="Votre ville"
+                    placeholder={c.request.fields.cityPlaceholder}
                     value={values.city}
                     onChange={(event) => update('city', event.target.value)}
                     aria-invalid={Boolean(errors.city)}
@@ -473,14 +467,16 @@ export function RequestPage({ cartons, onCartonsChange, onNavigate }: RequestPag
 
                 <div className="field full-row">
                   <label htmlFor="email">
-                    E-mail <span className="optional">facultatif</span>
+                    {c.request.fields.emailLabel}{' '}
+                    <span className="optional">{c.request.fields.optional}</span>
                   </label>
                   <input
                     id="email"
                     name="email"
                     type="email"
+                    dir="ltr"
                     autoComplete="email"
-                    placeholder="Votre adresse e-mail"
+                    placeholder={c.request.fields.emailPlaceholder}
                     value={values.email}
                     onChange={(event) => update('email', event.target.value)}
                     aria-invalid={Boolean(errors.email)}
@@ -495,12 +491,13 @@ export function RequestPage({ cartons, onCartonsChange, onNavigate }: RequestPag
 
                 <div className="field full-row">
                   <label htmlFor="message">
-                    Un détail à préciser ? <span className="optional">facultatif</span>
+                    {c.request.fields.messageLabel}{' '}
+                    <span className="optional">{c.request.fields.optional}</span>
                   </label>
                   <textarea
                     id="message"
                     name="message"
-                    placeholder="Livraison, quantité régulière, question…"
+                    placeholder={c.request.fields.messagePlaceholder}
                     maxLength={1000}
                     value={values.message}
                     onChange={(event) => update('message', event.target.value)}
@@ -520,10 +517,7 @@ export function RequestPage({ cartons, onCartonsChange, onNavigate }: RequestPag
                     aria-invalid={Boolean(errors.consent)}
                     aria-describedby={describedBy('consent')}
                   />
-                  <span>
-                    J’accepte que mes coordonnées soient utilisées pour traiter cette demande et me
-                    recontacter à ce sujet.
-                  </span>
+                  <span>{c.request.consent}</span>
                 </label>
                 {errors.consent ? (
                   <p className="field-error" id="consent-error">
@@ -531,17 +525,15 @@ export function RequestPage({ cartons, onCartonsChange, onNavigate }: RequestPag
                   </p>
                 ) : null}
                 <p className="consent-note">
-                  Les informations sont conservées {COMMERCE.dataRetentionMonths} mois après le
-                  dernier contact et ne sont ni vendues ni utilisées pour de la prospection non
-                  sollicitée. Consultez la{' '}
+                  {c.request.consentNote(COMMERCE.dataRetentionMonths)}
                   <a
-                    href={href('confidentialite')}
+                    href={hrefFor('confidentialite')}
                     onClick={(event) => {
                       event.preventDefault()
                       onNavigate('confidentialite')
                     }}
                   >
-                    politique de confidentialité
+                    {c.request.privacyLink}
                   </a>
                   .
                 </p>
@@ -555,24 +547,18 @@ export function RequestPage({ cartons, onCartonsChange, onNavigate }: RequestPag
 
               <button className="btn btn-primary full" type="submit" disabled={submitting}>
                 {submitting ? (
-                  'Envoi en cours…'
+                  c.request.submitting
                 ) : (
                   <>
-                    Demander la confirmation <Icon name="arrow" />
+                    {c.request.submit} <Icon name="arrow" />
                   </>
                 )}
               </button>
-              <p className="small muted form-footnote">
-                Aucun paiement à cette étape. La commande devient définitive après votre accord sur
-                le tarif et les modalités.
-              </p>
+              <p className="small muted form-footnote">{c.request.footnote}</p>
 
               <div className="form-direct">
-                <h2>Vous préférez échanger directement ?</h2>
-                <p>
-                  Notre équipe peut répondre à vos questions sur la quantité, la livraison ou les
-                  conditions professionnelles.
-                </p>
+                <h2>{c.request.directTitle}</h2>
+                <p>{c.request.directLead}</p>
                 <div className="form-direct-links">
                   <a
                     href={whatsappLink(directMessage)}
@@ -581,10 +567,10 @@ export function RequestPage({ cartons, onCartonsChange, onNavigate }: RequestPag
                   >
                     <Icon name="whatsapp" /> WhatsApp
                   </a>
-                  <a href={CONTACT.phoneHref}>
+                  <a href={CONTACT.phoneHref} dir="ltr">
                     <Icon name="phone" /> {CONTACT.phoneDisplay}
                   </a>
-                  <a href={mailtoLink('Demande d’information SEALSI', directMessage)}>
+                  <a href={mailtoLink(c.request.mailSubject, directMessage)} dir="ltr">
                     <Icon name="mail" /> {CONTACT.email}
                   </a>
                 </div>
@@ -605,48 +591,39 @@ export function RequestPage({ cartons, onCartonsChange, onNavigate }: RequestPag
         <div className="demo-dialog-inner">
           {dialogMode === 'sent' && lastRequest ? (
             <>
-              <span className="eyebrow">DEMANDE ENREGISTRÉE</span>
-              <h2 id="request-dialog-title">Merci, votre demande est partie.</h2>
+              <span className="eyebrow">{c.request.dialog.sentEyebrow}</span>
+              <h2 id="request-dialog-title">{c.request.dialog.sentTitle}</h2>
               <p className="dialog-reference">
-                Référence : <strong>{lastRequest.reference}</strong>
+                {c.request.dialog.reference} <strong>{lastRequest.reference}</strong>
               </p>
-              <p>{COMMERCE.responseNote}</p>
-              <p className="small muted">
-                Conservez cette référence pour faciliter nos échanges. Aucun paiement n’a été
-                demandé.
-              </p>
+              <p>{c.request.dialog.sentNote}</p>
+              <p className="small muted">{c.request.dialog.sentSmall}</p>
               <form method="dialog">
-                <button className="btn btn-primary">Fermer</button>
+                <button className="btn btn-primary">{c.request.dialog.close}</button>
               </form>
             </>
           ) : null}
 
           {dialogMode === 'handoff' && lastRequest ? (
             <>
-              <span className="eyebrow">DERNIÈRE ÉTAPE</span>
-              <h2 id="request-dialog-title">Transmettez votre demande.</h2>
-              <p>
-                Votre récapitulatif est prêt. Choisissez WhatsApp ou l’e-mail pour l’envoyer à
-                SEALSI. <strong>Aucune donnée n’a encore été transmise.</strong>
-              </p>
+              <span className="eyebrow">{c.request.dialog.handoffEyebrow}</span>
+              <h2 id="request-dialog-title">{c.request.dialog.handoffTitle}</h2>
+              <p>{c.request.dialog.handoffLead}</p>
               {handoffActions}
               <form method="dialog">
-                <button className="btn btn-quiet">Fermer</button>
+                <button className="btn btn-quiet">{c.request.dialog.close}</button>
               </form>
             </>
           ) : null}
 
           {dialogMode === 'error' && lastRequest ? (
             <>
-              <span className="eyebrow">ENVOI INTERROMPU</span>
-              <h2 id="request-dialog-title">La transmission automatique a échoué.</h2>
-              <p>
-                Vos informations restent dans le formulaire. Réessayez, ou envoyez le
-                récapitulatif ci-dessous via WhatsApp ou e-mail.
-              </p>
+              <span className="eyebrow">{c.request.dialog.errorEyebrow}</span>
+              <h2 id="request-dialog-title">{c.request.dialog.errorTitle}</h2>
+              <p>{c.request.dialog.errorLead}</p>
               {handoffActions}
               <form method="dialog">
-                <button className="btn btn-quiet">Fermer</button>
+                <button className="btn btn-quiet">{c.request.dialog.close}</button>
               </form>
             </>
           ) : null}

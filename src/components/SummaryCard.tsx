@@ -19,6 +19,7 @@ export function SummaryCard({
   continueDisabled = false,
 }: SummaryCardProps) {
   const { c } = useLanguage()
+  const hasQuantity = cartons > 0
 
   return (
     <aside
@@ -36,15 +37,15 @@ export function SummaryCard({
         </div>
         <div>
           <dt>{c.summary.cartons}</dt>
-          <dd>{cartons}</dd>
+          <dd>{hasQuantity ? cartons : '—'}</dd>
         </div>
         <div>
           <dt>{c.summary.bottles}</dt>
-          <dd>{bottlesFor(cartons)}</dd>
+          <dd>{hasQuantity ? bottlesFor(cartons) : '—'}</dd>
         </div>
         <div>
           <dt>{c.summary.volume}</dt>
-          <dd>{litresFor(cartons)} L</dd>
+          <dd>{hasQuantity ? `${litresFor(cartons)} L` : '—'}</dd>
         </div>
       </dl>
 

@@ -16,9 +16,50 @@
   --line: #dfe6ed;
   --focus: #064aa5;
   --ease: cubic-bezier(0.2, 0.75, 0.25, 1);
-  --font: "Segoe UI", "Inter Variable", Arial, sans-serif;
+  --font: "Inter Variable", "Segoe UI", Arial, sans-serif;
   --serif: Georgia, "Times New Roman", serif;
   --container: 1240px;
+}
+
+/* Arabic has its own face: Inter carries no Arabic glyphs, and the tracking
+   used for the Latin wordmark breaks the script's joins. */
+:root[lang='ar'] {
+  --font: "Noto Sans Arabic Variable", "Segoe UI", Tahoma, sans-serif;
+}
+
+:root[lang='ar'] h1,
+:root[lang='ar'] h2,
+:root[lang='ar'] h3,
+:root[lang='ar'] h4,
+:root[lang='ar'] .hero h1 em,
+:root[lang='ar'] .eyebrow,
+:root[lang='ar'] .tag,
+:root[lang='ar'] .hero-caption,
+:root[lang='ar'] .header-language,
+:root[lang='ar'] .summary-title,
+:root[lang='ar'] .order-steps,
+:root[lang='ar'] .volume-summary strong {
+  letter-spacing: normal;
+}
+
+:root[lang='ar'] h1 {
+  line-height: 1.25;
+}
+
+:root[lang='ar'] h2 {
+  line-height: 1.35;
+}
+
+:root[lang='ar'] h3 {
+  line-height: 1.45;
+}
+
+:root[lang='ar'] .hero h1 {
+  line-height: 1.3;
+}
+
+:root[lang='ar'] .hero-copy > p {
+  line-height: 1.9;
 }
 
 *,
@@ -151,7 +192,7 @@ p {
 .skip-link {
   position: absolute;
   top: -100px;
-  left: 12px;
+  inset-inline-start: 12px;
   z-index: 200;
   padding: 12px 18px;
   border-radius: 7px;
@@ -349,6 +390,11 @@ p {
   flex: none;
 }
 
+/* Directional icons follow the writing direction. */
+:root[dir='rtl'] .icon-arrow {
+  transform: scaleX(-1);
+}
+
 /* --------------------------------------------------------------------------
    Header
    -------------------------------------------------------------------------- */
@@ -534,8 +580,7 @@ p {
   display: flex;
   position: absolute;
   top: 77px;
-  left: 0;
-  right: 0;
+  inset-inline: 0;
   z-index: 30;
   flex-direction: column;
   background: white;
@@ -659,30 +704,23 @@ p {
 }
 
 .hero-meta span + span {
-  border-left: 1px solid #ffffff30;
-  padding-left: 25px;
+  border-inline-start: 1px solid #ffffff30;
+  padding-inline-start: 25px;
 }
 
 .hero-caption {
   position: absolute;
-  right: max(5vw, 24px);
+  inset-inline-end: max(5vw, 24px);
   bottom: 26px;
   z-index: 3;
-  border-left: 1px solid var(--gold);
-  padding: 6px 0 6px 13px;
+  border-inline-start: 1px solid var(--gold);
+  padding-block: 6px;
+  padding-inline: 13px 0;
   font-size: 11px;
   letter-spacing: 0.08em;
   line-height: 1.5;
   color: #d8eff8;
   text-shadow: 0 1px 14px #020e24;
-}
-
-:root[dir='rtl'] .hero-caption {
-  right: auto;
-  left: max(5vw, 24px);
-  border-left: none;
-  border-right: 1px solid var(--gold);
-  padding: 6px 13px 6px 0;
 }
 
 /* --------------------------------------------------------------------------
@@ -706,13 +744,13 @@ p {
   align-items: center;
   gap: 14px;
   padding: 0 28px;
-  border-right: 1px solid var(--line);
+  border-inline-end: 1px solid var(--line);
   font-size: 13px;
   font-weight: 600;
 }
 
 .benefit:first-child {
-  padding-left: 0;
+  padding-inline-start: 0;
 }
 
 .benefit:last-child {
@@ -779,7 +817,7 @@ p {
   width: 112%;
   max-width: none;
   height: auto;
-  margin-left: -6%;
+  margin-inline-start: -6%;
 }
 
 .editorial-copy h2 {
@@ -1116,7 +1154,7 @@ p {
 
 .gallery-badge {
   position: absolute;
-  left: 24px;
+  inset-inline-start: 24px;
   top: 24px;
   background: white;
   z-index: 2;
@@ -1386,11 +1424,11 @@ p {
 
 .volume-summary > div {
   padding: 0 20px;
-  border-right: 1px solid var(--line);
+  border-inline-end: 1px solid var(--line);
 }
 
 .volume-summary > div:first-child {
-  padding-left: 0;
+  padding-inline-start: 0;
 }
 
 .volume-summary > div:last-child {
@@ -1481,7 +1519,7 @@ p {
 .summary-card dd {
   margin: 0;
   font-weight: 600;
-  text-align: right;
+  text-align: end;
 }
 
 .summary-card .divider {
@@ -1822,26 +1860,26 @@ p {
 }
 
 .service-visual img:nth-child(1) {
-  left: 10%;
+  inset-inline-start: 10%;
   height: 300px;
   opacity: 0.75;
 }
 
 .service-visual img:nth-child(2) {
-  left: 43%;
+  inset-inline-start: 43%;
   height: 300px;
   opacity: 0.75;
 }
 
 .service-visual img:nth-child(3) {
-  left: 25%;
+  inset-inline-start: 25%;
   z-index: 2;
 }
 
 .carton-label {
   position: absolute;
   z-index: 3;
-  right: 0;
+  inset-inline-end: 0;
   bottom: 5px;
   background: white;
   border: 1px solid var(--line);
@@ -2108,7 +2146,7 @@ p {
 
 .legal-body ul {
   margin: 8px 0 0;
-  padding-left: 20px;
+  padding-inline-start: 20px;
   color: #475569;
   font-size: 13px;
   line-height: 1.8;
@@ -2353,7 +2391,7 @@ p {
   }
 
   .hero-caption {
-    right: 28px;
+    inset-inline-end: 28px;
     bottom: 22px;
   }
 
@@ -2379,7 +2417,7 @@ p {
   }
 
   .hero-meta span + span {
-    padding-left: 15px;
+    padding-inline-start: 15px;
   }
 
   .service-hero h1 {
@@ -2414,8 +2452,13 @@ p {
     display: none;
   }
 
+  /* The header switch is hidden on small screens, so keep the one in the menu. */
+  .mobile-nav .header-language {
+    display: flex;
+  }
+
   .header-right {
-    margin-left: auto;
+    margin-inline-start: auto;
     gap: 15px;
   }
 
@@ -2478,7 +2521,7 @@ p {
   }
 
   .hero-meta span + span {
-    padding-left: 12px;
+    padding-inline-start: 12px;
   }
 
   .hero-media {
@@ -2502,10 +2545,10 @@ p {
   }
 
   .hero-caption {
-    right: 22px;
+    inset-inline-end: 22px;
     bottom: 14px;
     font-size: 9px;
-    padding-left: 9px;
+    padding-inline-start: 9px;
   }
 
   .benefit-bar .wrap {
@@ -2517,7 +2560,7 @@ p {
 
   .benefit {
     padding: 18px 0;
-    border-right: 0;
+    border-inline-end: 0;
     font-size: 11px;
     gap: 10px;
   }
@@ -2567,7 +2610,7 @@ p {
 
   .signature-stage img {
     width: 100%;
-    margin-left: 0;
+    margin-inline-start: 0;
   }
 
   .editorial-copy p {
@@ -2701,7 +2744,7 @@ p {
   }
 
   .gallery-badge {
-    left: 17px;
+    inset-inline-start: 17px;
     top: 17px;
   }
 
@@ -2901,7 +2944,7 @@ p {
   }
 
   .carton-label {
-    right: 0;
+    inset-inline-end: 0;
     font-size: 10px;
     padding: 12px 14px;
   }

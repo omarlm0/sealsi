@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { whatsappLink } from '../config/business'
-import { href } from '../data/site'
 import type { PageId } from '../data/site'
 import { useLanguage } from '../i18n/LanguageContext'
 import { Icon } from './Icon'
@@ -14,7 +13,7 @@ type HeaderProps = {
 }
 
 export function Header({ page, cartons, dark = false, onNavigate }: HeaderProps) {
-  const { c, lang, setLang } = useLanguage()
+  const { c, lang, setLang, hrefFor } = useLanguage()
   const [menuOpen, setMenuOpen] = useState(false)
   const menuButtonRef = useRef<HTMLButtonElement>(null)
 
@@ -45,7 +44,10 @@ export function Header({ page, cartons, dark = false, onNavigate }: HeaderProps)
         type="button"
         lang="fr"
         aria-pressed={lang === 'fr'}
-        onClick={() => setLang('fr')}
+        onClick={() => {
+          setMenuOpen(false)
+          setLang('fr')
+        }}
       >
         FR
       </button>
@@ -56,7 +58,10 @@ export function Header({ page, cartons, dark = false, onNavigate }: HeaderProps)
         type="button"
         lang="ar"
         aria-pressed={lang === 'ar'}
-        onClick={() => setLang('ar')}
+        onClick={() => {
+          setMenuOpen(false)
+          setLang('ar')
+        }}
       >
         AR
       </button>
@@ -67,7 +72,7 @@ export function Header({ page, cartons, dark = false, onNavigate }: HeaderProps)
     <header className={dark ? 'site-header dark' : 'site-header'}>
       <div className="wrap">
         <a
-          href={href('accueil')}
+          href={hrefFor('accueil')}
           className="brand"
           aria-label={c.header.homeAria}
           onClick={(event) => {
@@ -84,7 +89,7 @@ export function Header({ page, cartons, dark = false, onNavigate }: HeaderProps)
             return (
               <a
                 key={item.label}
-                href={href(item.page, item.section)}
+                href={hrefFor(item.page, item.section)}
                 aria-current={active ? 'page' : undefined}
                 onClick={(event) => {
                   event.preventDefault()
@@ -110,7 +115,7 @@ export function Header({ page, cartons, dark = false, onNavigate }: HeaderProps)
             <span>WhatsApp</span>
           </a>
           <a
-            href={href('demande')}
+            href={hrefFor('demande')}
             className="cart-link"
             aria-label={c.header.cartAria(cartons)}
             aria-current={page === 'demande' ? 'page' : undefined}
@@ -148,7 +153,7 @@ export function Header({ page, cartons, dark = false, onNavigate }: HeaderProps)
           {c.nav.map((item) => (
             <a
               key={item.label}
-              href={href(item.page, item.section)}
+              href={hrefFor(item.page, item.section)}
               aria-current={page === item.page && !item.section ? 'page' : undefined}
               onClick={(event) => {
                 event.preventDefault()
@@ -159,7 +164,7 @@ export function Header({ page, cartons, dark = false, onNavigate }: HeaderProps)
             </a>
           ))}
           <a
-            href={href('demande')}
+            href={hrefFor('demande')}
             aria-current={page === 'demande' ? 'page' : undefined}
             onClick={(event) => {
               event.preventDefault()

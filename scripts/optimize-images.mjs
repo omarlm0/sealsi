@@ -49,6 +49,22 @@ for (const width of [700, 1000]) {
 }
 
 /**
+ * Responsive hero variants for both languages. The full-size 1672 px WebP
+ * stays the `1672w` candidate; the inline head script in index.html preloads
+ * the variant that matches the URL.
+ */
+const heroAr = 'assets-src/products/oceanic-hero-ar.png'
+
+if (!fs.existsSync(heroAr)) {
+  throw new Error(`Arabic master hero missing: ${heroAr}`)
+}
+
+for (const width of [640, 960, 1280]) {
+  await convert(hero, `public/assets/oceanic-hero-${width}.webp`, width)
+  await convert(heroAr, `public/assets/oceanic-hero-ar-${width}.webp`, width)
+}
+
+/**
  * 1200 × 630 Open Graph card. The hero scene already reserves its left half
  * for readable text, so the card keeps the real product scene instead of a
  * synthetic mockup. A left gradient guarantees text contrast.
